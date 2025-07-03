@@ -1,0 +1,99 @@
+name: 24/7 Automated Job Bot
+
+on:
+  schedule:
+    # Run every hour (0 minutes past every hour)
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allow manual triggering
+  push:
+    branches: [ main ]
+
+jobs:
+  job-application-bot:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install Chrome browser
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget unzip
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Set up environment variables
+      run: |
+        cat > .env << EOF
+        # Personal Information
+        FULL_NAME=${{ secrets.FULL_NAME }}
+        EMAIL=${{ secrets.EMAIL }}
+        PHONE=${{ secrets.PHONE }}
+        LINKEDIN=${{ secrets.LINKEDIN }}
+        GITHUB_URL=${{ secrets.GITHUB_URL }}
+        LOCATION=${{ secrets.LOCATION }}
+        
+        # Platform Credentials
+        TWITTER_EMAIL=${{ secrets.TWITTER_EMAIL }}
+        TWITTER_PASSWORD=${{ secrets.TWITTER_PASSWORD }}
+        INDEED_EMAIL=${{ secrets.INDEED_EMAIL }}
+        INDEED_PASSWORD=${{ secrets.INDEED_PASSWORD }}
+        DICE_EMAIL=${{ secrets.DICE_EMAIL }}
+        DICE_PASSWORD=${{ secrets.DICE_PASSWORD }}
+        WEWORKREMOTELY_EMAIL=${{ secrets.WEWORKREMOTELY_EMAIL }}
+        WEWORKREMOTELY_PASSWORD=${{ secrets.WEWORKREMOTELY_PASSWORD }}
+        TURING_EMAIL=${{ secrets.TURING_EMAIL }}
+        TURING_PASSWORD=${{ secrets.TURING_PASSWORD }}
+        REMOTEOK_EMAIL=${{ secrets.REMOTEOK_EMAIL }}
+        REMOTEOK_PASSWORD=${{ secrets.REMOTEOK_PASSWORD }}
+        FLEXJOBS_EMAIL=${{ secrets.FLEXJOBS_EMAIL }}
+        FLEXJOBS_PASSWORD=${{ secrets.FLEXJOBS_PASSWORD }}
+
+        # Job Preferences
+        JOB_TITLES=DevOps Engineer,Cloud Engineer,Site Reliability Engineer (SRE),Infrastructure Engineer,Platform Engineer,AWS Engineer,Kubernetes Administrator,CI/CD Engineer,Linux Systems Engineer,Cloud Automation Engineer,Junior DevOps Associate,Remote DevOps Intern
+        SKILLS=DevOps,AWS,Docker,Kubernetes,Python,Linux,CI/CD,Jenkins,Terraform
+        SALARY_MIN=50000
+        REMOTE_ONLY=false
+        EXPERIENCE_LEVEL=Entry and Mid
+        EOF
+        
+    - name: Create application proofs directory
+      run: mkdir -p application_proofs
+      
+    - name: Run job bot
+      run: |
+        export DISPLAY=:99
+        Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+        python super_ultimate_bot.py
+      env:
+        PYTHONPATH: .
+        
+    - name: Upload application proofs
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: application-proofs-${{ github.run_number }}
+        path: |
+          application_proofs/
+          super_ultimate_applications.txt
+          super_ultimate_cycle_log.txt
+        retention-days: 30
+        
+    - name: Send notification
+      if: always()
+      run: |
+        echo "Job bot cycle completed at $(date)"
+        echo "Check artifacts for application proofs and logs"
