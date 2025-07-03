@@ -126,3 +126,5 @@ The bot logs all activities and provides:
 **No Jobs Found**: Check if your skills match available positions  
 
 ---
+
+🎉 **Your bot is ready! Happy job hunting!** 🎉
