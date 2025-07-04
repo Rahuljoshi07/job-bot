@@ -518,5 +518,24 @@ class SuperUltimateJobBot:
                 time.sleep(300)
 
 if __name__ == "__main__":
-    bot = SuperUltimateJobBot()
-    bot.run_super_ultimate_cycle()
+    try:
+        print("🚀 Starting Super Ultimate Job Bot...")
+        print(f"🕐 Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"🖥️  Environment: {'GitHub Actions' if os.getenv('GITHUB_ACTIONS') == 'true' else 'Local'}")
+        
+        bot = SuperUltimateJobBot()
+        bot.run_super_ultimate_cycle()
+        
+    except Exception as e:
+        print(f"❌ Critical error in job bot: {e}")
+        print(f"📝 Error details: {traceback.format_exc()}")
+        
+        # Log error to file
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open('bot_error_log.txt', 'a') as f:
+            f.write(f"{timestamp} - CRITICAL ERROR: {e}\n")
+            f.write(f"Traceback: {traceback.format_exc()}\n\n")
+        
+        # Exit with error code so GitHub Actions knows it failed
+        import sys
+        sys.exit(1)
