@@ -111,14 +111,20 @@ jobs:
         EOF
         mkdir -p application_proofs
 
-    - name: Run simple job bot
+    - name: Install NLP dependencies
+      run: |
+        python -m pip install --no-deps nltk spacy textblob scikit-learn pandas numpy
+        python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet')"
+        python -m spacy download en_core_web_sm || echo "Spacy model download failed, will continue without it"
+
+    - name: Run enhanced ultimate job bot
       run: |
         export DISPLAY=:99
         Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
         sleep 3
-        echo "🤖 Starting simple job bot..."
-        python simple_job_bot.py
-        echo "✅ Job bot completed!"
+        echo "🚀 Starting enhanced ultimate job bot..."
+        python enhanced_ultimate_job_bot.py
+        echo "✅ Enhanced job bot completed!"
       env:
         PYTHONPATH: .
         GITHUB_ACTIONS: true
