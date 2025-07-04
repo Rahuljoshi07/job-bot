@@ -99,7 +99,61 @@ class Config:
                         os.environ[var] = '+1234567890'
                     elif 'PERSONAL_LOCATION' in var:
                         os.environ[var] = 'Remote'
+                    elif 'LINKEDIN' in var:
+                        os.environ[var] = 'https://linkedin.com/in/rahul'
+                    elif 'GITHUB' in var:
+                        os.environ[var] = 'https://github.com/rahuljoshi'
                 print("✅ Default values set for missing variables")
+                
+                # Reload configuration after setting defaults
+                config = {
+                    'personal': {
+                        'full_name': os.getenv('PERSONAL_FULL_NAME'),
+                        'email': os.getenv('PERSONAL_EMAIL'),
+                        'phone': os.getenv('PERSONAL_PHONE'),
+                        'linkedin': os.getenv('PERSONAL_LINKEDIN', ''),
+                        'github': os.getenv('PERSONAL_GITHUB', ''),
+                        'location': os.getenv('PERSONAL_LOCATION')
+                    },
+                    'platforms': {
+                        'twitter': {
+                            'email': os.getenv('TWITTER_EMAIL'),
+                            'password': os.getenv('TWITTER_PASSWORD')
+                        },
+                        'turing': {
+                            'email': os.getenv('TURING_EMAIL'),
+                            'password': os.getenv('TURING_PASSWORD')
+                        },
+                        'indeed': {
+                            'email': os.getenv('INDEED_EMAIL'),
+                            'password': os.getenv('INDEED_PASSWORD')
+                        },
+                        'dice': {
+                            'email': os.getenv('DICE_EMAIL'),
+                            'password': os.getenv('DICE_PASSWORD')
+                        },
+                        'flexjobs': {
+                            'email': os.getenv('FLEXJOBS_EMAIL'),
+                            'password': os.getenv('FLEXJOBS_PASSWORD')
+                        },
+                        'weworkremotely': {
+                            'email': os.getenv('WEWORKREMOTELY_EMAIL'),
+                            'password': os.getenv('WEWORKREMOTELY_PASSWORD')
+                        }
+                    },
+                    'preferences': {
+                        'job_titles': [
+                            "DevOps Engineer", "Cloud Engineer", "Site Reliability Engineer (SRE)",
+                            "Infrastructure Engineer", "Platform Engineer", "AWS Engineer",
+                            "Kubernetes Administrator", "CI/CD Engineer", "Linux Systems Engineer",
+                            "Cloud Automation Engineer", "Junior DevOps Associate", "Remote DevOps Intern"
+                        ],
+                        'skills': ["DevOps", "AWS", "Docker", "Kubernetes", "Python", "Linux", "CI/CD", "Jenkins", "Terraform"],
+                        'salary_min': os.getenv('PREFERENCES_SALARY_MIN', ''),
+                        'remote_only': os.getenv('PREFERENCES_REMOTE_ONLY', 'true').lower() == 'true',
+                        'experience_level': os.getenv('PREFERENCES_EXPERIENCE_LEVEL', 'entry')
+                    }
+                }
             else:
                 raise ValueError(f"Missing required environment variables: {missing_vars}")
         
