@@ -75,6 +75,12 @@ jobs:
     - name: Create application proofs directory
       run: mkdir -p application_proofs
 
+    - name: Run diagnostics
+      run: python diagnose.py
+      env:
+        PYTHONPATH: .
+        GITHUB_ACTIONS: true
+    
     - name: Run job bot
       run: |
         export DISPLAY=:99
