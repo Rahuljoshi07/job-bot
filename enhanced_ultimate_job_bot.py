@@ -18,9 +18,21 @@ import sqlite3
 from datetime import datetime, timedelta
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
-from email.mime.text import MimeText
-from email.mime.multipart import MimeMultipart
-import schedule
+try:
+    from email.mime.text import MimeText
+    from email.mime.multipart import MimeMultipart
+except ImportError:
+    # Fallback for email imports
+    MimeText = None
+    MimeMultipart = None
+    print("⚠️ Email functionality disabled due to import issues")
+
+try:
+    import schedule
+except ImportError:
+    schedule = None
+    print("⚠️ Schedule module not available")
+
 import threading
 from dataclasses import dataclass
 from typing import List, Dict, Optional, Tuple
