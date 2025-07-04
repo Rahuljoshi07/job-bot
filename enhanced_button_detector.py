@@ -95,6 +95,70 @@ class EnhancedButtonDetector:
                 ".apply-button",
                 "button[title*='Apply']",
                 "[href*='apply']"
+            ],
+            "xtwitter": [
+                "a[href*='careers.x.com']",
+                "a[href*='apply']",
+                "[role='button'][aria-label*='Apply']",
+                ".apply-button",
+                "button[data-testid*='apply']",
+                "a[data-testid*='apply']",
+                "[href*='x.com/jobs']",
+                "[href*='twitter.com/jobs']",
+                "[href*='jobs.x.com']",
+                "[data-testid='apply']",
+                "button[aria-label*='apply']",
+                "a[class*='apply']",
+                "[role='link'][href*='apply']",
+                ".career-apply-btn",
+                "[data-qa='apply-button']"
+            ],
+            "x/twitter": [
+                "a[href*='careers.x.com']",
+                "a[href*='apply']",
+                "[role='button'][aria-label*='Apply']",
+                ".apply-button",
+                "button[data-testid*='apply']",
+                "a[data-testid*='apply']",
+                "[href*='x.com/jobs']",
+                "[href*='twitter.com/jobs']"
+            ],
+            "twitter": [
+                "a[href*='careers.x.com']",
+                "a[href*='apply']",
+                "[role='button'][aria-label*='Apply']",
+                ".apply-button",
+                "button[data-testid*='apply']",
+                "a[data-testid*='apply']",
+                "[href*='x.com/jobs']",
+                "[href*='twitter.com/jobs']"
+            ],
+            "turing": [
+                "[data-cy='apply-button']",
+                ".apply-button",
+                "button[class*='apply']",
+                "a[href*='apply']",
+                "[href*='turing.com/apply']",
+                "button[title*='Apply']",
+                ".btn-primary[href*='apply']",
+                "[data-testid*='apply']",
+                "[data-qa='apply']",
+                ".job-apply-button",
+                "button[type='submit'][class*='apply']",
+                "a[class*='btn'][href*='apply']",
+                ".opportunity-apply",
+                "[role='button'][data-action='apply']",
+                "button[aria-label*='Apply']",
+                ".submit-application",
+                "[data-testid='job-apply']"
+            ],
+            "weworkremotely": [
+                "a[href*='apply']",
+                ".apply-button",
+                "button[class*='apply']",
+                "[data-apply]",
+                "button[title*='Apply']",
+                ".btn[href*='apply']"
             ]
         }
         return selectors.get(platform.lower(), [])
