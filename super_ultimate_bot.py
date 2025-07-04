@@ -349,7 +349,7 @@ class SuperUltimateJobBot:
                 print("✅ Job page opened (fallback mode)")
             
             # For Wellfound, try to apply with cover letter
-            elif job['platform'] == 'Wellfound':
+            if job['platform'] == 'Wellfound':
                 try:
                     # Look for apply button
                     apply_selectors = [
