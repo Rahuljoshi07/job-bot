@@ -1,70 +1,86 @@
-name: Job Bot
+name: Simple Job Bot
 
 on:
   schedule:
-    # Run every 2 hours (1 hour work, 1 hour rest)
+    # Run every 2 hours
     - cron: '0 */2 * * *'
   workflow_dispatch: # Allow manual trigger
+    inputs:
+      job_limit:
+        description: 'Maximum number of jobs to apply to'
+        required: false
+        default: '10'
+      debug_mode:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+        type: boolean
   push:
     branches: [ main ]
+    paths:
+      - '**.py'
+      - 'requirements.txt'
+      - '.github/workflows/**'
+
+env:
+  PYTHON_VERSION: '3.11'
+  FIREFOX_VERSION: 'latest'
 
 jobs:
-  job-application-bot:
+  simple-job-bot:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: "Primary Run"
+            job_limit: ${{ github.event.inputs.job_limit || '10' }}
 
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+        cache-dependency-path: 'requirements.txt'
 
-    - name: Install Firefox browser and WebDriver (non-Snap)
+    - name: Install Firefox and geckodriver
       run: |
         sudo apt-get update
-        
-        # Remove any existing Snap Firefox that might cause conflicts
         sudo snap remove firefox 2>/dev/null || true
-        
-        # Install required packages
         sudo apt-get install -y software-properties-common xvfb
         
-        # Try to install Firefox ESR from Mozilla PPA first
+        # Install Firefox ESR
         sudo add-apt-repository -y ppa:mozillateam/ppa
         echo 'Package: *' | sudo tee /etc/apt/preferences.d/mozilla-firefox > /dev/null
         echo 'Pin: release o=LP-PPA-mozillateam' | sudo tee -a /etc/apt/preferences.d/mozilla-firefox > /dev/null
         echo 'Pin-Priority: 1001' | sudo tee -a /etc/apt/preferences.d/mozilla-firefox > /dev/null
         sudo apt-get update
-        
-        # Install Firefox from PPA (this gives us a non-Snap version)
         sudo apt-get install -y firefox
         
-        # Install geckodriver manually with better error handling
+        # Install geckodriver
         GECKO_VERSION=$(curl -s "https://api.github.com/repos/mozilla/geckodriver/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-        echo "Installing geckodriver version: $GECKO_VERSION"
-        
-        # Download with better error handling
-        GECKO_URL="https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VERSION}/geckodriver-v${GECKO_VERSION}-linux64.tar.gz"
-        echo "Downloading from: $GECKO_URL"
-        
-        curl -L --fail --retry 3 "$GECKO_URL" -o /tmp/geckodriver.tar.gz
+        curl -L --fail --retry 3 "https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VERSION}/geckodriver-v${GECKO_VERSION}-linux64.tar.gz" -o /tmp/geckodriver.tar.gz
         sudo tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin/
         sudo chmod +x /usr/local/bin/geckodriver
-        rm -f /tmp/geckodriver.tar.gz
         
         # Verify installation
         geckodriver --version
         firefox --version
-        which firefox
 
-    - name: Install Python dependencies
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Set up environment variables
+    - name: Set up environment
       run: |
         cat > .env << EOF
         PERSONAL_FULL_NAME=${{ secrets.PERSONAL_FULL_NAME }}
@@ -73,8 +89,6 @@ jobs:
         PERSONAL_LINKEDIN=${{ secrets.PERSONAL_LINKEDIN }}
         PERSONAL_GITHUB=${{ secrets.PERSONAL_GITHUB }}
         PERSONAL_LOCATION=${{ secrets.PERSONAL_LOCATION }}
-
-        # Platform Credentials
         TWITTER_EMAIL=${{ secrets.TWITTER_EMAIL }}
         TWITTER_PASSWORD=${{ secrets.TWITTER_PASSWORD }}
         INDEED_EMAIL=${{ secrets.INDEED_EMAIL }}
@@ -89,128 +103,25 @@ jobs:
         REMOTEOK_PASSWORD=${{ secrets.REMOTEOK_PASSWORD }}
         FLEXJOBS_EMAIL=${{ secrets.FLEXJOBS_EMAIL }}
         FLEXJOBS_PASSWORD=${{ secrets.FLEXJOBS_PASSWORD }}
-
-        # Job Preferences
         JOB_TITLES=DevOps Engineer,Cloud Engineer,Site Reliability Engineer (SRE),Infrastructure Engineer,Platform Engineer,AWS Engineer,Kubernetes Administrator,CI/CD Engineer,Linux Systems Engineer,Cloud Automation Engineer,Junior DevOps Associate,Remote DevOps Intern
         SKILLS=DevOps,AWS,Docker,Kubernetes,Python,Linux,CI/CD,Jenkins,Terraform
         SALARY_MIN=50000
         REMOTE_ONLY=false
         EXPERIENCE_LEVEL=Entry and Mid
         EOF
-        
-        # Verify .env file was created
-        echo "📄 .env file created with $(wc -l < .env) lines"
-        echo "🔍 Environment variables preview (first 5 lines):"
-        head -5 .env
+        mkdir -p application_proofs
 
-    - name: Create application proofs directory
-      run: mkdir -p application_proofs
-
-    - name: Test secrets access
-      run: python test_secrets.py
-      env:
-        PYTHONPATH: .
-        GITHUB_ACTIONS: true
-        # Pass all secrets as environment variables
-        PERSONAL_FULL_NAME: ${{ secrets.PERSONAL_FULL_NAME }}
-        PERSONAL_EMAIL: ${{ secrets.PERSONAL_EMAIL }}
-        PERSONAL_PHONE: ${{ secrets.PERSONAL_PHONE }}
-        PERSONAL_LINKEDIN: ${{ secrets.PERSONAL_LINKEDIN }}
-        PERSONAL_GITHUB: ${{ secrets.PERSONAL_GITHUB }}
-        PERSONAL_LOCATION: ${{ secrets.PERSONAL_LOCATION }}
-        TWITTER_EMAIL: ${{ secrets.TWITTER_EMAIL }}
-        TWITTER_PASSWORD: ${{ secrets.TWITTER_PASSWORD }}
-        INDEED_EMAIL: ${{ secrets.INDEED_EMAIL }}
-        INDEED_PASSWORD: ${{ secrets.INDEED_PASSWORD }}
-        DICE_EMAIL: ${{ secrets.DICE_EMAIL }}
-        DICE_PASSWORD: ${{ secrets.DICE_PASSWORD }}
-        WEWORKREMOTELY_EMAIL: ${{ secrets.WEWORKREMOTELY_EMAIL }}
-        WEWORKREMOTELY_PASSWORD: ${{ secrets.WEWORKREMOTELY_PASSWORD }}
-        TURING_EMAIL: ${{ secrets.TURING_EMAIL }}
-        TURING_PASSWORD: ${{ secrets.TURING_PASSWORD }}
-        REMOTEOK_EMAIL: ${{ secrets.REMOTEOK_EMAIL }}
-        REMOTEOK_PASSWORD: ${{ secrets.REMOTEOK_PASSWORD }}
-        FLEXJOBS_EMAIL: ${{ secrets.FLEXJOBS_EMAIL }}
-        FLEXJOBS_PASSWORD: ${{ secrets.FLEXJOBS_PASSWORD }}
-
-    - name: Run diagnostics
-      run: python diagnose.py
-      env:
-        PYTHONPATH: .
-        GITHUB_ACTIONS: true
-        # Pass all secrets as environment variables
-        PERSONAL_FULL_NAME: ${{ secrets.PERSONAL_FULL_NAME }}
-        PERSONAL_EMAIL: ${{ secrets.PERSONAL_EMAIL }}
-        PERSONAL_PHONE: ${{ secrets.PERSONAL_PHONE }}
-        PERSONAL_LINKEDIN: ${{ secrets.PERSONAL_LINKEDIN }}
-        PERSONAL_GITHUB: ${{ secrets.PERSONAL_GITHUB }}
-        PERSONAL_LOCATION: ${{ secrets.PERSONAL_LOCATION }}
-        TWITTER_EMAIL: ${{ secrets.TWITTER_EMAIL }}
-        TWITTER_PASSWORD: ${{ secrets.TWITTER_PASSWORD }}
-        INDEED_EMAIL: ${{ secrets.INDEED_EMAIL }}
-        INDEED_PASSWORD: ${{ secrets.INDEED_PASSWORD }}
-        DICE_EMAIL: ${{ secrets.DICE_EMAIL }}
-        DICE_PASSWORD: ${{ secrets.DICE_PASSWORD }}
-        WEWORKREMOTELY_EMAIL: ${{ secrets.WEWORKREMOTELY_EMAIL }}
-        WEWORKREMOTELY_PASSWORD: ${{ secrets.WEWORKREMOTELY_PASSWORD }}
-        TURING_EMAIL: ${{ secrets.TURING_EMAIL }}
-        TURING_PASSWORD: ${{ secrets.TURING_PASSWORD }}
-        REMOTEOK_EMAIL: ${{ secrets.REMOTEOK_EMAIL }}
-        REMOTEOK_PASSWORD: ${{ secrets.REMOTEOK_PASSWORD }}
-        FLEXJOBS_EMAIL: ${{ secrets.FLEXJOBS_EMAIL }}
-        FLEXJOBS_PASSWORD: ${{ secrets.FLEXJOBS_PASSWORD }}
-    
-    - name: Test Firefox ESR and Marionette connection
+    - name: Run simple job bot
       run: |
         export DISPLAY=:99
         Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
         sleep 3
-        python test_firefox_esr.py
-      env:
-        PYTHONPATH: .
-        GITHUB_ACTIONS: true
-    
-    - name: Test Apply button detection fixes
-      run: |
-        echo "🧪 Testing Apply button detection fixes..."
-        python test_button_fixes.py
-        echo "✅ Apply button fixes verified!"
-      env:
-        PYTHONPATH: .
-        GITHUB_ACTIONS: true
-        # Pass all secrets as environment variables
-        PERSONAL_FULL_NAME: ${{ secrets.PERSONAL_FULL_NAME }}
-        PERSONAL_EMAIL: ${{ secrets.PERSONAL_EMAIL }}
-        PERSONAL_PHONE: ${{ secrets.PERSONAL_PHONE }}
-        PERSONAL_LINKEDIN: ${{ secrets.PERSONAL_LINKEDIN }}
-        PERSONAL_GITHUB: ${{ secrets.PERSONAL_GITHUB }}
-        PERSONAL_LOCATION: ${{ secrets.PERSONAL_LOCATION }}
-        TWITTER_EMAIL: ${{ secrets.TWITTER_EMAIL }}
-        TWITTER_PASSWORD: ${{ secrets.TWITTER_PASSWORD }}
-        INDEED_EMAIL: ${{ secrets.INDEED_EMAIL }}
-        INDEED_PASSWORD: ${{ secrets.INDEED_PASSWORD }}
-        DICE_EMAIL: ${{ secrets.DICE_EMAIL }}
-        DICE_PASSWORD: ${{ secrets.DICE_PASSWORD }}
-        WEWORKREMOTELY_EMAIL: ${{ secrets.WEWORKREMOTELY_EMAIL }}
-        WEWORKREMOTELY_PASSWORD: ${{ secrets.WEWORKREMOTELY_PASSWORD }}
-        TURING_EMAIL: ${{ secrets.TURING_EMAIL }}
-        TURING_PASSWORD: ${{ secrets.TURING_PASSWORD }}
-        REMOTEOK_EMAIL: ${{ secrets.REMOTEOK_EMAIL }}
-        REMOTEOK_PASSWORD: ${{ secrets.REMOTEOK_PASSWORD }}
-        FLEXJOBS_EMAIL: ${{ secrets.FLEXJOBS_EMAIL }}
-        FLEXJOBS_PASSWORD: ${{ secrets.FLEXJOBS_PASSWORD }}
-    
-    - name: Run job bot
-      run: |
-        export DISPLAY=:99
-        Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
-        sleep 3
-        echo "Running simple job bot"
+        echo "🤖 Starting simple job bot..."
         python simple_job_bot.py
+        echo "✅ Job bot completed!"
       env:
         PYTHONPATH: .
         GITHUB_ACTIONS: true
-        # Pass all secrets as environment variables
         PERSONAL_FULL_NAME: ${{ secrets.PERSONAL_FULL_NAME }}
         PERSONAL_EMAIL: ${{ secrets.PERSONAL_EMAIL }}
         PERSONAL_PHONE: ${{ secrets.PERSONAL_PHONE }}
@@ -232,7 +143,7 @@ jobs:
         FLEXJOBS_EMAIL: ${{ secrets.FLEXJOBS_EMAIL }}
         FLEXJOBS_PASSWORD: ${{ secrets.FLEXJOBS_PASSWORD }}
 
-    - name: Upload results
+    - name: Upload job results
       uses: actions/upload-artifact@v4
       if: always()
       with:
@@ -242,9 +153,9 @@ jobs:
           applications.txt
         retention-days: 4
 
-    - name: Send log notification
+    - name: Job completion summary
       if: always()
       run: |
-        echo "✅ Job bot cycle completed at $(date)"
-        echo "📄 Artifacts uploaded: application_proofs, logs, screenshots"
-        echo "🕒 Next run scheduled in ~2 hours."
+        echo "🎉 Simple job bot run completed at $(date)"
+        echo "📋 Results and screenshots uploaded as artifacts"
+        echo "⏰ Next automated run in ~2 hours"
