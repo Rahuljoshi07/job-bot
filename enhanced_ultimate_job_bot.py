@@ -339,39 +339,62 @@ class JobRelevanceScorer:
         return (matched_skills / len(user_skills)) * 100
     
     def calculate_relevance_score(self, user_profile: UserProfile, job_match: JobMatch) -> float:
-        """Calculate comprehensive job relevance score (0-100)"""
+        """Calculate comprehensive job relevance score (0-100) - Enhanced for better matching"""
         score = 0.0
         
-        # Skill match (40% weight)
+        # Skill match (35% weight) - More lenient scoring
         skill_match = self.calculate_skill_match(user_profile.skills, job_match.requirements)
-        score += skill_match * 0.4
+        # Boost score if any skills match
+        if skill_match > 0:
+            skill_match = max(skill_match, 20)  # Minimum 20% if any skills match
+        score += skill_match * 0.35
         
-        # Title match (25% weight)
+        # Title match (30% weight) - More flexible matching
         title_match = 0
+        job_title_lower = job_match.title.lower()
+        
+        # Check for exact role matches
         for preferred_role in user_profile.preferred_roles:
-            if preferred_role.lower() in job_match.title.lower():
+            if preferred_role.lower() in job_title_lower:
                 title_match = 100
                 break
-        score += title_match * 0.25
         
-        # Location match (15% weight)
+        # Check for common DevOps/Engineering keywords if no exact match
+        if title_match == 0:
+            devops_keywords = ['engineer', 'developer', 'devops', 'sre', 'cloud', 'platform', 'infrastructure', 'software']
+            for keyword in devops_keywords:
+                if keyword in job_title_lower:
+                    title_match = 60  # Partial match for engineering roles
+                    break
+        
+        score += title_match * 0.30
+        
+        # Location match (20% weight) - More flexible
         location_match = 0
-        if user_profile.remote_only and 'remote' in job_match.location.lower():
+        location_lower = job_match.location.lower()
+        if 'remote' in location_lower or 'worldwide' in location_lower or 'global' in location_lower:
             location_match = 100
-        elif user_profile.location.lower() in job_match.location.lower():
+        elif user_profile.location.lower() in location_lower:
             location_match = 100
-        score += location_match * 0.15
+        else:
+            location_match = 40  # Partial match for any location
+        score += location_match * 0.20
         
         # Company preference (10% weight)
         company_match = 0
         if job_match.company in user_profile.preferred_companies:
             company_match = 100
         elif job_match.company in user_profile.blacklisted_companies:
-            company_match = -100
-        score += company_match * 0.1
+            company_match = -50  # Less harsh penalty
+        else:
+            company_match = 50  # Neutral score for unknown companies
+        score += company_match * 0.10
         
-        # Sentiment score (10% weight)
-        score += job_match.sentiment_score * 0.1
+        # Sentiment score (5% weight) - Reduced weight
+        score += job_match.sentiment_score * 0.05
+        
+        # Add base score boost to ensure more matches
+        score += 10  # Base 10 point boost
         
         return max(0, min(100, score))
     
@@ -1004,6 +1027,9 @@ class EnhancedUltimateJobBot:
             job.skill_match_percentage = self.relevance_scorer.calculate_skill_match(
                 self.user_profile.skills, job.requirements
             )
+            
+            # Debug logging for job scores
+            logger.info(f"📋 Job: {job.title} at {job.company} - Score: {job.relevance_score:.1f}% (Skills: {job.skill_match_percentage:.1f}%)")
         
         # Sort by relevance score
         all_jobs.sort(key=lambda x: x.relevance_score, reverse=True)
@@ -1353,9 +1379,17 @@ LinkedIn: {linkedin}
                 logger.warning("No jobs found")
                 return stats
             
-            # Filter high-relevance jobs
-            high_relevance_jobs = [job for job in jobs if job.relevance_score >= 70]
+            # Filter jobs with more lenient scoring
+            # Lower threshold to 40% to actually apply to jobs
+            high_relevance_jobs = [job for job in jobs if job.relevance_score >= 40]
             stats['high_relevance_jobs'] = len(high_relevance_jobs)
+            
+            logger.info(f"📈 Jobs above 40% relevance: {len(high_relevance_jobs)}")
+            
+            # If still no jobs, take top 5 jobs regardless of score
+            if len(high_relevance_jobs) == 0 and len(jobs) > 0:
+                high_relevance_jobs = sorted(jobs, key=lambda x: x.relevance_score, reverse=True)[:5]
+                logger.info(f"⚡ No jobs met 40% threshold, taking top 5 jobs with scores: {[f'{job.title}: {job.relevance_score:.1f}%' for job in high_relevance_jobs]}")
             
             # Apply to jobs
             for job in high_relevance_jobs[:20]:  # Limit to top 20 jobs
