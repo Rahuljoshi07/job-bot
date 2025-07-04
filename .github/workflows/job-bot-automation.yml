@@ -133,14 +133,14 @@ jobs:
         echo "🔍 Validating advanced scoring integration..."
         python -c "from advanced_scoring_system import AdvancedJobScorer; print('✅ Enhanced scoring system loaded successfully!')" || echo "⚠️ Advanced scoring not available, using basic scoring"
 
-    - name: Run enhanced ultimate job bot
+    - name: Run fixed enhanced job bot
       run: |
         export DISPLAY=:99
         Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
         sleep 3
-        echo "🚀 Starting enhanced ultimate job bot..."
-        python enhanced_ultimate_job_bot.py
-        echo "✅ Enhanced job bot completed!"
+        echo "🚀 Starting fixed enhanced job bot..."
+        python fixed_enhanced_job_bot.py
+        echo "✅ Fixed enhanced job bot completed!"
       env:
         PYTHONPATH: .
         GITHUB_ACTIONS: true
@@ -175,6 +175,9 @@ jobs:
           enhanced_applications.txt
           enhanced_cycle_log.txt
           enhanced_job_bot.log
+          fixed_enhanced_applications.txt
+          fixed_enhanced_cycle_log.txt
+          fixed_enhanced_job_bot.log
           job_bot.db
         retention-days: 7
 
