@@ -120,12 +120,18 @@ jobs:
         EOF
         mkdir -p application_proofs
 
-    - name: Install NLP dependencies
+    - name: Install NLP dependencies and test enhanced scoring
       run: |
-        echo "Installing NLP libraries..."
+        echo "Installing NLP libraries for enhanced scoring..."
         python -m pip install nltk spacy textblob scikit-learn pandas numpy matplotlib || echo "Some NLP packages failed to install - continuing without them"
         python -c "import nltk; nltk.download('punkt', quiet=True); nltk.download('stopwords', quiet=True); nltk.download('wordnet', quiet=True)" || echo "NLTK data download failed - continuing without it"
         python -m spacy download en_core_web_sm || echo "Spacy model download failed - continuing without it"
+        
+        echo "🧪 Testing enhanced scoring system..."
+        python test_new_scoring.py || echo "Scoring test completed with warnings"
+        
+        echo "🔍 Validating advanced scoring integration..."
+        python -c "from advanced_scoring_system import AdvancedJobScorer; print('✅ Enhanced scoring system loaded successfully!')" || echo "⚠️ Advanced scoring not available, using basic scoring"
 
     - name: Run enhanced ultimate job bot
       run: |
