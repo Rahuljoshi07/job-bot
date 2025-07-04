@@ -121,9 +121,9 @@ jobs:
     - name: Install NLP dependencies
       run: |
         echo "Installing NLP libraries..."
-        python -m pip install nltk spacy textblob scikit-learn pandas numpy matplotlib || echo "Some NLP packages failed to install"
-        python -c "import nltk; nltk.download('punkt', quiet=True); nltk.download('stopwords', quiet=True); nltk.download('wordnet', quiet=True)" || echo "NLTK data download failed"
-        python -m spacy download en_core_web_sm || echo "Spacy model download failed, will continue without it"
+        python -m pip install nltk spacy textblob scikit-learn pandas numpy matplotlib || echo "Some NLP packages failed to install - continuing without them"
+        python -c "import nltk; nltk.download('punkt', quiet=True); nltk.download('stopwords', quiet=True); nltk.download('wordnet', quiet=True)" || echo "NLTK data download failed - continuing without it"
+        python -m spacy download en_core_web_sm || echo "Spacy model download failed - continuing without it"
 
     - name: Run enhanced ultimate job bot
       run: |
