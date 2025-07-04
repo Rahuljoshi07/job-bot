@@ -20,15 +20,22 @@ import traceback
 
 class SuperUltimateJobBot:
     def __init__(self):
-        self.config = Config()
-        self.user_config = self.config.create_user_config_from_env()
-        self.resume_analyzer = ResumeAnalyzer()
-        self.driver = None
-        self.applied_jobs = set()
-        self.proof_folder = "application_proofs"
-        
-        # Create proof folder if it doesn't exist
-        os.makedirs(self.proof_folder, exist_ok=True)
+        print("🔧 Initializing Job Bot...")
+        try:
+            self.config = Config()
+            self.user_config = self.config.create_user_config_from_env()
+            self.resume_analyzer = ResumeAnalyzer()
+            self.driver = None
+            self.applied_jobs = set()
+            self.proof_folder = "application_proofs"
+            
+            # Create proof folder if it doesn't exist
+            os.makedirs(self.proof_folder, exist_ok=True)
+            print("✅ Job Bot initialized successfully")
+        except Exception as e:
+            print(f"❌ Initialization error: {e}")
+            print(f"Traceback: {traceback.format_exc()}")
+            raise
         
     def setup_browser(self):
         """Setup Firefox browser with screenshot capabilities"""
