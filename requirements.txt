@@ -7,3 +7,6 @@ python-docx==0.8.11
 selenium==4.15.0
 webdriver-manager==4.0.1
 python-dotenv==1.0.0
+requests-html==0.10.0
+urllib3==1.26.18
+certifi==2024.2.2
