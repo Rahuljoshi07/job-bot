@@ -39,7 +39,24 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import *
 from webdriver_manager.firefox import GeckoDriverManager
 from bs4 import BeautifulSoup
-from enhanced_captcha_solver import EnhancedCaptchaSolver
+# Configure comprehensive logging first
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('enhanced_job_bot.log', encoding='utf-8'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Import enhanced captcha solver with fallback
+try:
+    from enhanced_captcha_solver import EnhancedCaptchaSolver
+    CAPTCHA_SOLVER_AVAILABLE = True
+except ImportError:
+    CAPTCHA_SOLVER_AVAILABLE = False
+    logger.warning("Enhanced captcha solver not available, using basic handling")
 
 # NLP and ML libraries
 try:
@@ -66,16 +83,7 @@ try:
 except ImportError:
     PDF_AVAILABLE = False
 
-# Configure comprehensive logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('enhanced_job_bot.log', encoding='utf-8'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
+# Logger is already configured above
 
 @dataclass
 class JobMatch:
@@ -1106,12 +1114,15 @@ LinkedIn: {linkedin}
                     self.driver.get(job_match.url)
                     time.sleep(self.scheduler.get_random_delay())
                     
-                    # Initialize captcha solver
-                    captcha_solver = EnhancedCaptchaSolver(self.driver)
-                    
-                    # Handle captcha if present
-                    if not captcha_solver.handle_captcha_flow():
-                        logger.warning("Captcha handling failed, but continuing...")
+                    # Initialize captcha solver if available
+                    if CAPTCHA_SOLVER_AVAILABLE:
+                        captcha_solver = EnhancedCaptchaSolver(self.driver)
+                        # Handle captcha if present
+                        if not captcha_solver.handle_captcha_flow():
+                            logger.warning("Captcha handling failed, but continuing...")
+                    else:
+                        # Basic captcha detection
+                        self._basic_captcha_check()
                     
                     # Take initial screenshot
                     screenshot_path = self.take_screenshot(job_match, "initial")
@@ -1125,7 +1136,10 @@ LinkedIn: {linkedin}
                         time.sleep(2)
                         
                         # Handle captcha again if it appears after clicking
-                        captcha_solver.handle_captcha_flow()
+                        if CAPTCHA_SOLVER_AVAILABLE:
+                            captcha_solver.handle_captcha_flow()
+                        else:
+                            self._basic_captcha_check()
                         
                         # Take application screenshot
                         screenshot_path = self.take_screenshot(job_match, "applied")
@@ -1261,6 +1275,32 @@ LinkedIn: {linkedin}
                     
         except Exception as e:
             logger.error(f"Form filling error: {e}")
+    
+    def _basic_captcha_check(self):
+        """Basic captcha detection and handling"""
+        try:
+            # Basic captcha selectors
+            captcha_selectors = [
+                "iframe[src*='recaptcha']",
+                ".g-recaptcha",
+                "iframe[src*='hcaptcha']",
+                ".captcha",
+                "#captcha"
+            ]
+            
+            for selector in captcha_selectors:
+                try:
+                    element = self.driver.find_element(By.CSS_SELECTOR, selector)
+                    if element.is_displayed():
+                        logger.warning(f"⚠️ Basic captcha detected: {selector}")
+                        # Wait a bit for potential auto-resolution
+                        time.sleep(5)
+                        return
+                except:
+                    continue
+                    
+        except Exception as e:
+            logger.error(f"Basic captcha check error: {e}")
     
     def _log_application(self, job_match: JobMatch, screenshot_path: str):
         """Log application details"""
