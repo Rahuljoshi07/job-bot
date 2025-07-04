@@ -20,6 +20,10 @@ scikit-learn==1.3.2
 pandas==2.1.4
 numpy==1.24.4
 
+# Resume processing dependencies
+PyPDF2==3.0.1
+python-docx==0.8.11
+
 # Database and data handling
 # sqlite3 is built-in to Python
 

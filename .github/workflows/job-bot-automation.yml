@@ -1,4 +1,4 @@
-name: Enhanced Ultimate Job Bot
+name: Enhanced Resume Matching Job Bot
 
 on:
   schedule:
@@ -133,14 +133,14 @@ jobs:
         echo "🔍 Validating advanced scoring integration..."
         python -c "from advanced_scoring_system import AdvancedJobScorer; print('✅ Enhanced scoring system loaded successfully!')" || echo "⚠️ Advanced scoring not available, using basic scoring"
 
-    - name: Run fixed enhanced job bot
+    - name: Run enhanced resume matching job bot
       run: |
         export DISPLAY=:99
         Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
         sleep 3
-        echo "🚀 Starting fixed enhanced job bot..."
-        python fixed_enhanced_job_bot.py
-        echo "✅ Fixed enhanced job bot completed!"
+        echo "🚀 Starting enhanced resume matching job bot..."
+        python enhanced_resume_matching_bot.py
+        echo "✅ Enhanced resume matching job bot completed!"
       env:
         PYTHONPATH: .
         GITHUB_ACTIONS: true
@@ -178,6 +178,13 @@ jobs:
           fixed_enhanced_applications.txt
           fixed_enhanced_cycle_log.txt
           fixed_enhanced_job_bot.log
+          enhanced_resume_matching_applications_*.txt
+          enhanced_resume_matching_cycle_*.txt
+          enhanced_resume_matching_report_*.txt
+          enhanced_resume_matching_bot.log
+          super_ultimate_applications_*.txt
+          super_ultimate_report_*.txt
+          super_ultimate_job_bot.log
           job_bot.db
         retention-days: 7
 
