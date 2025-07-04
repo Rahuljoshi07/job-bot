@@ -29,15 +29,22 @@ from urllib.parse import urljoin
 import pickle
 import shutil
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('ultimate_bot.log'),
-        logging.StreamHandler()
-    ]
-)
+# Configure logging with proper encoding for GitHub Actions
+try:
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler('ultimate_bot.log', encoding='utf-8'),
+            logging.StreamHandler()
+        ]
+    )
+except Exception:
+    # Fallback for systems with encoding issues
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
 logger = logging.getLogger(__name__)
 
 class UltimateFinalJobBot:
