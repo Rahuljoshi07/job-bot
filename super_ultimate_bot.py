@@ -43,7 +43,7 @@ class SuperUltimateJobBot:
         try:
             # For GitHub Actions, geckodriver is pre-installed
             if os.getenv('GITHUB_ACTIONS') == 'true':
-                service = Service('/usr/bin/geckodriver')
+                service = Service('/usr/local/bin/geckodriver')
             else:
                 service = Service(GeckoDriverManager().install())
             
