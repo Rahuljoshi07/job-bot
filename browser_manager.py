@@ -76,8 +76,8 @@ class BrowserManager:
                 options.add_argument("--disable-renderer-backgrounding")
                 options.add_argument("--disable-features=TranslateUI")
                 options.add_argument("--disable-ipc-flooding-protection")
-                # For Firefox ESR in CI
-                options.binary_location = "/usr/bin/firefox-esr"
+                # For non-Snap Firefox from Mozilla PPA in CI
+                options.binary_location = "/usr/bin/firefox"
             
             service = FirefoxService(GeckoDriverManager().install())
             self.driver = webdriver.Firefox(service=service, options=options)
