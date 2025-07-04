@@ -3,6 +3,8 @@
 .env.local
 .env.production
 .env.staging
+credentials_template.env
+credentials.env
 
 # User configuration (contains sensitive data)
 user_config.json
