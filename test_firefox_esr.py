@@ -23,12 +23,12 @@ def test_firefox_esr():
     # Check Firefox installation
     try:
         if is_ci:
-            result = subprocess.run(['firefox-esr', '--version'], capture_output=True, text=True)
-            print(f"🦊 Firefox ESR version: {result.stdout.strip()}")
+            result = subprocess.run(['firefox', '--version'], capture_output=True, text=True)
+            print(f"🦊 Firefox version: {result.stdout.strip()}")
         else:
-            print("🦊 Firefox ESR check skipped (not in CI)")
+            print("🦊 Firefox check skipped (not in CI)")
     except Exception as e:
-        print(f"⚠️ Firefox ESR version check failed: {e}")
+        print(f"⚠️ Firefox version check failed: {e}")
     
     # Check geckodriver
     try:
@@ -61,7 +61,7 @@ def test_firefox_esr():
             options.add_argument("--disable-renderer-backgrounding")
             options.add_argument("--disable-features=TranslateUI")
             options.add_argument("--disable-ipc-flooding-protection")
-            options.binary_location = "/usr/bin/firefox-esr"
+            options.binary_location = "/usr/bin/firefox"
         
         service = FirefoxService(GeckoDriverManager().install())
         driver = webdriver.Firefox(service=service, options=options)

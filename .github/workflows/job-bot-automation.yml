@@ -21,20 +21,35 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Install Firefox ESR browser and WebDriver
+    - name: Install Firefox browser and WebDriver (non-Snap)
       run: |
         sudo apt-get update
-        # Install Firefox ESR instead of Snap version to avoid Marionette port issues
-        sudo apt-get install -y firefox-esr xvfb
+        
         # Remove any existing Snap Firefox that might cause conflicts
         sudo snap remove firefox 2>/dev/null || true
+        
+        # Install required packages
+        sudo apt-get install -y software-properties-common xvfb
+        
+        # Try to install Firefox ESR from Mozilla PPA first
+        sudo add-apt-repository -y ppa:mozillateam/ppa
+        echo 'Package: *' | sudo tee /etc/apt/preferences.d/mozilla-firefox > /dev/null
+        echo 'Pin: release o=LP-PPA-mozillateam' | sudo tee -a /etc/apt/preferences.d/mozilla-firefox > /dev/null
+        echo 'Pin-Priority: 1001' | sudo tee -a /etc/apt/preferences.d/mozilla-firefox > /dev/null
+        sudo apt-get update
+        
+        # Install Firefox from PPA (this gives us a non-Snap version)
+        sudo apt-get install -y firefox
+        
         # Install geckodriver manually
         GECKO_VERSION=$(curl -s "https://api.github.com/repos/mozilla/geckodriver/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
         curl -sL "https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v${GECKO_VERSION}-linux64.tar.gz" | sudo tar -xz -C /usr/local/bin/
         sudo chmod +x /usr/local/bin/geckodriver
+        
         # Verify installation
         geckodriver --version
-        firefox-esr --version
+        firefox --version
+        which firefox
 
     - name: Install Python dependencies
       run: |
