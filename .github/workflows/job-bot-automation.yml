@@ -42,7 +42,7 @@ jobs:
         PERSONAL_EMAIL=${{ secrets.PERSONAL_EMAIL }}
         PERSONAL_PHONE=${{ secrets.PERSONAL_PHONE }}
         PERSONAL_LINKEDIN=${{ secrets.PERSONAL_LINKEDIN }}
-        PERSONAL_GITHUB_URL=${{ secrets.PERSONAL_GITHUB_URL }}
+        PERSONAL_GITHUB=${{ secrets.PERSONAL_GITHUB }}
         PERSONAL_LOCATION=${{ secrets.PERSONAL_LOCATION }}
 
         # Platform Credentials

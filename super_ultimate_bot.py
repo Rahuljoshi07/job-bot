@@ -2,10 +2,10 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
-from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 import time
 import json
 import requests
@@ -28,19 +28,23 @@ class SuperUltimateJobBot:
         os.makedirs(self.proof_folder, exist_ok=True)
         
     def setup_browser(self):
-        """Setup Chrome browser with screenshot capabilities"""
+        """Setup Firefox browser with screenshot capabilities"""
         options = Options()
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
-        options.add_argument("--disable-extensions")
         options.add_argument("--window-size=1920,1080")
-        # Remove headless to see actual applications
-        # options.add_argument("--headless")
+        # Enable headless mode for GitHub Actions
+        options.add_argument("--headless")
         
         try:
-            service = Service(ChromeDriverManager().install())
-            self.driver = webdriver.Chrome(service=service, options=options)
+            # For GitHub Actions, geckodriver is pre-installed
+            if os.getenv('GITHUB_ACTIONS') == 'true':
+                service = Service('/usr/local/bin/geckodriver')
+            else:
+                service = Service(GeckoDriverManager().install())
+            
+            self.driver = webdriver.Firefox(service=service, options=options)
             self.driver.set_page_load_timeout(30)
             print("✅ Browser setup complete with screenshot capability")
             return True
@@ -74,7 +78,7 @@ class SuperUltimateJobBot:
             print(f"📸 Proof screenshot saved: {filename}")
             
             # Also log the screenshot in our applications file
-            with open('job-bot/super_ultimate_applications.txt', 'a') as f:
+            with open('super_ultimate_applications.txt', 'a') as f:
                 f.write(f"{timestamp} - PROOF SCREENSHOT: Applied to {job_title} at {company_name} ({platform}) - Screenshot: {filename}\n")
             
             return filename
@@ -377,7 +381,7 @@ class SuperUltimateJobBot:
             
             # Log application with proof
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            with open('job-bot/super_ultimate_applications.txt', 'a') as f:
+            with open('super_ultimate_applications.txt', 'a') as f:
                 f.write(f"{timestamp} - Applied to {job['title']} at {job['company']} ({job['platform']}) - URL: {job.get('url', 'N/A')} - Proof: {proof_file or 'No screenshot'}\n")
             
             print("✅ Application logged with proof!")
@@ -456,7 +460,7 @@ class SuperUltimateJobBot:
             
             # Log cycle completion
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            with open('job-bot/super_ultimate_cycle_log.txt', 'a') as f:
+            with open('super_ultimate_cycle_log.txt', 'a') as f:
                 f.write(f"{timestamp} - SUPER ULTIMATE CYCLE: {applications_sent} applications with proof, {len(all_jobs)} jobs found\n")
             
             print(f"\n🎉 SUPER ULTIMATE cycle completed with PROOF!")
