@@ -41,10 +41,18 @@ jobs:
         # Install Firefox from PPA (this gives us a non-Snap version)
         sudo apt-get install -y firefox
         
-        # Install geckodriver manually
+        # Install geckodriver manually with better error handling
         GECKO_VERSION=$(curl -s "https://api.github.com/repos/mozilla/geckodriver/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-        curl -sL "https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v${GECKO_VERSION}-linux64.tar.gz" | sudo tar -xz -C /usr/local/bin/
+        echo "Installing geckodriver version: $GECKO_VERSION"
+        
+        # Download with better error handling
+        GECKO_URL="https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VERSION}/geckodriver-v${GECKO_VERSION}-linux64.tar.gz"
+        echo "Downloading from: $GECKO_URL"
+        
+        curl -L --fail --retry 3 "$GECKO_URL" -o /tmp/geckodriver.tar.gz
+        sudo tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin/
         sudo chmod +x /usr/local/bin/geckodriver
+        rm -f /tmp/geckodriver.tar.gz
         
         # Verify installation
         geckodriver --version
