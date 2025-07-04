@@ -211,7 +211,7 @@ jobs:
           super_ultimate_applications.txt
           super_ultimate_cycle_log.txt
           bot_error_log.txt
-        retention-days: 30
+        retention-days: 4
 
     - name: Send log notification
       if: always()
