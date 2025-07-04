@@ -21,17 +21,20 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Install Firefox browser and WebDriver
+    - name: Install Firefox ESR browser and WebDriver
       run: |
         sudo apt-get update
-        sudo apt-get install -y firefox xvfb
+        # Install Firefox ESR instead of Snap version to avoid Marionette port issues
+        sudo apt-get install -y firefox-esr xvfb
+        # Remove any existing Snap Firefox that might cause conflicts
+        sudo snap remove firefox 2>/dev/null || true
         # Install geckodriver manually
         GECKO_VERSION=$(curl -s "https://api.github.com/repos/mozilla/geckodriver/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
         curl -sL "https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v${GECKO_VERSION}-linux64.tar.gz" | sudo tar -xz -C /usr/local/bin/
         sudo chmod +x /usr/local/bin/geckodriver
         # Verify installation
         geckodriver --version
-        firefox --version
+        firefox-esr --version
 
     - name: Install Python dependencies
       run: |
@@ -133,6 +136,16 @@ jobs:
         REMOTEOK_PASSWORD: ${{ secrets.REMOTEOK_PASSWORD }}
         FLEXJOBS_EMAIL: ${{ secrets.FLEXJOBS_EMAIL }}
         FLEXJOBS_PASSWORD: ${{ secrets.FLEXJOBS_PASSWORD }}
+    
+    - name: Test Firefox ESR and Marionette connection
+      run: |
+        export DISPLAY=:99
+        Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+        sleep 3
+        python test_firefox_esr.py
+      env:
+        PYTHONPATH: .
+        GITHUB_ACTIONS: true
     
     - name: Run job bot
       run: |

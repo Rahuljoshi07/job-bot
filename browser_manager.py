@@ -51,17 +51,33 @@ class BrowserManager:
     
     
     def setup_firefox(self, headless=True):
-        """Setup Firefox browser"""
+        """Setup Firefox browser (supports both regular Firefox and Firefox ESR)"""
         try:
             print("🔧 Setting up Firefox browser...")
             
             options = FirefoxOptions()
             if headless:
                 options.add_argument("--headless")
+            
+            # Enhanced Firefox options for better CI compatibility
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-gpu")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--disable-extensions")
+            options.add_argument("--disable-plugins")
             options.add_argument("--width=1920")
             options.add_argument("--height=1080")
+            options.add_argument("--window-size=1920,1080")
+            
+            # CI-specific settings for better stability
+            if os.environ.get('GITHUB_ACTIONS'):
+                options.add_argument("--disable-background-timer-throttling")
+                options.add_argument("--disable-backgrounding-occluded-windows")
+                options.add_argument("--disable-renderer-backgrounding")
+                options.add_argument("--disable-features=TranslateUI")
+                options.add_argument("--disable-ipc-flooding-protection")
+                # For Firefox ESR in CI
+                options.binary_location = "/usr/bin/firefox-esr"
             
             service = FirefoxService(GeckoDriverManager().install())
             self.driver = webdriver.Firefox(service=service, options=options)
