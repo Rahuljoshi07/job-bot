@@ -14,6 +14,7 @@ import os
 from datetime import datetime
 from config import Config
 from resume_analyzer import ResumeAnalyzer
+from enhanced_button_detector import EnhancedButtonDetector
 import logging
 from urllib.parse import urljoin
 import traceback
@@ -317,33 +318,42 @@ class SuperUltimateJobBot:
             # Take screenshot of job page as proof
             proof_file = self.take_proof_screenshot(job['title'], job['company'], job['platform'])
             
-            # For RemoteOK and other platforms, try to open application
-            if job['platform'] == 'RemoteOK' and job.get('apply_url'):
-                try:
-                    # Look for application form or external apply button
-                    apply_buttons = self.driver.find_elements(By.CSS_SELECTOR, 
-                        "a[href*='apply'], button:contains('Apply'), .apply-btn, [data-apply]")
+            # Use enhanced button detector for better Apply button finding
+            try:
+                button_detector = EnhancedButtonDetector(self.driver)
+                
+                # Create screenshot callback for button detection
+                def screenshot_callback(stage):
+                    self.take_proof_screenshot(f"{job['title']}_{stage}", job['company'], job['platform'])
+                
+                # Try to find and click Apply button
+                platform_name = job['platform'].lower().replace('/', '').replace(' ', '')
+                success, method, error = button_detector.click_apply_button(
+                    platform=platform_name, 
+                    take_screenshot_callback=screenshot_callback
+                )
+                
+                if success:
+                    print(f"✅ Successfully clicked Apply button using method: {method}")
+                    time.sleep(3)  # Wait for page response
                     
-                    if apply_buttons:
-                        apply_buttons[0].click()
-                        time.sleep(2)
+                    # Take final screenshot after application
+                    self.take_proof_screenshot(f"{job['title']}_application_completed", job['company'], job['platform'])
+                else:
+                    print(f"⚠️ Could not find/click Apply button: {error}")
+                    print("✅ Job page accessed (manual application may be required)")
                         
-                        # Take another screenshot after clicking apply
-                        self.take_proof_screenshot(f"{job['title']}_application_form", job['company'], job['platform'])
-                        
-                        print("✅ Application form opened")
-                    else:
-                        print("✅ Job page opened (external application)")
-                        
-                except Exception as e:
-                    print(f"⚠️ Could not interact with application: {e}")
+            except Exception as e:
+                print(f"⚠️ Enhanced button detection failed: {e}")
+                # Fallback to taking just a screenshot of the job page
+                print("✅ Job page opened (fallback mode)")
             
             # For Wellfound, try to apply with cover letter
             elif job['platform'] == 'Wellfound':
                 try:
                     # Look for apply button
                     apply_selectors = [
-                        "button:contains('Apply')",
+                        "button[title*='Apply']",
                         ".apply-button",
                         "[data-test='apply']",
                         "a[href*='apply']"

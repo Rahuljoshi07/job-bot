@@ -58,8 +58,8 @@ class UltimateJobBot:
                     "a[href*='login']", 
                     ".login",
                     ".sign-in",
-                    "a:contains('Sign In')",
-                    "a:contains('Login')"
+                    "a[title*='Sign In']",
+                    "a[title*='Login']"
                 ]
                 
                 login_clicked = False
@@ -412,8 +412,8 @@ class UltimateJobBot:
                         "a[href*='apply']",
                         ".apply-button",
                         ".btn-apply",
-                        "button:contains('Apply')",
-                        "a:contains('Apply')"
+                        "button[title*='Apply']",
+                        "a[title*='Apply']"
                     ]
                     
                     for selector in apply_selectors:
