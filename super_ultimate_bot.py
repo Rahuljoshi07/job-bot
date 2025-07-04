@@ -14,6 +14,9 @@ import os
 from datetime import datetime
 from config import Config
 from resume_analyzer import ResumeAnalyzer
+import logging
+from urllib.parse import urljoin
+import traceback
 
 class SuperUltimateJobBot:
     def __init__(self):
@@ -40,7 +43,7 @@ class SuperUltimateJobBot:
         try:
             # For GitHub Actions, geckodriver is pre-installed
             if os.getenv('GITHUB_ACTIONS') == 'true':
-                service = Service('/usr/local/bin/geckodriver')
+                service = Service('/usr/bin/geckodriver')
             else:
                 service = Service(GeckoDriverManager().install())
             
