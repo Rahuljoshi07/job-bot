@@ -257,18 +257,21 @@ class UltimateFinalJobBot:
             logger.info("🔧 Setting up browser...")
             
             options = Options()
+            # Firefox-specific arguments
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
-            options.add_argument("--disable-gpu")
-            options.add_argument("--window-size=1920,1080")
-            options.add_argument("--disable-blink-features=AutomationControlled")
-            options.add_experimental_option("excludeSwitches", ["enable-automation"])
-            options.add_experimental_option('useAutomationExtension', False)
+            options.add_argument("--width=1920")
+            options.add_argument("--height=1080")
             
             # Enable headless mode for GitHub Actions
             if os.getenv('GITHUB_ACTIONS') == 'true':
                 options.add_argument("--headless")
                 logger.info("🔧 Headless mode enabled for GitHub Actions")
+            
+            # Firefox preferences to avoid detection
+            options.set_preference("dom.webdriver.enabled", False)
+            options.set_preference("useAutomationExtension", False)
+            options.set_preference("general.useragent.override", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
             
             # Setup driver service
             try:
