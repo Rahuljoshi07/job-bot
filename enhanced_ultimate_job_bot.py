@@ -25,13 +25,13 @@ except ImportError:
     # Fallback for email imports
     MimeText = None
     MimeMultipart = None
-    print("⚠️ Email functionality disabled due to import issues")
+    print("WARNING: Email functionality disabled due to import issues")
 
 try:
     import schedule
 except ImportError:
     schedule = None
-    print("⚠️ Schedule module not available")
+    print("WARNING: Schedule module not available")
 
 import threading
 from dataclasses import dataclass
@@ -70,22 +70,43 @@ except ImportError:
     CAPTCHA_SOLVER_AVAILABLE = False
     logger.warning("Enhanced captcha solver not available, using basic handling")
 
+# Import advanced scoring system
+try:
+    from advanced_scoring_system import AdvancedJobScorer, ScoringMetrics
+    ADVANCED_SCORING_AVAILABLE = True
+except ImportError:
+    ADVANCED_SCORING_AVAILABLE = False
+    logger.warning("Advanced scoring system not available, using basic scoring")
+
 # NLP and ML libraries
 try:
     import nltk
     from nltk.corpus import stopwords
     from nltk.tokenize import word_tokenize
     from nltk.stem import WordNetLemmatizer
-    import spacy
-    from textblob import TextBlob
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.metrics.pairwise import cosine_similarity
     import pandas as pd
     import numpy as np
     NLP_AVAILABLE = True
+    print("SUCCESS: NLP libraries loaded successfully")
 except ImportError:
     NLP_AVAILABLE = False
-    print("⚠️ NLP libraries not available. Installing basic versions...")
+    print("WARNING: NLP libraries not available. Using basic scoring only.")
+
+# Optional spacy for advanced NLP
+try:
+    import spacy
+    SPACY_AVAILABLE = True
+except ImportError:
+    SPACY_AVAILABLE = False
+
+# Optional textblob for sentiment analysis
+try:
+    from textblob import TextBlob
+    TEXTBLOB_AVAILABLE = True
+except ImportError:
+    TEXTBLOB_AVAILABLE = False
 
 # PDF processing
 try:
@@ -945,9 +966,13 @@ class EnhancedUltimateJobBot:
                 logger.error(f"Resume parsing error: {e}")
     
     def setup_browser(self) -> bool:
-        """Setup Firefox browser with enhanced options"""
+        """Setup browser with Firefox/Chrome fallback for Windows compatibility"""
+        # Try Firefox first
         try:
-            options = Options()
+            from selenium.webdriver.firefox.options import Options as FirefoxOptions
+            from selenium.webdriver.firefox.service import Service as FirefoxService
+            
+            options = FirefoxOptions()
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--width=1920")
@@ -965,9 +990,9 @@ class EnhancedUltimateJobBot:
             
             # Setup service
             if os.getenv('GITHUB_ACTIONS') == 'true':
-                service = Service('/usr/local/bin/geckodriver')
+                service = FirefoxService('/usr/local/bin/geckodriver')
             else:
-                service = Service(GeckoDriverManager().install())
+                service = FirefoxService(GeckoDriverManager().install())
             
             self.driver = webdriver.Firefox(service=service, options=options)
             self.driver.set_page_load_timeout(30)
@@ -976,12 +1001,71 @@ class EnhancedUltimateJobBot:
             # Execute anti-detection script
             self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
             
-            logger.info("✅ Browser setup completed successfully")
+            logger.info("✅ Firefox browser setup completed successfully")
             return True
             
-        except Exception as e:
-            logger.error(f"Browser setup failed: {e}")
-            return False
+        except Exception as firefox_error:
+            logger.warning(f"Firefox setup failed: {firefox_error}")
+            
+            # Fallback to Chrome
+            try:
+                from selenium.webdriver.chrome.options import Options as ChromeOptions
+                from selenium.webdriver.chrome.service import Service as ChromeService
+                from webdriver_manager.chrome import ChromeDriverManager
+                
+                options = ChromeOptions()
+                options.add_argument("--no-sandbox")
+                options.add_argument("--disable-dev-shm-usage")
+                options.add_argument("--disable-blink-features=AutomationControlled")
+                options.add_argument("--window-size=1920,1080")
+                options.add_experimental_option("excludeSwitches", ["enable-automation"])
+                options.add_experimental_option('useAutomationExtension', False)
+                
+                # Headless mode for CI/CD
+                if os.getenv('GITHUB_ACTIONS') == 'true':
+                    options.add_argument("--headless")
+                
+                # Setup service
+                service = ChromeService(ChromeDriverManager().install())
+                
+                self.driver = webdriver.Chrome(service=service, options=options)
+                self.driver.set_page_load_timeout(30)
+                self.driver.implicitly_wait(10)
+                
+                # Execute anti-detection script
+                self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+                
+                logger.info("✅ Chrome browser setup completed successfully (Firefox fallback)")
+                return True
+                
+            except Exception as chrome_error:
+                logger.error(f"Both Firefox and Chrome setup failed. Firefox: {firefox_error}, Chrome: {chrome_error}")
+                
+                # Last resort: try Edge
+                try:
+                    from selenium.webdriver.edge.options import Options as EdgeOptions
+                    from selenium.webdriver.edge.service import Service as EdgeService
+                    from webdriver_manager.microsoft import EdgeChromiumDriverManager
+                    
+                    options = EdgeOptions()
+                    options.add_argument("--no-sandbox")
+                    options.add_argument("--disable-dev-shm-usage")
+                    options.add_argument("--window-size=1920,1080")
+                    
+                    if os.getenv('GITHUB_ACTIONS') == 'true':
+                        options.add_argument("--headless")
+                    
+                    service = EdgeService(EdgeChromiumDriverManager().install())
+                    self.driver = webdriver.Edge(service=service, options=options)
+                    self.driver.set_page_load_timeout(30)
+                    self.driver.implicitly_wait(10)
+                    
+                    logger.info("✅ Edge browser setup completed successfully (last resort)")
+                    return True
+                    
+                except Exception as edge_error:
+                    logger.error(f"All browser setups failed. Firefox: {firefox_error}, Chrome: {chrome_error}, Edge: {edge_error}")
+                    return False
     
     def search_all_jobs(self) -> List[JobMatch]:
         """Search jobs from all platforms"""
@@ -1016,8 +1100,9 @@ class EnhancedUltimateJobBot:
                 except Exception as e:
                     logger.error(f"LinkedIn search error: {e}")
         
-        # Calculate relevance scores
+        # Calculate relevance scores using both basic and advanced scoring
         for job in all_jobs:
+            # Basic relevance scoring
             job.relevance_score = self.relevance_scorer.calculate_relevance_score(
                 self.user_profile, job
             )
@@ -1027,6 +1112,55 @@ class EnhancedUltimateJobBot:
             job.skill_match_percentage = self.relevance_scorer.calculate_skill_match(
                 self.user_profile.skills, job.requirements
             )
+            
+            # Enhanced scoring with advanced system if available
+            if ADVANCED_SCORING_AVAILABLE:
+                try:
+                    # Create user profile for advanced scorer
+                    user_profile_dict = {
+                        'skills': self.user_profile.skills,
+                        'experience_years': self.user_profile.experience_years,
+                        'preferred_roles': self.user_profile.preferred_roles,
+                        'location': self.user_profile.location,
+                        'remote_only': self.user_profile.remote_only,
+                        'salary_min': self.user_profile.salary_min,
+                        'preferred_companies': self.user_profile.preferred_companies,
+                        'blacklisted_companies': self.user_profile.blacklisted_companies,
+                        'keywords': self.user_profile.skills,  # Use skills as keywords
+                        'bio': f"Experienced professional in {', '.join(self.user_profile.preferred_roles[:3])}"
+                    }
+                    
+                    # Create job data for advanced scorer
+                    job_data = {
+                        'title': job.title,
+                        'company': job.company,
+                        'description': job.description,
+                        'requirements': job.requirements,
+                        'location': job.location,
+                        'salary': job.salary
+                    }
+                    
+                    # Get advanced scoring
+                    advanced_scorer = AdvancedJobScorer(user_profile_dict)
+                    advanced_metrics = advanced_scorer.score_job(job_data)
+                    
+                    # Use advanced score if it's higher or more comprehensive
+                    if advanced_metrics.overall_score > job.relevance_score:
+                        job.relevance_score = advanced_metrics.overall_score
+                    
+                    # Update skill match with advanced system
+                    job.skill_match_percentage = max(job.skill_match_percentage, advanced_metrics.skills_score)
+                    
+                    # Save advanced scoring data
+                    advanced_scorer.save_scoring_data(job.id, advanced_metrics)
+                    
+                    # Log advanced metrics for high-scoring jobs
+                    if advanced_metrics.overall_score >= 70:
+                        explanation = advanced_scorer.get_scoring_explanation(advanced_metrics)
+                        logger.info(f"🎯 HIGH SCORE JOB ANALYSIS:\n{explanation}")
+                    
+                except Exception as e:
+                    logger.error(f"Advanced scoring error for {job.title}: {e}")
             
             # Debug logging for job scores
             logger.info(f"📋 Job: {job.title} at {job.company} - Score: {job.relevance_score:.1f}% (Skills: {job.skill_match_percentage:.1f}%)")
