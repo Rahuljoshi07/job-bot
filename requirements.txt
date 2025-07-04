@@ -21,13 +21,11 @@ pandas==2.1.4
 numpy==1.24.4
 
 # Database and data handling
-sqlite3
-pickle5==0.0.12
+# sqlite3 is built-in to Python
 
 # Email notifications
-secure-smtplib==0.1.1
+# secure-smtplib is not needed, using built-in smtplib
 
 # Additional utilities
-hashlib
-dataclasses
+# hashlib and dataclasses are built-in to Python
 typing-extensions==4.8.0
