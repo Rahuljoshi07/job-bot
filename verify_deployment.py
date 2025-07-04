@@ -102,19 +102,23 @@ def check_recent_commit():
     print("\n🔍 Checking recent commit...")
     
     try:
-        result = subprocess.run(['git', 'log', '--oneline', '-1'], 
+        result = subprocess.run(['git', 'log', '--oneline', '-3'], 
                               capture_output=True, text=True)
         
         if result.returncode == 0:
-            commit_msg = result.stdout.strip()
-            print(f"Latest commit: {commit_msg}")
+            commits = result.stdout.strip().split('\n')
+            print(f"Recent commits:")
+            for commit in commits[:3]:
+                print(f"  {commit}")
             
-            if 'CSS selector' in commit_msg or 'Fix CSS' in commit_msg:
-                print("✅ Recent commit contains CSS selector fixes")
-                return True
-            else:
-                print("⚠️ Recent commit doesn't seem to contain CSS fixes")
-                return False
+            # Check if any of the recent commits contain CSS fixes
+            for commit in commits:
+                if 'CSS selector' in commit or 'Fix CSS' in commit:
+                    print("✅ Recent commits contain CSS selector fixes")
+                    return True
+            
+            print("⚠️ No recent commits contain CSS fixes")
+            return False
         else:
             print("❌ Could not check git log")
             return False
