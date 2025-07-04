@@ -24,7 +24,14 @@ jobs:
     - name: Install Firefox browser and WebDriver
       run: |
         sudo apt-get update
-        sudo apt-get install -y firefox xvfb geckodriver
+        sudo apt-get install -y firefox xvfb
+        # Install geckodriver manually
+        GECKO_VERSION=$(curl -s "https://api.github.com/repos/mozilla/geckodriver/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+        curl -sL "https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v${GECKO_VERSION}-linux64.tar.gz" | sudo tar -xz -C /usr/local/bin/
+        sudo chmod +x /usr/local/bin/geckodriver
+        # Verify installation
+        geckodriver --version
+        firefox --version
 
     - name: Install Python dependencies
       run: |
@@ -87,6 +94,8 @@ jobs:
           application_proofs/
           super_ultimate_applications.txt
           super_ultimate_cycle_log.txt
+          bot_error_log.txt
+          .env
         retention-days: 30
 
     - name: Send log notification
