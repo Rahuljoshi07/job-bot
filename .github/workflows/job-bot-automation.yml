@@ -101,7 +101,6 @@ jobs:
           super_ultimate_applications.txt
           super_ultimate_cycle_log.txt
           bot_error_log.txt
-          .env
         retention-days: 30
 
     - name: Send log notification

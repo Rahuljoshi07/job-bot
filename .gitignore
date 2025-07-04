@@ -1,8 +1,25 @@
-# Environment variables
+# Environment variables (SECURITY CRITICAL)
 .env
+.env.local
+.env.production
+.env.staging
 
 # User configuration (contains sensitive data)
 user_config.json
+**/credentials.json
+**/secrets.json
+
+# Application proofs and logs (may contain sensitive info)
+application_proofs/
+super_ultimate_applications.txt
+super_ultimate_cycle_log.txt
+bot_error_log.txt
+
+# Screenshots (may contain personal info)
+*.png
+*.jpg
+*.jpeg
+screenshots/
 
 # Python
 __pycache__/
