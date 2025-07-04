@@ -59,7 +59,13 @@ def check_dependencies():
     
     for package in required_packages:
         try:
-            __import__(package.replace('-', '_'))
+            # Handle special module name cases
+            if package == 'python-dotenv':
+                __import__('dotenv')
+            elif package == 'beautifulsoup4':
+                __import__('bs4')
+            else:
+                __import__(package.replace('-', '_'))
             print(f"✅ {package}: OK")
         except ImportError as e:
             print(f"❌ {package}: MISSING - {e}")
