@@ -243,6 +243,11 @@ jobs:
         name: application-proofs-${{ github.run_number }}
         path: |
           application_proofs/
+          ultimate_final_applications.txt
+          ultimate_final_cycle_log.txt
+          ultimate_final_error_log.txt
+          ultimate_bot.log
+          critical_error_log.txt
           super_ultimate_applications.txt
           super_ultimate_cycle_log.txt
           bot_error_log.txt
