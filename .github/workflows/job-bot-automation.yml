@@ -1,4 +1,4 @@
-name: 24/7 Automated Job Bot
+name: Job Bot
 
 on:
   schedule:
@@ -200,17 +200,13 @@ jobs:
         FLEXJOBS_EMAIL: ${{ secrets.FLEXJOBS_EMAIL }}
         FLEXJOBS_PASSWORD: ${{ secrets.FLEXJOBS_PASSWORD }}
     
-    - name: Run ULTIMATE FINAL BOT (100% ERROR-FREE VERSION)
+    - name: Run job bot
       run: |
         export DISPLAY=:99
         Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
         sleep 3
-        echo "🎯 Running ULTIMATE FINAL BOT - 100% ERROR-FREE VERSION"
-        echo "✅ Comprehensive error handling enabled"
-        echo "✅ Bulletproof Apply button detection"
-        echo "✅ Smart template job handling"
-        echo "✅ Full logging and screenshot proof system"
-        python ULTIMATE_FINAL_BOT.py
+        echo "Running simple job bot"
+        python simple_job_bot.py
       env:
         PYTHONPATH: .
         GITHUB_ACTIONS: true
@@ -236,21 +232,14 @@ jobs:
         FLEXJOBS_EMAIL: ${{ secrets.FLEXJOBS_EMAIL }}
         FLEXJOBS_PASSWORD: ${{ secrets.FLEXJOBS_PASSWORD }}
 
-    - name: Upload application proofs & logs
+    - name: Upload results
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: application-proofs-${{ github.run_number }}
+        name: job-bot-results-${{ github.run_number }}
         path: |
           application_proofs/
-          ultimate_final_applications.txt
-          ultimate_final_cycle_log.txt
-          ultimate_final_error_log.txt
-          ultimate_bot.log
-          critical_error_log.txt
-          super_ultimate_applications.txt
-          super_ultimate_cycle_log.txt
-          bot_error_log.txt
+          applications.txt
         retention-days: 4
 
     - name: Send log notification
