@@ -39,6 +39,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import *
 from webdriver_manager.firefox import GeckoDriverManager
 from bs4 import BeautifulSoup
+from enhanced_captcha_solver import EnhancedCaptchaSolver
 
 # NLP and ML libraries
 try:
@@ -1083,7 +1084,7 @@ LinkedIn: {linkedin}
             return ""
     
     def apply_to_job(self, job_match: JobMatch) -> bool:
-        """Apply to job with enhanced automation"""
+        """Apply to job with enhanced automation and captcha handling"""
         try:
             logger.info(f"📝 Applying to: {job_match.title} at {job_match.company}")
             
@@ -1105,6 +1106,13 @@ LinkedIn: {linkedin}
                     self.driver.get(job_match.url)
                     time.sleep(self.scheduler.get_random_delay())
                     
+                    # Initialize captcha solver
+                    captcha_solver = EnhancedCaptchaSolver(self.driver)
+                    
+                    # Handle captcha if present
+                    if not captcha_solver.handle_captcha_flow():
+                        logger.warning("Captcha handling failed, but continuing...")
+                    
                     # Take initial screenshot
                     screenshot_path = self.take_screenshot(job_match, "initial")
                     
@@ -1115,6 +1123,9 @@ LinkedIn: {linkedin}
                         # Click apply button
                         self._click_apply_button(apply_button)
                         time.sleep(2)
+                        
+                        # Handle captcha again if it appears after clicking
+                        captcha_solver.handle_captcha_flow()
                         
                         # Take application screenshot
                         screenshot_path = self.take_screenshot(job_match, "applied")

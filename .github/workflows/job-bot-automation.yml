@@ -1,4 +1,4 @@
-name: Simple Job Bot
+name: Enhanced Ultimate Job Bot
 
 on:
   schedule:
@@ -27,16 +27,16 @@ env:
   FIREFOX_VERSION: 'latest'
 
 jobs:
-  simple-job-bot:
+  enhanced-ultimate-job-bot:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: "Primary Run"
-            job_limit: ${{ github.event.inputs.job_limit || '10' }}
+          - name: "AI-Powered Enhanced Run"
+            job_limit: ${{ github.event.inputs.job_limit || '20' }}
 
     steps:
     - name: Checkout code
@@ -103,11 +103,18 @@ jobs:
         REMOTEOK_PASSWORD=${{ secrets.REMOTEOK_PASSWORD }}
         FLEXJOBS_EMAIL=${{ secrets.FLEXJOBS_EMAIL }}
         FLEXJOBS_PASSWORD=${{ secrets.FLEXJOBS_PASSWORD }}
-        JOB_TITLES=DevOps Engineer,Cloud Engineer,Site Reliability Engineer (SRE),Infrastructure Engineer,Platform Engineer,AWS Engineer,Kubernetes Administrator,CI/CD Engineer,Linux Systems Engineer,Cloud Automation Engineer,Junior DevOps Associate,Remote DevOps Intern
-        SKILLS=DevOps,AWS,Docker,Kubernetes,Python,Linux,CI/CD,Jenkins,Terraform
-        SALARY_MIN=50000
-        REMOTE_ONLY=false
-        EXPERIENCE_LEVEL=Entry and Mid
+        JOB_TITLES="Site Reliability Engineer (SRE),Platform Engineer,Cloud Infrastructure Engineer (AWS/Azure/GCP),Senior DevOps Engineer,Kubernetes Engineer,K8s Admin,Terraform/IaC Engineer,CI/CD Automation Engineer,Cloud Security Engineer,DevOps Engineer,Cloud Engineer (AWS/GCP),Build & Release Engineer,Jenkins Pipeline Engineer,Linux System Administrator (Cloud-based),Infrastructure Engineer,Automation Engineer (Bash/Python)"
+        SKILLS="DevOps,AWS,Docker,Kubernetes,Python,Linux,CI/CD,Jenkins,Terraform,Azure,GCP,Ansible,Prometheus,Grafana,Git,Bash"
+        BLACKLISTED_COMPANIES="Fake Corp,Scam Inc,MLM Company"
+        PREFERRED_COMPANIES="Google,Microsoft,Amazon,Netflix,Meta,Apple,Tesla,Spotify"
+        SALARY_MIN=60000
+        REMOTE_ONLY=true
+        EXPERIENCE_LEVEL=entry
+        EMAIL_NOTIFICATIONS=true
+        SMTP_SERVER=smtp.gmail.com
+        SENDER_EMAIL=${{ secrets.SENDER_EMAIL }}
+        SENDER_PASSWORD=${{ secrets.SENDER_PASSWORD }}
+        RECIPIENT_EMAIL=${{ secrets.RECIPIENT_EMAIL }}
         EOF
         mkdir -p application_proofs
 
@@ -149,19 +156,35 @@ jobs:
         FLEXJOBS_EMAIL: ${{ secrets.FLEXJOBS_EMAIL }}
         FLEXJOBS_PASSWORD: ${{ secrets.FLEXJOBS_PASSWORD }}
 
-    - name: Upload job results
+    - name: Upload enhanced job bot results
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: job-bot-results-${{ github.run_number }}
+        name: enhanced-job-bot-results-${{ github.run_number }}
         path: |
           application_proofs/
-          applications.txt
-        retention-days: 4
+          enhanced_applications.txt
+          enhanced_cycle_log.txt
+          enhanced_job_bot.log
+          job_bot.db
+        retention-days: 7
 
-    - name: Job completion summary
+    - name: Upload analytics data
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: job-bot-analytics-${{ github.run_number }}
+        path: |
+          job_bot.db
+          applied_jobs_history.pkl
+        retention-days: 30
+
+    - name: Enhanced job bot completion summary
       if: always()
       run: |
-        echo "🎉 Simple job bot run completed at $(date)"
-        echo "📋 Results and screenshots uploaded as artifacts"
+        echo "🎉 Enhanced Ultimate Job Bot run completed at $(date)"
+        echo "🤖 AI-powered job application system executed successfully"
+        echo "📊 Analytics database and logs uploaded as artifacts"
+        echo "📸 Screenshots and proof uploaded for review"
         echo "⏰ Next automated run in ~2 hours"
+        echo "🔗 View artifacts in the Actions tab for detailed results"
