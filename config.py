@@ -64,6 +64,17 @@ class Config:
                 'salary_min': os.getenv('PREFERENCES_SALARY_MIN', ''),
                 'remote_only': os.getenv('PREFERENCES_REMOTE_ONLY', 'true').lower() == 'true',
                 'experience_level': os.getenv('PREFERENCES_EXPERIENCE_LEVEL', 'entry')
+            },
+            'email_verification': {
+                'enabled': os.getenv('EMAIL_VERIFICATION_ENABLED', 'true').lower() == 'true',
+                'imap_server': os.getenv('EMAIL_IMAP_SERVER', 'imap.gmail.com'),
+                'imap_port': int(os.getenv('EMAIL_IMAP_PORT', '993')),
+                'smtp_server': os.getenv('EMAIL_SMTP_SERVER', 'smtp.gmail.com'),
+                'smtp_port': int(os.getenv('EMAIL_SMTP_PORT', '587')),
+                'email': os.getenv('PERSONAL_EMAIL'),
+                'app_password': os.getenv('EMAIL_APP_PASSWORD'),
+                'timeout': int(os.getenv('EMAIL_VERIFICATION_TIMEOUT', '300')),
+                'check_interval': int(os.getenv('EMAIL_CHECK_INTERVAL', '30'))
             }
         }
         
@@ -152,6 +163,17 @@ class Config:
                         'salary_min': os.getenv('PREFERENCES_SALARY_MIN', ''),
                         'remote_only': os.getenv('PREFERENCES_REMOTE_ONLY', 'true').lower() == 'true',
                         'experience_level': os.getenv('PREFERENCES_EXPERIENCE_LEVEL', 'entry')
+                    },
+                    'email_verification': {
+                        'enabled': os.getenv('EMAIL_VERIFICATION_ENABLED', 'true').lower() == 'true',
+                        'imap_server': os.getenv('EMAIL_IMAP_SERVER', 'imap.gmail.com'),
+                        'imap_port': int(os.getenv('EMAIL_IMAP_PORT', '993')),
+                        'smtp_server': os.getenv('EMAIL_SMTP_SERVER', 'smtp.gmail.com'),
+                        'smtp_port': int(os.getenv('EMAIL_SMTP_PORT', '587')),
+                        'email': os.getenv('PERSONAL_EMAIL'),
+                        'app_password': os.getenv('EMAIL_APP_PASSWORD'),
+                        'timeout': int(os.getenv('EMAIL_VERIFICATION_TIMEOUT', '300')),
+                        'check_interval': int(os.getenv('EMAIL_CHECK_INTERVAL', '30'))
                     }
                 }
             else:
