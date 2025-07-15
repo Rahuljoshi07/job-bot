@@ -1,56 +1,56 @@
-2025-07-15 20:10:58 - Applied to DevOps Platform Engineer at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_2
-2025-07-15 20:10:58 - Applied to Senior DevOps Engineer at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_4
-2025-07-15 20:10:58 - Applied to DevOps Architect at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_9
-2025-07-15 20:10:58 - Applied to DevOps Engineer - Remote at TechCorp Solutions (DICE) - URL: https://dice.com/job/dice_001
-2025-07-15 20:10:58 - Applied to Cloud Infrastructure Engineer at CloudTech Inc (DICE) - URL: https://dice.com/job/dice_002
-2025-07-15 20:10:58 - Applied to AWS Solutions Architect at Digital Solutions (DICE) - URL: https://dice.com/job/dice_003
-2025-07-15 20:10:58 - Applied to Senior DevOps Engineer at InnovateIT (DICE) - URL: https://dice.com/job/dice_004
-2025-07-15 20:10:58 - Applied to Platform Engineer at ScaleTech (DICE) - URL: https://dice.com/job/dice_005
-2025-07-15 20:10:58 - Applied to Site Reliability Engineer at ReliableSystems (DICE) - URL: https://dice.com/job/dice_006
-2025-07-15 20:10:58 - Applied to Kubernetes Administrator at ContainerCorp (DICE) - URL: https://dice.com/job/dice_007
-2025-07-15 20:10:58 - Applied to CI/CD Engineer at AutomationInc (DICE) - URL: https://dice.com/job/dice_008
-2025-07-15 20:10:58 - Applied to Linux Systems Engineer at SystemsPro (DICE) - URL: https://dice.com/job/dice_009
-2025-07-15 20:10:58 - Applied to Cloud Automation Engineer at CloudAuto (DICE) - URL: https://dice.com/job/dice_010
-2025-07-15 20:10:58 - Applied to Infrastructure Engineer at InfraTech (DICE) - URL: https://dice.com/job/dice_011
-2025-07-15 20:10:58 - Applied to DevOps Consultant at ConsultingFirm (DICE) - URL: https://dice.com/job/dice_012
-2025-07-15 20:10:58 - Applied to AWS DevOps Engineer at AWSExperts (DICE) - URL: https://dice.com/job/dice_013
-2025-07-15 20:10:58 - Applied to Docker/Kubernetes Engineer at ContainerSolutions (DICE) - URL: https://dice.com/job/dice_014
-2025-07-15 20:10:58 - Applied to Jenkins Administrator at CIFlow (DICE) - URL: https://dice.com/job/dice_015
-2025-07-15 20:10:58 - Applied to DevOps Engineer at TechStartup (Indeed) - URL: https://indeed.com/job/indeed_001
-2025-07-15 20:10:58 - Applied to Cloud Engineer at CloudFirst (Indeed) - URL: https://indeed.com/job/indeed_002
-2025-07-15 20:10:58 - Applied to SRE Engineer at ReliabilityFirst (Indeed) - URL: https://indeed.com/job/indeed_003
-2025-07-15 20:10:58 - Applied to Platform Engineer at PlatformCorp (Indeed) - URL: https://indeed.com/job/indeed_004
-2025-07-15 20:10:58 - Applied to Infrastructure Engineer at InfraGroup (Indeed) - URL: https://indeed.com/job/indeed_005
-2025-07-15 20:10:58 - Applied to AWS Engineer at CloudNative (Indeed) - URL: https://indeed.com/job/indeed_006
-2025-07-15 20:10:58 - Applied to Kubernetes Engineer at K8sExperts (Indeed) - URL: https://indeed.com/job/indeed_007
-2025-07-15 20:10:58 - Applied to DevOps Specialist at DevSpecialists (Indeed) - URL: https://indeed.com/job/indeed_008
-2025-07-15 20:10:58 - Applied to Cloud Architect at ArchitectureFirst (Indeed) - URL: https://indeed.com/job/indeed_009
-2025-07-15 20:10:58 - Applied to Automation Engineer at AutoFirst (Indeed) - URL: https://indeed.com/job/indeed_010
-2025-07-15 20:10:58 - Applied to DevOps Platform Engineer at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_2
-2025-07-15 20:10:58 - Applied to Senior DevOps Engineer at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_4
-2025-07-15 20:10:58 - Applied to DevOps Architect at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_9
-2025-07-15 20:10:58 - Applied to DevOps Engineer - Remote at TechCorp Solutions (DICE) - URL: https://dice.com/job/dice_001
-2025-07-15 20:10:58 - Applied to Cloud Infrastructure Engineer at CloudTech Inc (DICE) - URL: https://dice.com/job/dice_002
-2025-07-15 20:10:58 - Applied to AWS Solutions Architect at Digital Solutions (DICE) - URL: https://dice.com/job/dice_003
-2025-07-15 20:10:58 - Applied to Senior DevOps Engineer at InnovateIT (DICE) - URL: https://dice.com/job/dice_004
-2025-07-15 20:10:58 - Applied to Platform Engineer at ScaleTech (DICE) - URL: https://dice.com/job/dice_005
-2025-07-15 20:10:58 - Applied to Site Reliability Engineer at ReliableSystems (DICE) - URL: https://dice.com/job/dice_006
-2025-07-15 20:10:58 - Applied to Kubernetes Administrator at ContainerCorp (DICE) - URL: https://dice.com/job/dice_007
-2025-07-15 20:10:58 - Applied to CI/CD Engineer at AutomationInc (DICE) - URL: https://dice.com/job/dice_008
-2025-07-15 20:10:58 - Applied to Linux Systems Engineer at SystemsPro (DICE) - URL: https://dice.com/job/dice_009
-2025-07-15 20:10:58 - Applied to Cloud Automation Engineer at CloudAuto (DICE) - URL: https://dice.com/job/dice_010
-2025-07-15 20:10:58 - Applied to Infrastructure Engineer at InfraTech (DICE) - URL: https://dice.com/job/dice_011
-2025-07-15 20:10:58 - Applied to DevOps Consultant at ConsultingFirm (DICE) - URL: https://dice.com/job/dice_012
-2025-07-15 20:10:58 - Applied to AWS DevOps Engineer at AWSExperts (DICE) - URL: https://dice.com/job/dice_013
-2025-07-15 20:10:58 - Applied to Docker/Kubernetes Engineer at ContainerSolutions (DICE) - URL: https://dice.com/job/dice_014
-2025-07-15 20:10:58 - Applied to Jenkins Administrator at CIFlow (DICE) - URL: https://dice.com/job/dice_015
-2025-07-15 20:10:58 - Applied to DevOps Engineer at TechStartup (Indeed) - URL: https://indeed.com/job/indeed_001
-2025-07-15 20:10:58 - Applied to Cloud Engineer at CloudFirst (Indeed) - URL: https://indeed.com/job/indeed_002
-2025-07-15 20:10:58 - Applied to SRE Engineer at ReliabilityFirst (Indeed) - URL: https://indeed.com/job/indeed_003
-2025-07-15 20:10:58 - Applied to Platform Engineer at PlatformCorp (Indeed) - URL: https://indeed.com/job/indeed_004
-2025-07-15 20:10:58 - Applied to Infrastructure Engineer at InfraGroup (Indeed) - URL: https://indeed.com/job/indeed_005
-2025-07-15 20:10:58 - Applied to AWS Engineer at CloudNative (Indeed) - URL: https://indeed.com/job/indeed_006
-2025-07-15 20:10:58 - Applied to Kubernetes Engineer at K8sExperts (Indeed) - URL: https://indeed.com/job/indeed_007
-2025-07-15 20:10:58 - Applied to DevOps Specialist at DevSpecialists (Indeed) - URL: https://indeed.com/job/indeed_008
-2025-07-15 20:10:58 - Applied to Cloud Architect at ArchitectureFirst (Indeed) - URL: https://indeed.com/job/indeed_009
-2025-07-15 20:10:58 - Applied to Automation Engineer at AutoFirst (Indeed) - URL: https://indeed.com/job/indeed_010
+2025-07-15 20:05:48 - Applied to DevOps Platform Engineer at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_2
+2025-07-15 20:05:48 - Applied to Senior DevOps Engineer at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_4
+2025-07-15 20:05:48 - Applied to DevOps Architect at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_9
+2025-07-15 20:05:48 - Applied to DevOps Engineer - Remote at TechCorp Solutions (DICE) - URL: https://dice.com/job/dice_001
+2025-07-15 20:05:48 - Applied to Cloud Infrastructure Engineer at CloudTech Inc (DICE) - URL: https://dice.com/job/dice_002
+2025-07-15 20:05:48 - Applied to AWS Solutions Architect at Digital Solutions (DICE) - URL: https://dice.com/job/dice_003
+2025-07-15 20:05:48 - Applied to Senior DevOps Engineer at InnovateIT (DICE) - URL: https://dice.com/job/dice_004
+2025-07-15 20:05:48 - Applied to Platform Engineer at ScaleTech (DICE) - URL: https://dice.com/job/dice_005
+2025-07-15 20:05:48 - Applied to Site Reliability Engineer at ReliableSystems (DICE) - URL: https://dice.com/job/dice_006
+2025-07-15 20:05:48 - Applied to Kubernetes Administrator at ContainerCorp (DICE) - URL: https://dice.com/job/dice_007
+2025-07-15 20:05:48 - Applied to CI/CD Engineer at AutomationInc (DICE) - URL: https://dice.com/job/dice_008
+2025-07-15 20:05:48 - Applied to Linux Systems Engineer at SystemsPro (DICE) - URL: https://dice.com/job/dice_009
+2025-07-15 20:05:48 - Applied to Cloud Automation Engineer at CloudAuto (DICE) - URL: https://dice.com/job/dice_010
+2025-07-15 20:05:48 - Applied to Infrastructure Engineer at InfraTech (DICE) - URL: https://dice.com/job/dice_011
+2025-07-15 20:05:48 - Applied to DevOps Consultant at ConsultingFirm (DICE) - URL: https://dice.com/job/dice_012
+2025-07-15 20:05:48 - Applied to AWS DevOps Engineer at AWSExperts (DICE) - URL: https://dice.com/job/dice_013
+2025-07-15 20:05:48 - Applied to Docker/Kubernetes Engineer at ContainerSolutions (DICE) - URL: https://dice.com/job/dice_014
+2025-07-15 20:05:48 - Applied to Jenkins Administrator at CIFlow (DICE) - URL: https://dice.com/job/dice_015
+2025-07-15 20:05:48 - Applied to DevOps Engineer at TechStartup (Indeed) - URL: https://indeed.com/job/indeed_001
+2025-07-15 20:05:48 - Applied to Cloud Engineer at CloudFirst (Indeed) - URL: https://indeed.com/job/indeed_002
+2025-07-15 20:05:48 - Applied to SRE Engineer at ReliabilityFirst (Indeed) - URL: https://indeed.com/job/indeed_003
+2025-07-15 20:05:48 - Applied to Platform Engineer at PlatformCorp (Indeed) - URL: https://indeed.com/job/indeed_004
+2025-07-15 20:05:48 - Applied to Infrastructure Engineer at InfraGroup (Indeed) - URL: https://indeed.com/job/indeed_005
+2025-07-15 20:05:48 - Applied to AWS Engineer at CloudNative (Indeed) - URL: https://indeed.com/job/indeed_006
+2025-07-15 20:05:48 - Applied to Kubernetes Engineer at K8sExperts (Indeed) - URL: https://indeed.com/job/indeed_007
+2025-07-15 20:05:48 - Applied to DevOps Specialist at DevSpecialists (Indeed) - URL: https://indeed.com/job/indeed_008
+2025-07-15 20:05:48 - Applied to Cloud Architect at ArchitectureFirst (Indeed) - URL: https://indeed.com/job/indeed_009
+2025-07-15 20:05:48 - Applied to Automation Engineer at AutoFirst (Indeed) - URL: https://indeed.com/job/indeed_010
+2025-07-15 20:05:48 - Applied to DevOps Platform Engineer at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_2
+2025-07-15 20:05:48 - Applied to Senior DevOps Engineer at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_4
+2025-07-15 20:05:48 - Applied to DevOps Architect at X (Twitter) (X/Twitter) - URL: https://x.com/jobs/positions/x_job_9
+2025-07-15 20:05:48 - Applied to DevOps Engineer - Remote at TechCorp Solutions (DICE) - URL: https://dice.com/job/dice_001
+2025-07-15 20:05:48 - Applied to Cloud Infrastructure Engineer at CloudTech Inc (DICE) - URL: https://dice.com/job/dice_002
+2025-07-15 20:05:48 - Applied to AWS Solutions Architect at Digital Solutions (DICE) - URL: https://dice.com/job/dice_003
+2025-07-15 20:05:48 - Applied to Senior DevOps Engineer at InnovateIT (DICE) - URL: https://dice.com/job/dice_004
+2025-07-15 20:05:48 - Applied to Platform Engineer at ScaleTech (DICE) - URL: https://dice.com/job/dice_005
+2025-07-15 20:05:48 - Applied to Site Reliability Engineer at ReliableSystems (DICE) - URL: https://dice.com/job/dice_006
+2025-07-15 20:05:48 - Applied to Kubernetes Administrator at ContainerCorp (DICE) - URL: https://dice.com/job/dice_007
+2025-07-15 20:05:48 - Applied to CI/CD Engineer at AutomationInc (DICE) - URL: https://dice.com/job/dice_008
+2025-07-15 20:05:48 - Applied to Linux Systems Engineer at SystemsPro (DICE) - URL: https://dice.com/job/dice_009
+2025-07-15 20:05:48 - Applied to Cloud Automation Engineer at CloudAuto (DICE) - URL: https://dice.com/job/dice_010
+2025-07-15 20:05:48 - Applied to Infrastructure Engineer at InfraTech (DICE) - URL: https://dice.com/job/dice_011
+2025-07-15 20:05:48 - Applied to DevOps Consultant at ConsultingFirm (DICE) - URL: https://dice.com/job/dice_012
+2025-07-15 20:05:48 - Applied to AWS DevOps Engineer at AWSExperts (DICE) - URL: https://dice.com/job/dice_013
+2025-07-15 20:05:48 - Applied to Docker/Kubernetes Engineer at ContainerSolutions (DICE) - URL: https://dice.com/job/dice_014
+2025-07-15 20:05:48 - Applied to Jenkins Administrator at CIFlow (DICE) - URL: https://dice.com/job/dice_015
+2025-07-15 20:05:48 - Applied to DevOps Engineer at TechStartup (Indeed) - URL: https://indeed.com/job/indeed_001
+2025-07-15 20:05:48 - Applied to Cloud Engineer at CloudFirst (Indeed) - URL: https://indeed.com/job/indeed_002
+2025-07-15 20:05:48 - Applied to SRE Engineer at ReliabilityFirst (Indeed) - URL: https://indeed.com/job/indeed_003
+2025-07-15 20:05:48 - Applied to Platform Engineer at PlatformCorp (Indeed) - URL: https://indeed.com/job/indeed_004
+2025-07-15 20:05:48 - Applied to Infrastructure Engineer at InfraGroup (Indeed) - URL: https://indeed.com/job/indeed_005
+2025-07-15 20:05:48 - Applied to AWS Engineer at CloudNative (Indeed) - URL: https://indeed.com/job/indeed_006
+2025-07-15 20:05:48 - Applied to Kubernetes Engineer at K8sExperts (Indeed) - URL: https://indeed.com/job/indeed_007
+2025-07-15 20:05:48 - Applied to DevOps Specialist at DevSpecialists (Indeed) - URL: https://indeed.com/job/indeed_008
+2025-07-15 20:05:48 - Applied to Cloud Architect at ArchitectureFirst (Indeed) - URL: https://indeed.com/job/indeed_009
+2025-07-15 20:05:48 - Applied to Automation Engineer at AutoFirst (Indeed) - URL: https://indeed.com/job/indeed_010

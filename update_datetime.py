@@ -4,8 +4,8 @@ import re
 
 def update_datetime_info():
     # Using your updated timestamp
-    datetime_string = "2025-07-15 20:10:58"
-    Current User's Login: Rahuljoshi07
+    datetime_string = "2025-07-15 20:05:48"
+    username = "Rahuljoshi07"
     
     for root, dirs, files in os.walk("."):
         if ".git" in dirs:
@@ -24,14 +24,14 @@ def update_datetime_info():
                     
                     # Update username patterns
                     username_patterns = [
-                        r'Current User\'s Login: [A-Za-z0-9]+',
-                        r'User: [A-Za-z0-9]+',
-                        r'username = "[A-Za-z0-9]+"',
-                        r"username = '[A-Za-z0-9]+'"
+                        (r'Current User\'s Login: [A-Za-z0-9]+', f'Current User\'s Login: {username}'),
+                        (r'User: [A-Za-z0-9]+', f'User: {username}'),
+                        (r'username = "[A-Za-z0-9]+"', f'username = "{username}"'),
+                        (r"username = '[A-Za-z0-9]+'", f"username = '{username}'")
                     ]
                     
-                    for pattern in username_patterns:
-                        updated_content = re.sub(pattern, f'Current User\'s Login: {username}', updated_content)
+                    for pattern, replacement in username_patterns:
+                        updated_content = re.sub(pattern, replacement, updated_content)
                     
                     if content != updated_content:
                         with open(filepath, 'w', encoding='utf-8') as f:
