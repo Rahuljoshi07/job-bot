@@ -1,0 +1,1144 @@
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Data Engineer II
+Company: TrueML
+Salary: $62,000 - $77,000
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-data-engineer-ii-trueml-1093479
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Aws, Kubernetes, Terraform, Git, Ci/Cd
+Missing Skills: None
+Matched Technologies: Python, Aws, Kubernetes, Terraform, Git, Ci/Cd
+Missing Technologies: None
+
+Job Requirements: <p><i><b style="font-size: 18px">Why TrueML?</b></i></p><p>&nbsp;</p><p><span style="font-size: 16px">TrueML is a mission-driven financial software company that aims to create better customer experien...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Backend Engineer II
+Company: Gametime
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-backend-engineer-ii-gametime-1093453
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Git
+Missing Skills: None
+Matched Technologies: Git
+Missing Technologies: None
+
+Job Requirements: Remote - Live experiences help people cross todayâs digital divide and focus on what truly connects us â the here, the now, this once-in-a-lifetime moment thatâs bringing us together. To fulfill...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Information Security Officer
+Company: Finoa
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-information-security-officer-finoa-1093444
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Aws
+Missing Skills: None
+Matched Technologies: Aws
+Missing Technologies: None
+
+Job Requirements: <h1>Your mission</h1><p>As an ISO at Finoa, you will work within the information security /information risk team and assist in maintaining the security and integrity of our organizationâs informatio...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Compliance Operations Specialist
+Company: Ethena Labs
+Salary: $70,000 - $100,000
+Location: Globally Remote
+URL: https://remoteOK.com/remote-jobs/remote-compliance-operations-specialist-ethena-labs-1093423
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Git
+Missing Skills: None
+Matched Technologies: Git
+Missing Technologies: None
+
+Job Requirements: <p><b style="font-size: 18px">Who We Are:</b></p><p>Ethena Labs is at the forefront of the next wave of DeFi, dedicated to building products for modern finance. Ethena is a synthetic dollar protocol b...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Principal Software Engineer
+Company: JumpCloud
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-principal-software-engineer-jumpcloud-1093387
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Linux, Windows
+Missing Skills: None
+Matched Technologies: Linux, Windows
+Missing Technologies: None
+
+Job Requirements: Remote - JumpCloudÂ® delivers a unified open directory platform that makes it easy to securely manage identities, devices, and access across your organization. With JumpCloud, IT teams and MSPs enable...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Content and Community Lead
+Company: Ethena Labs
+Salary: Not specified
+Location: Globally Remote
+URL: https://remoteOK.com/remote-jobs/remote-content-and-community-lead-ethena-labs-1093370
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Git
+Missing Skills: None
+Matched Technologies: Git
+Missing Technologies: None
+
+Job Requirements: <p><b style="font-size: 18px">Who We Are:</b></p><p>Ethena Labs is at the forefront of the next wave of DeFi, dedicated to building products for modern finance. Ethena is a synthetic dollar protocol b...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Data Engineer Fully
+Company: SOFTGAMES
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-data-engineer-fully-softgames-1093369
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Aws
+Missing Skills: None
+Matched Technologies: Python, Aws
+Missing Technologies: None
+
+Job Requirements: <p><span style="color:#000000">SOFTGAMES is looking&nbsp;for a </span><strong><span style="color:#000000">Data Engineer (Mid-Sen Level) - Fully Remote</span></strong><span style="color:#000000"> to he...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Software Development Engineer
+Company: Triple A Technologies Pte
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-software-development-engineer-triple-a-technologies-pte-1093351
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Git
+Missing Skills: None
+Matched Technologies: Git
+Missing Technologies: None
+
+Job Requirements: Remote - About Triple-ATriple-A is a global payment institution licensed in the United States, Europe, and Singapore, enabling businesses worldwide to pay and get paid in both local and digital curren...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Token Plan Administrator
+Company: Toku
+Salary: Not specified
+Location: United States
+URL: https://remoteOK.com/remote-jobs/remote-token-plan-administrator-toku-1093348
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Git
+Missing Skills: None
+Matched Technologies: Git
+Missing Technologies: None
+
+Job Requirements: <p><span style="font-size: 11pt">We are looking for hungry, ambitious people with a background as a Stock Plan Administrator, Equity Compensation Manager, Equity Plan Administrator, or experience with...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: X/Twitter
+Title: Senior DevOps Engineer
+Company: X (Twitter)
+Salary: $120,000 - $180,000
+Location: Worldwide
+URL: https://xtwitter.com/job/x_twitter_001
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Aws, Docker, Kubernetes, Jenkins, Devops
+Missing Skills: None
+Matched Technologies: Python, Aws, Docker, Kubernetes, Jenkins, Devops
+Missing Technologies: None
+
+Job Requirements: Python, AWS, Docker, Kubernetes, Jenkins, 5+ years experience...
+Experience Required: 5+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: X/Twitter
+Title: DevOps Platform Engineer
+Company: X (Twitter)
+Salary: $110,000 - $160,000
+Location: Worldwide
+URL: https://xtwitter.com/job/x_twitter_002
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Docker, Gitlab, Git, Devops, Ci/Cd
+Missing Skills: None
+Matched Technologies: Docker, Gitlab, Git, Devops, Ci/Cd
+Missing Technologies: None
+
+Job Requirements: DevOps, CI/CD, GitLab, Docker, 3+ years experience...
+Experience Required: 3+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: X/Twitter
+Title: Site Reliability Engineer
+Company: X (Twitter)
+Salary: $115,000 - $170,000
+Location: Worldwide
+URL: https://xtwitter.com/job/x_twitter_004
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Linux
+Missing Skills: None
+Matched Technologies: Python, Linux
+Missing Technologies: None
+
+Job Requirements: Python, Linux, Monitoring, SRE practices, 4+ years experience...
+Experience Required: 4+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: X/Twitter
+Title: Cloud Infrastructure Engineer
+Company: X (Twitter)
+Salary: $105,000 - $155,000
+Location: Worldwide
+URL: https://xtwitter.com/job/x_twitter_005
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Aws
+Missing Skills: None
+Matched Technologies: Python, Aws
+Missing Technologies: None
+
+Job Requirements: AWS, Cloud infrastructure, Python, 3+ years experience...
+Experience Required: 3+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: DICE
+Title: DevOps Engineer
+Company: TechCorp
+Salary: $75,000 - $110,000
+Location: Worldwide
+URL: https://dice.com/job/dice_001
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Aws, Docker, Devops, Ci/Cd
+Missing Skills: None
+Matched Technologies: Aws, Docker, Devops, Ci/Cd
+Missing Technologies: None
+
+Job Requirements: DevOps, CI/CD, Docker, AWS, 2+ years experience...
+Experience Required: 2+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: DICE
+Title: Cloud Engineer
+Company: CloudCorp
+Salary: $80,000 - $120,000
+Location: Worldwide
+URL: https://dice.com/job/dice_002
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Aws
+Missing Skills: None
+Matched Technologies: Python, Aws
+Missing Technologies: None
+
+Job Requirements: AWS, Cloud services, Python, 3+ years experience...
+Experience Required: 3+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: DICE
+Title: Platform Engineer
+Company: PlatformCorp
+Salary: $85,000 - $125,000
+Location: Worldwide
+URL: https://dice.com/job/dice_003
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Docker, Kubernetes
+Missing Skills: None
+Matched Technologies: Docker, Kubernetes
+Missing Technologies: None
+
+Job Requirements: Kubernetes, Docker, Platform engineering, 3+ years experience...
+Experience Required: 3+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: Indeed
+Title: Remote DevOps Engineer
+Company: RemoteCorp
+Salary: $65,000 - $100,000
+Location: Worldwide
+URL: https://indeed.com/job/indeed_001
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Devops, Ci/Cd
+Missing Skills: None
+Matched Technologies: Devops, Ci/Cd
+Missing Technologies: None
+
+Job Requirements: DevOps, Remote work, CI/CD, 2+ years experience...
+Experience Required: 2+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: Indeed
+Title: Cloud Infrastructure Engineer
+Company: CloudFirst
+Salary: $70,000 - $110,000
+Location: Worldwide
+URL: https://indeed.com/job/indeed_002
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Aws, Devops
+Missing Skills: None
+Matched Technologies: Aws, Devops
+Missing Technologies: None
+
+Job Requirements: Cloud infrastructure, AWS, DevOps, 3+ years experience...
+Experience Required: 3+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: WeWorkRemotely
+Title: Remote DevOps Engineer
+Company: GlobalTech
+Salary: $70,000 - $110,000
+Location: Worldwide
+URL: https://weworkremotely.com/job/weworkremotely_001
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Devops, Ci/Cd
+Missing Skills: None
+Matched Technologies: Devops, Ci/Cd
+Missing Technologies: None
+
+Job Requirements: DevOps, Remote collaboration, CI/CD, 2+ years experience...
+Experience Required: 2+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: Turing
+Title: DevOps Engineer - Remote
+Company: US Tech Company
+Salary: $60,000 - $90,000
+Location: Worldwide
+URL: https://turing.com/job/turing_001
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 100.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Aws, Devops
+Missing Skills: None
+Matched Technologies: Python, Aws, Devops
+Missing Technologies: None
+
+Job Requirements: DevOps, Python, AWS, Remote work, 2+ years experience...
+Experience Required: 2+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: X/Twitter
+Title: DevOps Architect
+Company: X (Twitter)
+Salary: $140,000 - $200,000
+Location: Worldwide
+URL: https://xtwitter.com/job/x_twitter_003
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 94.0%
+Skills Match: 100.0%
+Technology Match: 100.0%
+Experience Match: 70.0%
+Education Match: 100.0%
+
+Matched Skills: Aws, Kubernetes, Terraform, Devops
+Missing Skills: None
+Matched Technologies: Aws, Kubernetes, Terraform, Devops
+Missing Technologies: None
+
+Job Requirements: AWS, Kubernetes, Terraform, Architecture, 7+ years experience...
+Experience Required: 7+ years
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Site Reliability Engineer
+Company: Tinybird
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-site-reliability-engineer-tinybird-1093416
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 82.5%
+Skills Match: 75.0%
+Technology Match: 75.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, C++, Kubernetes, Terraform, Ansible, Linux
+Missing Skills: Go, Redis
+Matched Technologies: Python, C++, Kubernetes, Terraform, Ansible, Linux
+Missing Technologies: Go, Redis
+
+Job Requirements: <p><b>About Tinybird:</b></p><p>At Tinybird, we help developers and data teams take flight by unlocking the power of real-time data to quickly build data pipelines and innovative data products. With T...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Systems Engineer Autonomous Vehicle Infrastructure
+Company: 2100 NVIDIA USA
+Salary: Not specified
+Location: US, CA, Santa Clara
+URL: https://remoteOK.com/remote-jobs/remote-senior-systems-engineer-autonomous-vehicle-infrastructure-2100-nvidia-usa-1093327
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 80.0%
+Skills Match: 71.4%
+Technology Match: 71.4%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Aws, Kubernetes, Git, Ci/Cd
+Missing Skills: Go, Express
+Matched Technologies: Python, Aws, Kubernetes, Git, Ci/Cd
+Missing Technologies: Go, Express
+
+Job Requirements: The autonomous vehicle (AV) infrastructure group builds foundational infrastructure and tools to enable NVIDIA's AV program. We are seeking a motivated Senior Engineer to join our team in building and...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Python Backend Engineer
+Company: Orga AI
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-python-backend-engineer-orga-ai-1093458
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 79.0%
+Skills Match: 70.0%
+Technology Match: 70.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Aws, Github Actions, Terraform, Git, Devops, Ci/Cd
+Missing Skills: Go, Rust, Microservices
+Matched Technologies: Python, Aws, Github Actions, Terraform, Git, Devops, Ci/Cd
+Missing Technologies: Go, Rust, Microservices
+
+Job Requirements: <h3>ð About Orga AI</h3><p>Orga AI, headquartered in Palma de Mallorca, builds real-time AI systems that see, listen, and speak. Our mission is to enable people to interact with technology in a flu...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Software Engineer
+Company: ModelVault
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-software-engineer-modelvault-1093504
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 76.7%
+Skills Match: 66.7%
+Technology Match: 66.7%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Ansible, Linux
+Missing Skills: Go
+Matched Technologies: Ansible, Linux
+Missing Technologies: Go
+
+Job Requirements: <p><strong>ModelVault</strong> is building the worldâs first fully-integrated, on-prem AI appliance â a plug-and-play AI server preloaded with software, models, and tools that let businesses (and ...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Staff Engineer Infrastructure
+Company: Pryon
+Salary: $180,000 - $215,000
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-staff-engineer-infrastructure-pryon-1093343
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 76.7%
+Skills Match: 66.7%
+Technology Match: 66.7%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Aws, Docker, Kubernetes, Terraform, Git, Devops, Ci/Cd
+Missing Skills: Go, Azure, Gcp, Agile
+Matched Technologies: Python, Aws, Docker, Kubernetes, Terraform, Git, Devops, Ci/Cd
+Missing Technologies: Go, Azure, Gcp, Agile
+
+Job Requirements: <p><b>About Pryon:&nbsp;</b></p><p>Weâre a team of AI, technology, and language experts whose DNA lives in Alexa, Siri, Watson, and virtually every human language technology product on the market. N...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Production Engineer
+Company: 110 Yahoo Holdings Inc.
+Salary: $128,250
+Location: US - United States of America
+URL: https://remoteOK.com/remote-jobs/remote-senior-production-engineer-110-yahoo-holdings-inc-1093325
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 76.7%
+Skills Match: 66.7%
+Technology Match: 66.7%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Java, Kubernetes, Terraform, Ansible, Linux, Devops, Ci/Cd
+Missing Skills: Go, Rust, Gcp, Google Cloud
+Matched Technologies: Python, Java, Kubernetes, Terraform, Ansible, Linux, Devops, Ci/Cd
+Missing Technologies: Go, Rust, Gcp, Google Cloud
+
+Job Requirements: Yahoo Mail is the ultimate consumer inbox with hundreds of millions of users. Itâs the best way to access your email and stay organized from a computer, phone or tablet. With its beautiful design an...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Enterprise Cloud Architect
+Company: Liatrio
+Salary: $145,000
+Location: Remote
+URL: https://remoteOK.com/remote-jobs/remote-enterprise-cloud-architect-liatrio-1093403
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 75.3%
+Skills Match: 64.7%
+Technology Match: 64.7%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Java, Javascript, Aws, Kubernetes, Gitlab, Terraform, Ansible, Git, Devops, Ci/Cd
+Missing Skills: Go, Azure, Gcp, Microsoft Azure, Elasticsearch, Tdd
+Matched Technologies: Python, Java, Javascript, Aws, Kubernetes, Gitlab, Terraform, Ansible, Git, Devops, Ci/Cd
+Missing Technologies: Go, Azure, Gcp, Microsoft Azure, Elasticsearch, Tdd
+
+Job Requirements: <p><span style="font-size: 18pt;">About Liatrio</span></p><p><br></p><p><span style="font-size: 12pt;">Liatrio is a boutique consulting firm aiming to help enterprises deliver software faster, safer a...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior System Software Engineer Cloud Networking
+Company: 2100 NVIDIA USA
+Salary: Not specified
+Location: US, CA, Santa Clara
+URL: https://remoteOK.com/remote-jobs/remote-senior-system-software-engineer-cloud-networking-2100-nvidia-usa-1093434
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 75.0%
+Skills Match: 64.3%
+Technology Match: 64.3%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Aws, Kubernetes, Gitlab, Terraform, Ansible, Git, Linux, Devops
+Missing Skills: Go, Rust, Azure, Gcp, Express
+Matched Technologies: Python, Aws, Kubernetes, Gitlab, Terraform, Ansible, Git, Linux, Devops
+Missing Technologies: Go, Rust, Azure, Gcp, Express
+
+Job Requirements: We are looking for a Senior System Software Engineer, Cloud Networking to design, prototype, implement and operate programmable software-defined networking solutions for NVIDIA Virtualized Clouds host...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Site Reliability Engineer ML Platforms
+Company: 2100 NVIDIA USA
+Salary: Not specified
+Location: US, CA, Santa Clara
+URL: https://remoteOK.com/remote-jobs/remote-senior-site-reliability-engineer-ml-platforms-2100-nvidia-usa-1093465
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 74.5%
+Skills Match: 63.6%
+Technology Match: 63.6%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Kubernetes, Jenkins, Github Actions, Git, Devops, Ci/Cd
+Missing Skills: Go, Ruby, Express, Microservices
+Matched Technologies: Python, Kubernetes, Jenkins, Github Actions, Git, Devops, Ci/Cd
+Missing Technologies: Go, Ruby, Express, Microservices
+
+Job Requirements: Are you passionate about building and maintaining large-scale production systems that support advanced data science and machine learning applications? Do you want to join a team at the heart of NVIDIA...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: React Native Developer
+Company: Interviews Chat
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-react-native-developer-interviews-chat-1093451
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 72.0%
+Skills Match: 60.0%
+Technology Match: 60.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Java, Javascript, Node.Js
+Missing Skills: Go, React
+Matched Technologies: Java, Javascript, Node.Js
+Missing Technologies: Go, React
+
+Job Requirements: <p class="p1"><strong>About Us<br /><br /></strong>Interviews Chat is an AI-powered platform helping people ace their job interviews in 32 languages around the world. It features <a href="https://www....
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Blockchain Engineer
+Company: MoonPay
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-blockchain-engineer-moonpay-1093331
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 72.0%
+Skills Match: 60.0%
+Technology Match: 60.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Java, Javascript, Git
+Missing Skills: Rust, React
+Matched Technologies: Java, Javascript, Git
+Missing Technologies: Rust, React
+
+Job Requirements: <p><b><span style="font-size: 24px">About MoonPay</span></b><span style="font-size: 24px"> ðð¸</span></p><p><br></p><p><span style="font-size: 16px">Hi, weâre MoonPay. Weâre here to onboard t...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Software Engineer
+Company: Magnet Forensics
+Salary: $107,200
+Location: Canada
+URL: https://remoteOK.com/remote-jobs/remote-senior-software-engineer-magnet-forensics-1093389
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 71.2%
+Skills Match: 58.8%
+Technology Match: 58.8%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, C#, Aws, Kubernetes, Jenkins, Gitlab, Terraform, Git, Linux, Devops
+Missing Skills: Go, Azure, Mysql, Postgresql, Redis, Elasticsearch, React
+Matched Technologies: Python, C#, Aws, Kubernetes, Jenkins, Gitlab, Terraform, Git, Linux, Devops
+Missing Technologies: Go, Azure, Mysql, Postgresql, Redis, Elasticsearch, React
+
+Job Requirements: <p><span style="font-size: 16px"><b>Who We Are; What We Do; Where Weâre Going</b></span></p><p><br></p><p><span style="font-size: 16px">Magnet Forensics is a global leader in the development of digi...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Software Engineer Full Stack
+Company: Pano AI
+Salary: $150,000 - $205,000
+Location: San Francisco, California
+URL: https://remoteOK.com/remote-jobs/remote-senior-software-engineer-full-stack-pano-ai-1093481
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 68.9%
+Skills Match: 55.6%
+Technology Match: 55.6%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, Java, Javascript, Aws, Docker, Kubernetes, Git, Linux, Devops, Ci/Cd
+Missing Skills: Go, Gcp, Postgresql, Redis, React, Express, Spring, Agile
+Matched Technologies: Python, Java, Javascript, Aws, Docker, Kubernetes, Git, Linux, Devops, Ci/Cd
+Missing Technologies: Go, Gcp, Postgresql, Redis, React, Express, Spring, Agile
+
+Job Requirements: <p><span style="font-size: 21.3333px">Who we are</span></p><p><br></p><p><b style="font-size: 10pt">The problem:</b><span style="font-size: 10pt"> Every minute matters in fire response.&nbsp; As clima...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Fullstack Developer JS Developer
+Company: GuideWell
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-fullstack-developer-js-developer-guidewell-1093480
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 65.0%
+Skills Match: 50.0%
+Technology Match: 50.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Java, Javascript, Node.Js, Git
+Missing Skills: Go, React, Spring, Agile
+Matched Technologies: Java, Javascript, Node.Js, Git
+Missing Technologies: Go, React, Spring, Agile
+
+Job Requirements: <p><i>This is a contract opportunity. You will be employed by Magnit to work on assignment with GuideWell.</i></p><p><span><strong>JOB SUMMARY:</strong></span></p><ul><li><span>Sr. React Developers ar...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Scientific Software Engineer Magnet Protection Systems
+Company: Commonwealth Fusion Systems
+Salary: $140,000 - $200,000
+Location: Devens, MA
+URL: https://remoteOK.com/remote-jobs/remote-senior-scientific-software-engineer-magnet-protection-systems-commonwealth-fusion-systems-1093472
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 65.0%
+Skills Match: 50.0%
+Technology Match: 50.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Python, C++, Ci/Cd
+Missing Skills: Go, Rust, Express
+Matched Technologies: Python, C++, Ci/Cd
+Missing Technologies: Go, Rust, Express
+
+Job Requirements: <p><b style="font-size: 16px">About Commonwealth Fusion Systems:&nbsp;</b></p><p><br></p><p><span style="font-size: 16px">Commonwealth Fusion Systems is on a mission to deliver the urgent transition t...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Software Engineer Ledger IOE Cardano
+Company: IO Global
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-software-engineer-ledger-ioe-cardano-io-global-1093443
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 65.0%
+Skills Match: 50.0%
+Technology Match: 50.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Git
+Missing Skills: Go
+Matched Technologies: Git
+Missing Technologies: Go
+
+Job Requirements: <p>Who are we?</p><p>IOG, is a technology company focused on blockchain research and development. We are renowned for our scientific approach to blockchain development, emphasizing peer-reviewed resea...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Fullstack Developer
+Company: Swipe Games
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-fullstack-developer-swipe-games-1093439
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 65.0%
+Skills Match: 50.0%
+Technology Match: 50.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Node.Js
+Missing Skills: React
+Matched Technologies: Node.Js
+Missing Technologies: React
+
+Job Requirements: <p>ð¡ We are seeking a Senior Fullstack Developer with a strong backend focus to join our core team. This hands-on role is ideal for candidates who take full ownership of their work and are passiona...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Print & Multimedia Designer
+Company: Tether Operations Limited
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-print-multimedia-designer-tether-operations-limited-1093432
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 65.0%
+Skills Match: 50.0%
+Technology Match: 50.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Git
+Missing Skills: Rust
+Matched Technologies: Git
+Missing Technologies: Rust
+
+Job Requirements: <p><strong><em>Join Tether and Shape the Future of Digital Finance</em></strong></p><p>At Tether, weâre not just building products, weâre pioneering a global financial revolution. Our cutting-edge...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior WordPress Plugins Developer
+Company: Melapress
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-wordpress-plugins-developer-melapress-1093402
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 65.0%
+Skills Match: 50.0%
+Technology Match: 50.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Java, Javascript, Git
+Missing Skills: Rust, Php, Mysql
+Matched Technologies: Java, Javascript, Git
+Missing Technologies: Rust, Php, Mysql
+
+Job Requirements: <p>Are you passionate about developing WordPress plugins that help website administrators keep their website and users secure? Do you enjoy building products used by hundreds of thousands of users? If...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Registered Dietitian
+Company: Foodsmart
+Salary: $50,000 - $91,640
+Location: US
+URL: https://remoteOK.com/remote-jobs/remote-registered-dietitian-foodsmart-1093385
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 65.0%
+Skills Match: 50.0%
+Technology Match: 50.0%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Git
+Missing Skills: Go
+Matched Technologies: Git
+Missing Technologies: Go
+
+Job Requirements: <p><b>About us:</b></p><p>We are the worldâs largest telenutrition and foodcare solution, backed by a national network of Registered Dietitians and designed to yield consistently healthier food choi...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Senior Full Stack Engineer
+Company: AMK Solutions
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-full-stack-engineer-amk-solutions-1093412
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 61.1%
+Skills Match: 44.4%
+Technology Match: 44.4%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Aws, Docker, Node.Js, Devops
+Missing Skills: Go, Mongodb, Redis, React, Express
+Matched Technologies: Aws, Docker, Node.Js, Devops
+Missing Technologies: Go, Mongodb, Redis, React, Express
+
+Job Requirements: <p dir="ltr">Senior Full-Stack Engineer (Node.js + Next.js)<br />Location: Remote<br />Working Hours: Must be available during U.S. business hours (until at least 3 PM ET)<br />Compensation: Competiti...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Back End Engineer
+Company: Medely
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-back-end-engineer-medely-1093475
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 60.0%
+Skills Match: 42.9%
+Technology Match: 42.9%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Java, Javascript, Git
+Missing Skills: Go, Ruby, Postgresql, Express
+Matched Technologies: Java, Javascript, Git
+Missing Technologies: Go, Ruby, Postgresql, Express
+
+Job Requirements: <p style="min-height:1.5em"><strong>The Company</strong></p><p style="min-height:1.5em">Medely is a high-growth series-C technology start-up reimagining the future of healthcare work by providing an o...
+Experience Required: Not specified
+
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED WITH RESUME MATCHING
+Platform: RemoteOK
+Title: Staff Front End Engineer
+Company: Medely
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-staff-front-end-engineer-medely-1093473
+
+RESUME MATCHING ANALYSIS:
+Overall Match: 60.0%
+Skills Match: 42.9%
+Technology Match: 42.9%
+Experience Match: 100.0%
+Education Match: 100.0%
+
+Matched Skills: Java, Javascript, Git
+Missing Skills: Go, React, Express, Agile
+Matched Technologies: Java, Javascript, Git
+Missing Technologies: Go, React, Express, Agile
+
+Job Requirements: <p style="min-height:1.5em"><strong>The Company</strong></p><p style="min-height:1.5em">Medely is a high-growth series-C technology start-up reimagining the future of healthcare work by providing an o...
+Experience Required: Not specified
+
+Proof: API-only
+---
+

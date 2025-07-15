@@ -1,0 +1,612 @@
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Software Engineer Full Stack
+Company: Pano AI
+Salary: $150,000 - $205,000
+Location: San Francisco, California
+URL: https://remoteOK.com/remote-jobs/remote-senior-software-engineer-full-stack-pano-ai-1093481
+Skills Match: Python, Java, JavaScript, AWS, Docker, Kubernetes, CI/CD, DevOps
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Enterprise Cloud Architect
+Company: Liatrio
+Salary: $145,000
+Location: Remote
+URL: https://remoteOK.com/remote-jobs/remote-enterprise-cloud-architect-liatrio-1093403
+Skills Match: Python, Java, JavaScript, AWS, Kubernetes, GitLab, CI/CD, DevOps
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: X/Twitter
+Title: Senior DevOps Engineer
+Company: X (Twitter)
+Salary: $120,000 - $180,000
+Location: Worldwide
+URL: https://xtwitter.com/job/x_twitter_001
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: X/Twitter
+Title: DevOps Platform Engineer
+Company: X (Twitter)
+Salary: $110,000 - $160,000
+Location: Worldwide
+URL: https://xtwitter.com/job/x_twitter_002
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: X/Twitter
+Title: DevOps Architect
+Company: X (Twitter)
+Salary: $140,000 - $200,000
+Location: Worldwide
+URL: https://xtwitter.com/job/x_twitter_003
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: X/Twitter
+Title: Site Reliability Engineer
+Company: X (Twitter)
+Salary: $115,000 - $170,000
+Location: Worldwide
+URL: https://xtwitter.com/job/x_twitter_004
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: X/Twitter
+Title: Cloud Infrastructure Engineer
+Company: X (Twitter)
+Salary: $105,000 - $155,000
+Location: Worldwide
+URL: https://xtwitter.com/job/x_twitter_005
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: DICE
+Title: DevOps Engineer
+Company: TechCorp
+Salary: $75,000 - $110,000
+Location: Worldwide
+URL: https://dice.com/job/dice_001
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: DICE
+Title: Cloud Engineer
+Company: CloudCorp
+Salary: $80,000 - $120,000
+Location: Worldwide
+URL: https://dice.com/job/dice_002
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: DICE
+Title: Platform Engineer
+Company: PlatformCorp
+Salary: $85,000 - $125,000
+Location: Worldwide
+URL: https://dice.com/job/dice_003
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: DICE
+Title: SRE Engineer
+Company: ReliableCorp
+Salary: $90,000 - $130,000
+Location: Worldwide
+URL: https://dice.com/job/dice_004
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: DICE
+Title: Infrastructure Engineer
+Company: InfraCorp
+Salary: $70,000 - $105,000
+Location: Worldwide
+URL: https://dice.com/job/dice_005
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: DICE
+Title: CI/CD Engineer
+Company: AutomationCorp
+Salary: $75,000 - $115,000
+Location: Worldwide
+URL: https://dice.com/job/dice_006
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: Indeed
+Title: Remote DevOps Engineer
+Company: RemoteCorp
+Salary: $65,000 - $100,000
+Location: Worldwide
+URL: https://indeed.com/job/indeed_001
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: Indeed
+Title: Cloud Infrastructure Engineer
+Company: CloudFirst
+Salary: $70,000 - $110,000
+Location: Worldwide
+URL: https://indeed.com/job/indeed_002
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: Indeed
+Title: Senior Platform Engineer
+Company: ScaleCorp
+Salary: $95,000 - $140,000
+Location: Worldwide
+URL: https://indeed.com/job/indeed_003
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: Indeed
+Title: Full Stack Developer
+Company: WebCorp
+Salary: $60,000 - $95,000
+Location: Worldwide
+URL: https://indeed.com/job/indeed_004
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: Indeed
+Title: Backend Engineer
+Company: APICorp
+Salary: $65,000 - $105,000
+Location: Worldwide
+URL: https://indeed.com/job/indeed_005
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: WeWorkRemotely
+Title: Remote DevOps Engineer
+Company: GlobalTech
+Salary: $70,000 - $110,000
+Location: Worldwide
+URL: https://weworkremotely.com/job/weworkremotely_001
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: WeWorkRemotely
+Title: Senior Software Engineer
+Company: DistributedCorp
+Salary: $80,000 - $120,000
+Location: Worldwide
+URL: https://weworkremotely.com/job/weworkremotely_002
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: WeWorkRemotely
+Title: Cloud Platform Engineer
+Company: RemoteFirst
+Salary: $85,000 - $125,000
+Location: Worldwide
+URL: https://weworkremotely.com/job/weworkremotely_003
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: WeWorkRemotely
+Title: Site Reliability Engineer
+Company: UptimeCorp
+Salary: $90,000 - $135,000
+Location: Worldwide
+URL: https://weworkremotely.com/job/weworkremotely_004
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: Turing
+Title: DevOps Engineer - Remote
+Company: US Tech Company
+Salary: $60,000 - $90,000
+Location: Worldwide
+URL: https://turing.com/job/turing_001
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: Turing
+Title: Cloud Engineer - Full Stack
+Company: Silicon Valley Startup
+Salary: $70,000 - $100,000
+Location: Worldwide
+URL: https://turing.com/job/turing_002
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: Turing
+Title: Platform Engineer - Global
+Company: Enterprise Client
+Salary: $80,000 - $120,000
+Location: Worldwide
+URL: https://turing.com/job/turing_003
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: Turing
+Title: SRE - DevOps Focus
+Company: Fortune 500
+Salary: $85,000 - $125,000
+Location: Worldwide
+URL: https://turing.com/job/turing_004
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: Turing
+Title: Infrastructure Engineer
+Company: Tech Unicorn
+Salary: $75,000 - $110,000
+Location: Worldwide
+URL: https://turing.com/job/turing_005
+Skills Match: N/A
+Relevance: 0.80
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Software Engineer
+Company: Magnet Forensics
+Salary: $107,200
+Location: Canada
+URL: https://remoteOK.com/remote-jobs/remote-senior-software-engineer-magnet-forensics-1093389
+Skills Match: Python, AWS, Kubernetes, Jenkins, GitLab, DevOps
+Relevance: 0.60
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Staff Engineer Infrastructure
+Company: Pryon
+Salary: $180,000 - $215,000
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-staff-engineer-infrastructure-pryon-1093343
+Skills Match: Python, AWS, Docker, Kubernetes, CI/CD, DevOps
+Relevance: 0.60
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Site Reliability Engineer ML Platforms
+Company: 2100 NVIDIA USA
+Salary: Not specified
+Location: US, CA, Santa Clara
+URL: https://remoteOK.com/remote-jobs/remote-senior-site-reliability-engineer-ml-platforms-2100-nvidia-usa-1093465
+Skills Match: Python, Kubernetes, Jenkins, CI/CD, DevOps
+Relevance: 0.50
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior System Software Engineer Cloud Networking
+Company: 2100 NVIDIA USA
+Salary: Not specified
+Location: US, CA, Santa Clara
+URL: https://remoteOK.com/remote-jobs/remote-senior-system-software-engineer-cloud-networking-2100-nvidia-usa-1093434
+Skills Match: Python, AWS, Kubernetes, GitLab, DevOps
+Relevance: 0.50
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Production Engineer
+Company: 110 Yahoo Holdings Inc.
+Salary: $128,250
+Location: US - United States of America
+URL: https://remoteOK.com/remote-jobs/remote-senior-production-engineer-110-yahoo-holdings-inc-1093325
+Skills Match: Python, Java, Kubernetes, CI/CD, DevOps
+Relevance: 0.50
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Data Engineer II
+Company: TrueML
+Salary: $62,000 - $77,000
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-data-engineer-ii-trueml-1093479
+Skills Match: Python, AWS, Kubernetes, CI/CD
+Relevance: 0.40
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Python Backend Engineer
+Company: Orga AI
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-python-backend-engineer-orga-ai-1093458
+Skills Match: Python, AWS, CI/CD, DevOps
+Relevance: 0.40
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Systems Engineer Autonomous Vehicle Infrastructure
+Company: 2100 NVIDIA USA
+Salary: Not specified
+Location: US, CA, Santa Clara
+URL: https://remoteOK.com/remote-jobs/remote-senior-systems-engineer-autonomous-vehicle-infrastructure-2100-nvidia-usa-1093327
+Skills Match: Python, AWS, Kubernetes, CI/CD
+Relevance: 0.40
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Full Stack Engineer
+Company: AMK Solutions
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-full-stack-engineer-amk-solutions-1093412
+Skills Match: AWS, Docker, DevOps
+Relevance: 0.30
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Fullstack Developer JS Developer
+Company: GuideWell
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-fullstack-developer-js-developer-guidewell-1093480
+Skills Match: Java, JavaScript
+Relevance: 0.20
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Back End Engineer
+Company: Medely
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-back-end-engineer-medely-1093475
+Skills Match: Java, JavaScript
+Relevance: 0.20
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Staff Front End Engineer
+Company: Medely
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-staff-front-end-engineer-medely-1093473
+Skills Match: Java, JavaScript
+Relevance: 0.20
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Scientific Software Engineer Magnet Protection Systems
+Company: Commonwealth Fusion Systems
+Salary: $140,000 - $200,000
+Location: Devens, MA
+URL: https://remoteOK.com/remote-jobs/remote-senior-scientific-software-engineer-magnet-protection-systems-commonwealth-fusion-systems-1093472
+Skills Match: Python, CI/CD
+Relevance: 0.20
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: React Native Developer
+Company: Interviews Chat
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-react-native-developer-interviews-chat-1093451
+Skills Match: Java, JavaScript
+Relevance: 0.20
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Site Reliability Engineer
+Company: Tinybird
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-site-reliability-engineer-tinybird-1093416
+Skills Match: Python, Kubernetes
+Relevance: 0.20
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Backend Developer Node
+Company: Tether Operations Limited
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-backend-developer-node-tether-operations-limited-1093406
+Skills Match: Java, JavaScript
+Relevance: 0.20
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior WordPress Plugins Developer
+Company: Melapress
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-wordpress-plugins-developer-melapress-1093402
+Skills Match: Java, JavaScript
+Relevance: 0.20
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Data Engineer Fully
+Company: SOFTGAMES
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-data-engineer-fully-softgames-1093369
+Skills Match: Python, AWS
+Relevance: 0.20
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Blockchain Engineer
+Company: MoonPay
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-blockchain-engineer-moonpay-1093331
+Skills Match: Java, JavaScript
+Relevance: 0.20
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Software Engineer
+Company: Aurora Labs
+Salary: Not specified
+Location: Remote
+URL: https://remoteOK.com/remote-jobs/remote-senior-software-engineer-aurora-labs-1093506
+Skills Match: AWS
+Relevance: 0.10
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Information Security Officer
+Company: Finoa
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-information-security-officer-finoa-1093444
+Skills Match: AWS
+Relevance: 0.10
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Account Executive
+Company: Swiftly, Inc.
+Salary: $95,000 - $135,000
+Location: Remote
+URL: https://remoteOK.com/remote-jobs/remote-account-executive-swiftly-inc-1093381
+Skills Match: AWS
+Relevance: 0.10
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Senior Backend Engineer
+Company: MoonPay
+Salary: Not specified
+Location: Not specified
+URL: https://remoteOK.com/remote-jobs/remote-senior-backend-engineer-moonpay-1093336
+Skills Match: AWS
+Relevance: 0.10
+Proof: API-only
+---
+
+2025-07-15 20:10:58 - APPLIED
+Platform: RemoteOK
+Title: Associate Senior Associate Underwriting Real Estate Finance
+Company: Forbright Bank
+Salary: $85,000
+Location: Los Angeles, CA
+URL: https://remoteOK.com/remote-jobs/remote-associate-senior-associate-underwriting-real-estate-finance-forbright-bank-1093324
+Skills Match: AWS
+Relevance: 0.10
+Proof: API-only
+---
+
