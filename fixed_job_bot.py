@@ -32,6 +32,10 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from urllib.parse import urljoin
 import re
+import imaplib
+import email
+import smtplib
+from email.mime.text import MIMEText
 
 # Configure logging with proper encoding
 try:
@@ -484,6 +488,144 @@ class FixedJobBot:
             
         except Exception as e:
             self._log_error("Failed to log verification", e)
+    
+    def _check_email_confirmation(self, platform, job_title, company_name, application_time):
+        """Check email for job application confirmation"""
+        try:
+            # Skip email verification if disabled
+            if not self.config.get('email_verification', {}).get('enabled', False):
+                logger.info("📧 Email verification disabled, skipping")
+                return {"status": "disabled", "message": "Email verification is disabled"}
+            
+            email_config = self.config.get('email_verification', {})
+            
+            # Check if required email configuration is available
+            if not email_config.get('email') or not email_config.get('app_password'):
+                logger.warning("📧 Email verification configuration incomplete")
+                return {"status": "config_missing", "message": "Email configuration incomplete"}
+            
+            logger.info(f"📧 Checking email for {job_title} at {company_name} confirmation...")
+            
+            # Connect to IMAP server
+            imap_server = email_config.get('imap_server', 'imap.gmail.com')
+            imap_port = email_config.get('imap_port', 993)
+            
+            mail = imaplib.IMAP4_SSL(imap_server, imap_port)
+            mail.login(email_config['email'], email_config['app_password'])
+            mail.select('inbox')
+            
+            # Search for confirmation emails from the time of application
+            search_time = application_time - timedelta(minutes=5)  # Allow some buffer
+            search_date = search_time.strftime('%d-%b-%Y')
+            
+            # Search keywords that might indicate job application confirmation
+            search_keywords = [
+                'application received',
+                'application confirmation',
+                'thank you for applying',
+                'application submitted',
+                company_name.lower(),
+                platform.lower()
+            ]
+            
+            confirmation_found = False
+            confirmation_details = []
+            
+            # Check emails for a limited time
+            timeout = email_config.get('timeout', 300)  # 5 minutes default
+            check_interval = email_config.get('check_interval', 30)  # 30 seconds interval
+            end_time = time.time() + timeout
+            
+            while time.time() < end_time:
+                # Search for emails since the search date
+                typ, data = mail.search(None, f'(SINCE "{search_date}")')
+                
+                if typ == 'OK':
+                    mail_ids = data[0].split()
+                    
+                    # Check recent emails (last 50 to avoid overload)
+                    for mail_id in mail_ids[-50:]:
+                        try:
+                            typ, data = mail.fetch(mail_id, '(RFC822)')
+                            if typ == 'OK':
+                                msg = email.message_from_bytes(data[0][1])
+                                
+                                # Get email details
+                                subject = msg.get('subject', '').lower()
+                                from_addr = msg.get('from', '').lower()
+                                date_str = msg.get('date', '')
+                                
+                                # Parse email date
+                                try:
+                                    email_date = email.utils.parsedate_to_datetime(date_str)
+                                    if email_date < application_time:
+                                        continue  # Skip emails before application
+                                except:
+                                    continue
+                                
+                                # Check if email content matches confirmation patterns
+                                body = self._extract_email_body(msg)
+                                content = (subject + ' ' + from_addr + ' ' + body).lower()
+                                
+                                # Check for confirmation keywords
+                                for keyword in search_keywords:
+                                    if keyword in content:
+                                        confirmation_found = True
+                                        confirmation_details.append({
+                                            'subject': subject,
+                                            'from': from_addr,
+                                            'date': date_str,
+                                            'keyword_matched': keyword
+                                        })
+                                        break
+                                
+                                if confirmation_found:
+                                    break
+                        except Exception as e:
+                            logger.debug(f"Error processing email {mail_id}: {e}")
+                            continue
+                
+                if confirmation_found:
+                    break
+                
+                # Wait before next check
+                time.sleep(check_interval)
+            
+            mail.close()
+            mail.logout()
+            
+            if confirmation_found:
+                logger.info(f"✅ Email confirmation found for {job_title} at {company_name}")
+                return {
+                    "status": "confirmed",
+                    "message": "Email confirmation received",
+                    "details": confirmation_details
+                }
+            else:
+                logger.warning(f"⚠️ No email confirmation found for {job_title} at {company_name}")
+                return {
+                    "status": "pending",
+                    "message": "No email confirmation found within timeout period"
+                }
+                
+        except Exception as e:
+            self._log_error(f"Email verification error for {job_title} at {company_name}", e)
+            return {"status": "error", "message": f"Email verification failed: {str(e)}"}
+    
+    def _extract_email_body(self, msg):
+        """Extract text content from email message"""
+        try:
+            body = ""
+            if msg.is_multipart():
+                for part in msg.walk():
+                    if part.get_content_type() == "text/plain":
+                        body += part.get_payload(decode=True).decode('utf-8', errors='ignore')
+            else:
+                body = msg.get_payload(decode=True).decode('utf-8', errors='ignore')
+            return body
+        except Exception as e:
+            logger.debug(f"Error extracting email body: {e}")
+            return ""
     
     def _create_user_profile(self):
         """Create user profile from configuration"""
@@ -1185,13 +1327,31 @@ class FixedJobBot:
                 # Take final verification screenshot
                 self._take_verification_screenshot(platform, company_name, f"{job_title}_Completion")
                 
+                # Check email confirmation if enabled
+                application_time = datetime.now()
+                email_verification = self._check_email_confirmation(platform, job_title, company_name, application_time)
+                
+                # Update verification status based on email confirmation
+                if email_verification["status"] == "confirmed":
+                    verification_status = "EMAIL_CONFIRMED"
+                    logger.info(f"📧 Email confirmation received for {job_title} at {company_name}")
+                elif email_verification["status"] == "pending":
+                    verification_status = "EMAIL_PENDING"
+                    logger.warning(f"📧 Email confirmation pending for {job_title} at {company_name}")
+                
+                # Log verification details
+                self._log_verification(
+                    platform, company_name, job_title, 
+                    verification_status, email_verification.get("message", "")
+                )
+                
                 # Log success
                 self._log_application(
                     platform, job_title, company_name, "SUCCESS", 
                     job_url, verification_status
                 )
                 
-                logger.info(f"✅ Successfully applied to {job_title} at {company_name}")
+                logger.info(f"✅ Successfully applied to {job_title} at {company_name} - Status: {verification_status}")
                 return True
             else:
                 self._log_application(platform, job_title, company_name, "FAILED", job_url)
@@ -1638,4 +1798,11 @@ class FixedJobBot:
             
             # Log cycle statistics
             duration = time.time() - start_time
-            self._log_cycle(platform,
+            self._log_cycle(platform, jobs_found, jobs_applied, duration)
+            
+            logger.info(f"✅ Completed {platform} cycle: {jobs_found} jobs found, {jobs_applied} applications sent in {duration:.2f}s")
+            return True
+            
+        except Exception as e:
+            self._log_error(f"Error in {platform} cycle", e)
+            return False
