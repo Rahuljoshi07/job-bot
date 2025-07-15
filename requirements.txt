@@ -33,3 +33,15 @@ python-docx==0.8.11
 # Additional utilities
 # hashlib and dataclasses are built-in to Python
 typing-extensions==4.8.0
+
+# Web Dashboard Dependencies
+flask==2.3.3
+chart.js  # CDN-based, no pip install needed
+
+# CLI Enhancement Dependencies
+colorama==0.4.6
+click==8.1.7
+tqdm==4.66.1
+
+# Notification System Dependencies
+plyer==2.1.0  # For desktop notifications
