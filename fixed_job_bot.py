@@ -36,6 +36,8 @@ import imaplib
 import email
 import smtplib
 from email.mime.text import MIMEText
+import hashlib
+import base64
 
 # Configure logging with proper encoding
 try:
@@ -103,6 +105,9 @@ class FixedJobBot:
         
         # Initialize verification system
         self.verification_timestamps = {}
+        
+        # Initialize credential encryption
+        self.encryption_key = self._get_or_create_encryption_key()
         
         logger.info("✅ Fixed Job Bot initialized successfully!")
     
@@ -490,14 +495,25 @@ class FixedJobBot:
             self._log_error("Failed to log verification", e)
     
     def _check_email_confirmation(self, platform, job_title, company_name, application_time):
-        """Check email for job application confirmation"""
+        """Check email for job application confirmation with enhanced automation"""
         try:
             # Skip email verification if disabled
-            if not self.config.get('email_verification', {}).get('enabled', False):
+            verification_config = self.config.get('verification', {})
+            if not verification_config.get('enable_email_check', False):
                 logger.info("📧 Email verification disabled, skipping")
                 return {"status": "disabled", "message": "Email verification is disabled"}
             
-            email_config = self.config.get('email_verification', {})
+            # Automatically use the same email that was used for the application
+            application_email = self.config.get('personal', {}).get('email', '')
+            if not application_email:
+                logger.warning("📧 No application email found in configuration")
+                return {"status": "config_missing", "message": "Application email not configured"}
+            
+            # Use application email for verification if not explicitly configured
+            email_config = verification_config.copy()
+            if not email_config.get('email'):
+                email_config['email'] = application_email
+                logger.info(f"📧 Using application email for verification: {application_email}")
             
             # Check if required email configuration is available
             if not email_config.get('email') or not email_config.get('app_password'):
@@ -506,90 +522,99 @@ class FixedJobBot:
             
             logger.info(f"📧 Checking email for {job_title} at {company_name} confirmation...")
             
-            # Connect to IMAP server
-            imap_server = email_config.get('imap_server', 'imap.gmail.com')
-            imap_port = email_config.get('imap_port', 993)
+            # Get email server configuration with smart defaults
+            email_provider = self._detect_email_provider(email_config['email'])
+            imap_config = self._get_imap_config(email_provider)
             
-            mail = imaplib.IMAP4_SSL(imap_server, imap_port)
-            mail.login(email_config['email'], email_config['app_password'])
-            mail.select('inbox')
+            imap_server = email_config.get('imap_server', imap_config['server'])
+            imap_port = email_config.get('imap_port', imap_config['port'])
+            
+            # Connect to IMAP server with enhanced error handling
+            try:
+                mail = imaplib.IMAP4_SSL(imap_server, imap_port)
+                mail.login(email_config['email'], email_config['app_password'])
+                mail.select('inbox')
+                logger.info(f"📧 Successfully connected to {imap_server}")
+            except Exception as e:
+                logger.error(f"📧 Failed to connect to {imap_server}: {e}")
+                return {"status": "connection_failed", "message": f"Failed to connect to email server: {str(e)}"}
             
             # Search for confirmation emails from the time of application
             search_time = application_time - timedelta(minutes=5)  # Allow some buffer
             search_date = search_time.strftime('%d-%b-%Y')
             
-            # Search keywords that might indicate job application confirmation
-            search_keywords = [
-                'application received',
-                'application confirmation',
-                'thank you for applying',
-                'application submitted',
-                company_name.lower(),
-                platform.lower()
-            ]
+            # Enhanced search keywords based on platform and company
+            search_keywords = self._build_search_keywords(platform, company_name, job_title)
             
             confirmation_found = False
             confirmation_details = []
             
-            # Check emails for a limited time
+            # Check emails for a configured time period
             timeout = email_config.get('timeout', 300)  # 5 minutes default
             check_interval = email_config.get('check_interval', 30)  # 30 seconds interval
             end_time = time.time() + timeout
             
             while time.time() < end_time:
-                # Search for emails since the search date
-                typ, data = mail.search(None, f'(SINCE "{search_date}")')
-                
-                if typ == 'OK':
-                    mail_ids = data[0].split()
+                try:
+                    # Search for emails since the search date
+                    typ, data = mail.search(None, f'(SINCE "{search_date}")')
                     
-                    # Check recent emails (last 50 to avoid overload)
-                    for mail_id in mail_ids[-50:]:
-                        try:
-                            typ, data = mail.fetch(mail_id, '(RFC822)')
-                            if typ == 'OK':
-                                msg = email.message_from_bytes(data[0][1])
-                                
-                                # Get email details
-                                subject = msg.get('subject', '').lower()
-                                from_addr = msg.get('from', '').lower()
-                                date_str = msg.get('date', '')
-                                
-                                # Parse email date
-                                try:
-                                    email_date = email.utils.parsedate_to_datetime(date_str)
-                                    if email_date < application_time:
-                                        continue  # Skip emails before application
-                                except:
-                                    continue
-                                
-                                # Check if email content matches confirmation patterns
-                                body = self._extract_email_body(msg)
-                                content = (subject + ' ' + from_addr + ' ' + body).lower()
-                                
-                                # Check for confirmation keywords
-                                for keyword in search_keywords:
-                                    if keyword in content:
+                    if typ == 'OK':
+                        mail_ids = data[0].split()
+                        
+                        # Check recent emails (last 50 to avoid overload)
+                        for mail_id in mail_ids[-50:]:
+                            try:
+                                typ, data = mail.fetch(mail_id, '(RFC822)')
+                                if typ == 'OK':
+                                    msg = email.message_from_bytes(data[0][1])
+                                    
+                                    # Get email details
+                                    subject = msg.get('subject', '').lower()
+                                    from_addr = msg.get('from', '').lower()
+                                    date_str = msg.get('date', '')
+                                    
+                                    # Parse email date
+                                    try:
+                                        email_date = email.utils.parsedate_to_datetime(date_str)
+                                        if email_date < application_time:
+                                            continue  # Skip emails before application
+                                    except:
+                                        continue
+                                    
+                                    # Check if email content matches confirmation patterns
+                                    body = self._extract_email_body(msg)
+                                    content = (subject + ' ' + from_addr + ' ' + body).lower()
+                                    
+                                    # Check for confirmation keywords with scoring
+                                    match_score = self._calculate_confirmation_score(content, search_keywords)
+                                    
+                                    if match_score > 0.7:  # Threshold for confirmation
                                         confirmation_found = True
                                         confirmation_details.append({
                                             'subject': subject,
                                             'from': from_addr,
                                             'date': date_str,
-                                            'keyword_matched': keyword
+                                            'match_score': match_score,
+                                            'matched_keywords': [kw for kw in search_keywords if kw in content]
                                         })
                                         break
-                                
-                                if confirmation_found:
-                                    break
-                        except Exception as e:
-                            logger.debug(f"Error processing email {mail_id}: {e}")
-                            continue
-                
-                if confirmation_found:
+                                    
+                                    if confirmation_found:
+                                        break
+                            except Exception as e:
+                                logger.debug(f"Error processing email {mail_id}: {e}")
+                                continue
+                    
+                    if confirmation_found:
+                        break
+                    
+                    # Wait before next check
+                    time.sleep(check_interval)
+                    
+                except Exception as e:
+                    logger.warning(f"📧 Error during email search: {e}")
                     break
-                
-                # Wait before next check
-                time.sleep(check_interval)
             
             mail.close()
             mail.logout()
@@ -611,6 +636,249 @@ class FixedJobBot:
         except Exception as e:
             self._log_error(f"Email verification error for {job_title} at {company_name}", e)
             return {"status": "error", "message": f"Email verification failed: {str(e)}"}
+    
+    def _detect_email_provider(self, email_address):
+        """Detect email provider from email address"""
+        if '@gmail.com' in email_address.lower():
+            return 'gmail'
+        elif '@outlook.com' in email_address.lower() or '@hotmail.com' in email_address.lower():
+            return 'outlook'
+        elif '@yahoo.com' in email_address.lower():
+            return 'yahoo'
+        else:
+            return 'generic'
+    
+    def _get_imap_config(self, provider):
+        """Get IMAP configuration for email provider"""
+        imap_configs = {
+            'gmail': {'server': 'imap.gmail.com', 'port': 993},
+            'outlook': {'server': 'outlook.office365.com', 'port': 993},
+            'yahoo': {'server': 'imap.mail.yahoo.com', 'port': 993},
+            'generic': {'server': 'imap.gmail.com', 'port': 993}  # Default fallback
+        }
+        
+        return imap_configs.get(provider, imap_configs['generic'])
+    
+    def _build_search_keywords(self, platform, company_name, job_title):
+        """Build enhanced search keywords for email verification"""
+        keywords = [
+            'application received',
+            'application confirmation',
+            'thank you for applying',
+            'application submitted',
+            'application complete',
+            'we received your application',
+            'your application has been',
+            'application status',
+            company_name.lower(),
+            platform.lower()
+        ]
+        
+        # Add job title words
+        if job_title and job_title != "Unknown Position":
+            title_words = job_title.lower().split()
+            keywords.extend([word for word in title_words if len(word) > 2])
+        
+        # Add platform-specific keywords
+        platform_keywords = {
+            'LinkedIn': ['linkedin', 'easy apply', 'your linkedin application'],
+            'Indeed': ['indeed', 'indeed.com', 'indeed application'],
+            'Dice': ['dice', 'dice.com', 'dice application'],
+            'RemoteOK': ['remote ok', 'remoteok', 'remote-ok']
+        }
+        
+        if platform in platform_keywords:
+            keywords.extend(platform_keywords[platform])
+        
+        return list(set(keywords))  # Remove duplicates
+    
+    def _calculate_confirmation_score(self, content, keywords):
+        """Calculate confidence score for email confirmation"""
+        score = 0
+        keyword_matches = 0
+        
+        for keyword in keywords:
+            if keyword in content:
+                keyword_matches += 1
+                
+                # Weight different types of keywords
+                if keyword in ['application received', 'application submitted', 'thank you for applying']:
+                    score += 0.4  # High weight for direct confirmation phrases
+                elif keyword in ['application confirmation', 'application complete', 'we received your application']:
+                    score += 0.3  # Medium weight for confirmation phrases
+                else:
+                    score += 0.1  # Low weight for general matches
+        
+        # Bonus for multiple matches
+        if keyword_matches > 3:
+            score += 0.2
+        
+        return min(score, 1.0)  # Cap at 1.0
+    
+    def _get_or_create_encryption_key(self):
+        """Get or create encryption key for credential storage"""
+        try:
+            key_file = '.encryption_key'
+            
+            if os.path.exists(key_file):
+                with open(key_file, 'rb') as f:
+                    key = f.read()
+                logger.info("✅ Encryption key loaded")
+                return key
+            else:
+                # Generate new encryption key
+                key = os.urandom(32)  # 256-bit key
+                
+                with open(key_file, 'wb') as f:
+                    f.write(key)
+                
+                # Set restrictive permissions
+                os.chmod(key_file, 0o600)
+                
+                logger.info("✅ New encryption key generated")
+                return key
+                
+        except Exception as e:
+            self._log_error("Failed to setup encryption key", e)
+            # Fallback to a derived key
+            return hashlib.sha256(b'job-bot-fallback-key').digest()
+    
+    def _encrypt_credential(self, credential):
+        """Encrypt credential using simple XOR encryption"""
+        try:
+            if not credential:
+                return ""
+            
+            # Simple XOR encryption (for basic protection)
+            encrypted = bytearray()
+            for i, char in enumerate(credential.encode('utf-8')):
+                key_byte = self.encryption_key[i % len(self.encryption_key)]
+                encrypted.append(char ^ key_byte)
+            
+            # Base64 encode for safe storage
+            return base64.b64encode(encrypted).decode('utf-8')
+            
+        except Exception as e:
+            self._log_error("Failed to encrypt credential", e)
+            return credential  # Return original if encryption fails
+    
+    def _decrypt_credential(self, encrypted_credential):
+        """Decrypt credential using simple XOR decryption"""
+        try:
+            if not encrypted_credential:
+                return ""
+            
+            # Base64 decode
+            encrypted = base64.b64decode(encrypted_credential.encode('utf-8'))
+            
+            # Simple XOR decryption
+            decrypted = bytearray()
+            for i, byte in enumerate(encrypted):
+                key_byte = self.encryption_key[i % len(self.encryption_key)]
+                decrypted.append(byte ^ key_byte)
+            
+            return decrypted.decode('utf-8')
+            
+        except Exception as e:
+            self._log_error("Failed to decrypt credential", e)
+            return encrypted_credential  # Return original if decryption fails
+    
+    def _encrypt_config_credentials(self, config):
+        """Encrypt sensitive credentials in configuration"""
+        try:
+            encrypted_config = config.copy()
+            
+            # Encrypt platform credentials
+            for platform, creds in encrypted_config.get('platforms', {}).items():
+                if isinstance(creds, dict):
+                    if 'password' in creds:
+                        creds['password'] = self._encrypt_credential(creds['password'])
+                    if 'app_password' in creds:
+                        creds['app_password'] = self._encrypt_credential(creds['app_password'])
+            
+            # Encrypt verification credentials
+            verification = encrypted_config.get('verification', {})
+            if 'app_password' in verification:
+                verification['app_password'] = self._encrypt_credential(verification['app_password'])
+            
+            return encrypted_config
+            
+        except Exception as e:
+            self._log_error("Failed to encrypt config credentials", e)
+            return config
+    
+    def _decrypt_config_credentials(self, encrypted_config):
+        """Decrypt sensitive credentials in configuration"""
+        try:
+            config = encrypted_config.copy()
+            
+            # Decrypt platform credentials
+            for platform, creds in config.get('platforms', {}).items():
+                if isinstance(creds, dict):
+                    if 'password' in creds:
+                        creds['password'] = self._decrypt_credential(creds['password'])
+                    if 'app_password' in creds:
+                        creds['app_password'] = self._decrypt_credential(creds['app_password'])
+            
+            # Decrypt verification credentials
+            verification = config.get('verification', {})
+            if 'app_password' in verification:
+                verification['app_password'] = self._decrypt_credential(verification['app_password'])
+            
+            return config
+            
+        except Exception as e:
+            self._log_error("Failed to decrypt config credentials", e)
+            return encrypted_config
+    
+    def save_encrypted_credentials(self, credentials_dict, filename='encrypted_credentials.json'):
+        """Save credentials with encryption"""
+        try:
+            encrypted_creds = {}
+            
+            for key, value in credentials_dict.items():
+                if isinstance(value, str) and ('password' in key.lower() or 'token' in key.lower()):
+                    encrypted_creds[key] = self._encrypt_credential(value)
+                else:
+                    encrypted_creds[key] = value
+            
+            with open(filename, 'w', encoding='utf-8') as f:
+                json.dump(encrypted_creds, f, indent=2)
+            
+            # Set restrictive permissions
+            os.chmod(filename, 0o600)
+            
+            logger.info(f"✅ Encrypted credentials saved to {filename}")
+            return True
+            
+        except Exception as e:
+            self._log_error("Failed to save encrypted credentials", e)
+            return False
+    
+    def load_encrypted_credentials(self, filename='encrypted_credentials.json'):
+        """Load and decrypt credentials"""
+        try:
+            if not os.path.exists(filename):
+                logger.warning(f"⚠️ Encrypted credentials file not found: {filename}")
+                return {}
+            
+            with open(filename, 'r', encoding='utf-8') as f:
+                encrypted_creds = json.load(f)
+            
+            decrypted_creds = {}
+            
+            for key, value in encrypted_creds.items():
+                if isinstance(value, str) and ('password' in key.lower() or 'token' in key.lower()):
+                    decrypted_creds[key] = self._decrypt_credential(value)
+                else:
+                    decrypted_creds[key] = value
+            
+            logger.info(f"✅ Encrypted credentials loaded from {filename}")
+            return decrypted_creds
+            
+        except Exception as e:
+            self._log_error("Failed to load encrypted credentials", e)
+            return {}
     
     def _extract_email_body(self, msg):
         """Extract text content from email message"""
@@ -894,6 +1162,144 @@ class FixedJobBot:
         except Exception as e:
             self._log_error("Verification screenshot error", e)
             return None
+    
+    def _login_to_platform_with_retry(self, platform, max_retries=2):
+        """Login to platform with retry logic"""
+        for attempt in range(max_retries):
+            try:
+                logger.info(f"🔐 Attempting login to {platform} (attempt {attempt + 1}/{max_retries})")
+                
+                success = self._login_to_platform(platform)
+                if success:
+                    logger.info(f"✅ Login successful for {platform}")
+                    return True
+                else:
+                    logger.warning(f"⚠️ Login attempt {attempt + 1} failed for {platform}")
+                    
+                    if attempt < max_retries - 1:
+                        time.sleep(5)  # Wait before retry
+                        
+            except Exception as e:
+                self._log_error(f"Login attempt {attempt + 1} error for {platform}", e)
+                if attempt < max_retries - 1:
+                    time.sleep(5)
+                    
+        return False
+    
+    def _search_jobs_with_retry(self, platform, job_type, location, max_retries=2):
+        """Search for jobs with retry logic"""
+        for attempt in range(max_retries):
+            try:
+                logger.info(f"🔍 Searching {platform} for {job_type} in {location} (attempt {attempt + 1}/{max_retries})")
+                
+                job_items = self.search_jobs(platform, job_type, location)
+                if job_items is not None:
+                    logger.info(f"✅ Search successful: found {len(job_items)} jobs")
+                    return job_items
+                else:
+                    logger.warning(f"⚠️ Search attempt {attempt + 1} returned None for {job_type}")
+                    
+                    if attempt < max_retries - 1:
+                        time.sleep(3)  # Wait before retry
+                        
+            except Exception as e:
+                self._log_error(f"Search attempt {attempt + 1} error for {job_type} in {location}", e)
+                if attempt < max_retries - 1:
+                    time.sleep(3)
+                    
+        return None
+    
+    def _apply_to_job_with_verification(self, platform, job_element):
+        """Apply to job with enhanced verification and error handling"""
+        try:
+            # Standard application process
+            success = self.apply_to_job(platform, job_element)
+            
+            if success:
+                # Extract job details for verification
+                job_title = self._extract_job_title(platform) or "Unknown Position"
+                company_name = self._extract_company_name(platform) or "Unknown Company"
+                
+                # Check verification status from recent logs
+                verification_status = "PENDING"
+                job_key = f"{platform}_{company_name}_{job_title}"
+                
+                if job_key in self.verification_timestamps:
+                    # Check if email verification was enabled and successful
+                    if self.config.get('verification', {}).get('enable_email_check', False):
+                        verification_status = "EMAIL_PENDING"  # Will be updated by email verification
+                    else:
+                        verification_status = "CONFIRMED"
+                
+                return {
+                    'success': True,
+                    'job_title': job_title,
+                    'company_name': company_name,
+                    'verification_status': verification_status,
+                    'platform': platform
+                }
+            else:
+                return {
+                    'success': False,
+                    'error': 'Application failed',
+                    'platform': platform
+                }
+                
+        except Exception as e:
+            self._log_error(f"Error in enhanced job application", e)
+            return {
+                'success': False,
+                'error': str(e),
+                'platform': platform
+            }
+    
+    def _get_alternative_platform(self, failed_platform):
+        """Get alternative platform when primary platform fails"""
+        platform_alternatives = {
+            'LinkedIn': 'Indeed',
+            'Indeed': 'RemoteOK',
+            'RemoteOK': 'Dice',
+            'Dice': 'LinkedIn'
+        }
+        
+        alternative = platform_alternatives.get(failed_platform)
+        if alternative:
+            logger.info(f"🔄 Suggesting alternative platform: {alternative} for failed {failed_platform}")
+            return alternative
+        
+        return None
+    
+    def _log_cycle_with_metrics(self, platform, jobs_found, jobs_applied, duration, metrics, success):
+        """Log cycle statistics with enhanced metrics"""
+        try:
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            
+            # Calculate success rates
+            login_success_rate = ((metrics['login_attempts'] - metrics['login_failures']) / max(metrics['login_attempts'], 1)) * 100
+            search_success_rate = ((metrics['search_attempts'] - metrics['search_failures']) / max(metrics['search_attempts'], 1)) * 100
+            application_success_rate = ((metrics['application_attempts'] - metrics['application_failures']) / max(metrics['application_attempts'], 1)) * 100
+            verification_success_rate = (metrics['verification_successes'] / max(metrics['verification_successes'] + metrics['verification_failures'], 1)) * 100
+            
+            cycle_details = (
+                f"{timestamp} - {platform} - {'SUCCESS' if success else 'FAILED'}\n"
+                f"Jobs found: {jobs_found}\n"
+                f"Jobs applied: {jobs_applied}\n"
+                f"Duration: {duration:.2f} seconds\n"
+                f"Login success rate: {login_success_rate:.1f}%\n"
+                f"Search success rate: {search_success_rate:.1f}%\n"
+                f"Application success rate: {application_success_rate:.1f}%\n"
+                f"Verification success rate: {verification_success_rate:.1f}%\n"
+                f"Performance metrics: {json.dumps(metrics, indent=2)}\n"
+                f"-" * 50 + "\n"
+            )
+            
+            with open(self.cycle_log_file, 'a', encoding='utf-8') as f:
+                f.write(cycle_details)
+                
+            logger.info(f"✅ Logged enhanced cycle metrics for {platform}")
+            
+        except Exception as e:
+            self._log_error("Failed to log cycle metrics", e)
     
     def _login_to_platform(self, platform):
         """Login to specified platform"""
@@ -1757,52 +2163,154 @@ class FixedJobBot:
                 
             return False
     
-    def run_platform_cycle(self, platform):
-        """Run complete job cycle for a platform"""
+    def run_platform_cycle(self, platform, max_retries=3):
+        """Run complete job cycle for a platform with retry mechanisms and enhanced error handling"""
         start_time = time.time()
         jobs_found = 0
         jobs_applied = 0
+        retry_count = 0
+        platform_success = False
         
-        try:
-            logger.info(f"🚀 Starting job cycle for {platform}")
-            
-            # Login if needed
-            if platform != "RemoteOK":  # RemoteOK doesn't require login
-                if not self._login_to_platform(platform):
-                    logger.error(f"❌ Login failed for {platform}, skipping")
-                    return False
-            
-            # Get search keywords
-            job_types = self.config['preferences']['job_types']
-            locations = self.config['preferences']['locations']
-            
-            # For each keyword and location combination
-            for job_type in job_types:
-                for location in locations:
-                    try:
-                        # Search for jobs
-                        job_items = self.search_jobs(platform, job_type, location)
-                        jobs_found += len(job_items)
+        # Platform performance metrics
+        platform_metrics = {
+            'login_attempts': 0,
+            'login_failures': 0,
+            'search_attempts': 0,
+            'search_failures': 0,
+            'application_attempts': 0,
+            'application_failures': 0,
+            'verification_successes': 0,
+            'verification_failures': 0
+        }
+        
+        while retry_count < max_retries and not platform_success:
+            try:
+                logger.info(f"🚀 Starting job cycle for {platform} (attempt {retry_count + 1}/{max_retries})")
+                
+                # Setup browser if not already done
+                if not self.driver:
+                    if not self._setup_browser():
+                        logger.error(f"❌ Browser setup failed for {platform}")
+                        retry_count += 1
+                        continue
+                
+                # Login with retry logic
+                login_success = True
+                if platform != "RemoteOK":  # RemoteOK doesn't require login
+                    platform_metrics['login_attempts'] += 1
+                    login_success = self._login_to_platform_with_retry(platform, max_retries=2)
+                    
+                    if not login_success:
+                        platform_metrics['login_failures'] += 1
+                        logger.warning(f"⚠️ Login failed for {platform} after retries")
                         
-                        if not job_items:
-                            logger.warning(f"⚠️ No jobs found for {job_type} in {location}")
+                        # Try alternative platform if login consistently fails
+                        if retry_count >= max_retries - 1:
+                            alternative_platform = self._get_alternative_platform(platform)
+                            if alternative_platform:
+                                logger.info(f"🔄 Switching to alternative platform: {alternative_platform}")
+                                return self.run_platform_cycle(alternative_platform, max_retries)
+                        
+                        retry_count += 1
+                        continue
+                
+                # Get search keywords
+                job_types = self.config['preferences']['job_types']
+                locations = self.config['preferences']['locations']
+                
+                # Track successful searches for this cycle
+                successful_searches = 0
+                
+                # For each keyword and location combination
+                for job_type in job_types:
+                    for location in locations:
+                        try:
+                            platform_metrics['search_attempts'] += 1
+                            
+                            # Search for jobs with retry logic
+                            job_items = self._search_jobs_with_retry(platform, job_type, location, max_retries=2)
+                            
+                            if job_items is None:
+                                platform_metrics['search_failures'] += 1
+                                logger.warning(f"⚠️ Search failed for {job_type} in {location} after retries")
+                                continue
+                            
+                            successful_searches += 1
+                            jobs_found += len(job_items)
+                            
+                            if not job_items:
+                                logger.info(f"ℹ️ No jobs found for {job_type} in {location}")
+                                continue
+                            
+                            # Apply to each job with enhanced error handling
+                            application_limit = min(5, len(job_items))  # Limit applications per search
+                            for i, job_item in enumerate(job_items[:application_limit]):
+                                try:
+                                    platform_metrics['application_attempts'] += 1
+                                    
+                                    application_result = self._apply_to_job_with_verification(platform, job_item)
+                                    
+                                    if application_result['success']:
+                                        jobs_applied += 1
+                                        
+                                        if application_result.get('verification_status') == 'EMAIL_CONFIRMED':
+                                            platform_metrics['verification_successes'] += 1
+                                        elif application_result.get('verification_status') in ['EMAIL_PENDING', 'PENDING']:
+                                            platform_metrics['verification_failures'] += 1
+                                    else:
+                                        platform_metrics['application_failures'] += 1
+                                        
+                                    # Add delay between applications to avoid rate limiting
+                                    time.sleep(random.uniform(2, 5))
+                                    
+                                except Exception as e:
+                                    platform_metrics['application_failures'] += 1
+                                    self._log_error(f"Error applying to job {i+1} for {job_type} in {location}", e)
+                                    continue
+                                    
+                        except Exception as e:
+                            platform_metrics['search_failures'] += 1
+                            self._log_error(f"Error processing {job_type} in {location}", e)
                             continue
-                        
-                        # Apply to each job (limit to 5 per search for testing)
-                        for job_item in job_items[:5]:
-                            if self.apply_to_job(platform, job_item):
-                                jobs_applied += 1
-                                
-                    except Exception as e:
-                        self._log_error(f"Error processing {job_type} in {location}", e)
-            
-            # Log cycle statistics
-            duration = time.time() - start_time
-            self._log_cycle(platform, jobs_found, jobs_applied, duration)
-            
+                
+                # Check if cycle was successful
+                if successful_searches > 0 or jobs_applied > 0:
+                    platform_success = True
+                    logger.info(f"✅ Platform cycle successful for {platform}")
+                else:
+                    logger.warning(f"⚠️ No successful operations for {platform}")
+                    retry_count += 1
+                    
+            except Exception as e:
+                self._log_error(f"Critical error in {platform} cycle", e)
+                retry_count += 1
+                
+                # Reset browser on critical errors
+                self._close_browser()
+                time.sleep(5)  # Wait before retry
+        
+        # Log cycle statistics with enhanced metrics
+        duration = time.time() - start_time
+        self._log_cycle_with_metrics(platform, jobs_found, jobs_applied, duration, platform_metrics, platform_success)
+        
+        if platform_success:
             logger.info(f"✅ Completed {platform} cycle: {jobs_found} jobs found, {jobs_applied} applications sent in {duration:.2f}s")
-            return True
-            
-        except Exception as e:
-            self._log_error(f"Error in {platform} cycle", e)
-            return False
+            return {
+                'success': True,
+                'platform': platform,
+                'jobs_found': jobs_found,
+                'jobs_applied': jobs_applied,
+                'duration': duration,
+                'metrics': platform_metrics
+            }
+        else:
+            logger.error(f"❌ Failed {platform} cycle after {max_retries} attempts")
+            return {
+                'success': False,
+                'platform': platform,
+                'jobs_found': jobs_found,
+                'jobs_applied': jobs_applied,
+                'duration': duration,
+                'metrics': platform_metrics,
+                'error': 'Max retries exceeded'
+            }
