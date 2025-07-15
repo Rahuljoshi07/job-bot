@@ -36,6 +36,11 @@ import imaplib
 import email
 import smtplib
 from email.mime.text import MIMEText
+import hashlib
+import base64
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 # Configure logging with proper encoding
 try:
@@ -89,6 +94,10 @@ class FixedJobBot:
         # Create directories
         self._create_directories()
         
+        # Initialize encrypted credentials system
+        self.encrypted_env_file = ".env.encrypted"
+        self.credentials_key_file = ".credentials.key"
+        
         # Load configuration
         self.config = self._load_configuration()
         
@@ -105,6 +114,148 @@ class FixedJobBot:
         self.verification_timestamps = {}
         
         logger.info("✅ Fixed Job Bot initialized successfully!")
+    
+    def _generate_encryption_key(self, password=None):
+        """Generate encryption key from password or environment"""
+        try:
+            if not password:
+                # Try to get password from environment
+                password = os.environ.get('CREDENTIALS_PASSWORD', '')
+                if not password:
+                    # Generate a random password and save it securely
+                    password = base64.urlsafe_b64encode(os.urandom(32)).decode()
+                    logger.warning("🔐 Generated random password for credentials encryption")
+                    print(f"🔐 IMPORTANT: Your credentials password is: {password}")
+                    print("🔐 Please save this password securely and set CREDENTIALS_PASSWORD environment variable")
+            
+            # Generate key from password
+            password_bytes = password.encode()
+            salt = b'job_bot_salt_2024'  # Use a fixed salt for consistency
+            kdf = PBKDF2HMAC(
+                algorithm=hashes.SHA256(),
+                length=32,
+                salt=salt,
+                iterations=100000,
+            )
+            key = base64.urlsafe_b64encode(kdf.derive(password_bytes))
+            return key
+            
+        except Exception as e:
+            self._log_error("Error generating encryption key", e)
+            return None
+    
+    def _encrypt_credentials(self, credentials_dict, password=None):
+        """Encrypt credentials dictionary"""
+        try:
+            key = self._generate_encryption_key(password)
+            if not key:
+                return None
+            
+            f = Fernet(key)
+            credentials_json = json.dumps(credentials_dict)
+            encrypted_data = f.encrypt(credentials_json.encode())
+            
+            return base64.urlsafe_b64encode(encrypted_data).decode()
+            
+        except Exception as e:
+            self._log_error("Error encrypting credentials", e)
+            return None
+    
+    def _decrypt_credentials(self, encrypted_data, password=None):
+        """Decrypt credentials data"""
+        try:
+            key = self._generate_encryption_key(password)
+            if not key:
+                return None
+            
+            f = Fernet(key)
+            encrypted_bytes = base64.urlsafe_b64decode(encrypted_data.encode())
+            decrypted_data = f.decrypt(encrypted_bytes)
+            
+            return json.loads(decrypted_data.decode())
+            
+        except Exception as e:
+            self._log_error("Error decrypting credentials", e)
+            return None
+    
+    def _load_encrypted_credentials(self):
+        """Load credentials from encrypted file"""
+        try:
+            if not os.path.exists(self.encrypted_env_file):
+                logger.info("🔐 No encrypted credentials file found")
+                return None
+            
+            with open(self.encrypted_env_file, 'r') as f:
+                encrypted_data = f.read().strip()
+            
+            credentials = self._decrypt_credentials(encrypted_data)
+            if credentials:
+                logger.info("🔐 Successfully loaded encrypted credentials")
+                return credentials
+            else:
+                logger.error("🔐 Failed to decrypt credentials")
+                return None
+                
+        except Exception as e:
+            self._log_error("Error loading encrypted credentials", e)
+            return None
+    
+    def _save_encrypted_credentials(self, credentials_dict, password=None):
+        """Save credentials to encrypted file"""
+        try:
+            encrypted_data = self._encrypt_credentials(credentials_dict, password)
+            if not encrypted_data:
+                return False
+            
+            with open(self.encrypted_env_file, 'w') as f:
+                f.write(encrypted_data)
+            
+            logger.info("🔐 Credentials saved to encrypted file")
+            
+            # Update .gitignore to exclude encrypted file
+            self._update_gitignore()
+            
+            return True
+            
+        except Exception as e:
+            self._log_error("Error saving encrypted credentials", e)
+            return False
+    
+    def _update_gitignore(self):
+        """Update .gitignore to exclude encrypted credentials"""
+        try:
+            gitignore_entries = [
+                "# Encrypted credentials (SECURITY CRITICAL)",
+                ".env.encrypted",
+                ".credentials.key",
+                "credentials_password.txt",
+                "",
+                "# Temporary credential files",
+                ".env.temp",
+                ".credentials.temp"
+            ]
+            
+            gitignore_path = ".gitignore"
+            
+            # Read existing .gitignore
+            existing_content = ""
+            if os.path.exists(gitignore_path):
+                with open(gitignore_path, 'r') as f:
+                    existing_content = f.read()
+            
+            # Add entries if not already present
+            for entry in gitignore_entries:
+                if entry and entry not in existing_content:
+                    existing_content += f"{entry}\n"
+            
+            # Write updated .gitignore
+            with open(gitignore_path, 'w') as f:
+                f.write(existing_content)
+            
+            logger.info("🔐 Updated .gitignore with encrypted credential exclusions")
+            
+        except Exception as e:
+            self._log_error("Error updating .gitignore", e)
     
     def _create_directories(self):
         """Create necessary directories"""
@@ -229,9 +380,15 @@ class FixedJobBot:
         }
     
     def _load_configuration(self):
-        """Load configuration with fallbacks"""
+        """Load configuration with encrypted credentials support"""
         try:
-            # Try environment variables first
+            # Try encrypted credentials first (highest priority)
+            config = self._load_encrypted_credentials()
+            if config:
+                logger.info("✅ Configuration loaded from encrypted file")
+                return config
+            
+            # Try environment variables
             config = self._load_from_environment()
             if config:
                 logger.info("✅ Configuration loaded from environment")
@@ -330,10 +487,11 @@ class FixedJobBot:
                     'apply_strategy': 'all_matching'
                 },
                 'verification': {
-                    'enable_email_check': False,
-                    'email_imap_server': '',
-                    'email_smtp_server': '',
-                    'email_smtp_port': 587
+                    'enable_email_check': os.environ.get('ENABLE_EMAIL_VERIFICATION', 'false').lower() == 'true',
+                    'email_app_password': os.environ.get('EMAIL_APP_PASSWORD', ''),
+                    'email_imap_server': os.environ.get('EMAIL_IMAP_SERVER', ''),
+                    'email_smtp_server': os.environ.get('EMAIL_SMTP_SERVER', ''),
+                    'email_smtp_port': int(os.environ.get('EMAIL_SMTP_PORT', '587'))
                 }
             }
             
@@ -490,21 +648,30 @@ class FixedJobBot:
             self._log_error("Failed to log verification", e)
     
     def _check_email_confirmation(self, platform, job_title, company_name, application_time):
-        """Check email for job application confirmation"""
+        """Check email for job application confirmation using same email as applications"""
         try:
-            # Skip email verification if disabled
-            if not self.config.get('email_verification', {}).get('enabled', False):
+            # Use the same email address that was used for job applications
+            application_email = self.config.get('personal', {}).get('email', '')
+            
+            if not application_email:
+                logger.warning("📧 No application email configured")
+                return {"status": "no_email", "message": "No application email configured"}
+            
+            # Check if email verification is enabled
+            email_verification_enabled = self.config.get('verification', {}).get('enable_email_check', False)
+            
+            if not email_verification_enabled:
                 logger.info("📧 Email verification disabled, skipping")
                 return {"status": "disabled", "message": "Email verification is disabled"}
             
-            email_config = self.config.get('email_verification', {})
+            # Get email configuration for the same email used in applications
+            email_config = self._get_email_config_for_address(application_email)
             
-            # Check if required email configuration is available
-            if not email_config.get('email') or not email_config.get('app_password'):
-                logger.warning("📧 Email verification configuration incomplete")
-                return {"status": "config_missing", "message": "Email configuration incomplete"}
+            if not email_config:
+                logger.warning(f"📧 No email configuration found for application email: {application_email}")
+                return {"status": "config_missing", "message": f"Email configuration incomplete for {application_email}"}
             
-            logger.info(f"📧 Checking email for {job_title} at {company_name} confirmation...")
+            logger.info(f"📧 Checking email {application_email} for {job_title} at {company_name} confirmation...")
             
             # Connect to IMAP server
             imap_server = email_config.get('imap_server', 'imap.gmail.com')
@@ -518,23 +685,46 @@ class FixedJobBot:
             search_time = application_time - timedelta(minutes=5)  # Allow some buffer
             search_date = search_time.strftime('%d-%b-%Y')
             
-            # Search keywords that might indicate job application confirmation
+            # Enhanced search keywords including platform-specific patterns
             search_keywords = [
                 'application received',
                 'application confirmation',
                 'thank you for applying',
                 'application submitted',
+                'your application',
+                'job application',
+                f'application for {job_title.lower()}',
                 company_name.lower(),
                 platform.lower()
             ]
             
+            # Add platform-specific confirmation patterns
+            platform_patterns = {
+                "LinkedIn": ["linkedin", "easy apply", "job alert"],
+                "Indeed": ["indeed", "apply now", "job seeker"],
+                "RemoteOK": ["remote ok", "remoteok", "remote job"],
+                "Dice": ["dice", "dice.com", "tech jobs"]
+            }
+            
+            if platform in platform_patterns:
+                search_keywords.extend(platform_patterns[platform])
+            
             confirmation_found = False
             confirmation_details = []
             
-            # Check emails for a limited time
-            timeout = email_config.get('timeout', 300)  # 5 minutes default
-            check_interval = email_config.get('check_interval', 30)  # 30 seconds interval
+            # Enhanced timeout based on platform (some platforms send confirmations faster)
+            timeout_map = {
+                "LinkedIn": 180,  # 3 minutes
+                "Indeed": 300,    # 5 minutes
+                "RemoteOK": 120,  # 2 minutes (usually immediate)
+                "Dice": 240       # 4 minutes
+            }
+            
+            timeout = timeout_map.get(platform, 300)  # Default 5 minutes
+            check_interval = 30  # 30 seconds interval
             end_time = time.time() + timeout
+            
+            logger.info(f"📧 Monitoring email for {timeout} seconds with {check_interval}s intervals")
             
             while time.time() < end_time:
                 # Search for emails since the search date
@@ -543,8 +733,8 @@ class FixedJobBot:
                 if typ == 'OK':
                     mail_ids = data[0].split()
                     
-                    # Check recent emails (last 50 to avoid overload)
-                    for mail_id in mail_ids[-50:]:
+                    # Check recent emails (last 100 to be more thorough)
+                    for mail_id in mail_ids[-100:]:
                         try:
                             typ, data = mail.fetch(mail_id, '(RFC822)')
                             if typ == 'OK':
@@ -567,17 +757,33 @@ class FixedJobBot:
                                 body = self._extract_email_body(msg)
                                 content = (subject + ' ' + from_addr + ' ' + body).lower()
                                 
-                                # Check for confirmation keywords
+                                # Enhanced matching with scoring
+                                match_score = 0
+                                matched_keywords = []
+                                
                                 for keyword in search_keywords:
                                     if keyword in content:
-                                        confirmation_found = True
-                                        confirmation_details.append({
-                                            'subject': subject,
-                                            'from': from_addr,
-                                            'date': date_str,
-                                            'keyword_matched': keyword
-                                        })
-                                        break
+                                        match_score += 1
+                                        matched_keywords.append(keyword)
+                                
+                                # Consider it a match if we have at least 2 keyword matches
+                                # or 1 strong match (application + company/platform)
+                                if (match_score >= 2 or 
+                                    (match_score >= 1 and any(strong in content for strong in ['application', 'applied', 'submitted']))):
+                                    
+                                    confirmation_found = True
+                                    confirmation_details.append({
+                                        'subject': subject,
+                                        'from': from_addr,
+                                        'date': date_str,
+                                        'keywords_matched': matched_keywords,
+                                        'match_score': match_score,
+                                        'body_preview': body[:200] + '...' if len(body) > 200 else body
+                                    })
+                                    
+                                    # Log the match for debugging
+                                    logger.info(f"📧 Email match found: {subject} from {from_addr} (score: {match_score})")
+                                    break
                                 
                                 if confirmation_found:
                                     break
@@ -588,6 +794,11 @@ class FixedJobBot:
                 if confirmation_found:
                     break
                 
+                # Log progress
+                remaining_time = int(end_time - time.time())
+                if remaining_time > 0:
+                    logger.info(f"📧 Still monitoring... {remaining_time}s remaining")
+                
                 # Wait before next check
                 time.sleep(check_interval)
             
@@ -596,6 +807,14 @@ class FixedJobBot:
             
             if confirmation_found:
                 logger.info(f"✅ Email confirmation found for {job_title} at {company_name}")
+                
+                # Log detailed verification information
+                self._log_verification(
+                    platform, company_name, job_title, 
+                    "EMAIL_CONFIRMED", 
+                    f"Found {len(confirmation_details)} matching emails"
+                )
+                
                 return {
                     "status": "confirmed",
                     "message": "Email confirmation received",
@@ -603,6 +822,14 @@ class FixedJobBot:
                 }
             else:
                 logger.warning(f"⚠️ No email confirmation found for {job_title} at {company_name}")
+                
+                # Log verification failure
+                self._log_verification(
+                    platform, company_name, job_title, 
+                    "EMAIL_PENDING", 
+                    f"No confirmation email found within {timeout} seconds"
+                )
+                
                 return {
                     "status": "pending",
                     "message": "No email confirmation found within timeout period"
@@ -610,7 +837,67 @@ class FixedJobBot:
                 
         except Exception as e:
             self._log_error(f"Email verification error for {job_title} at {company_name}", e)
+            
+            # Log verification error
+            self._log_verification(
+                platform, company_name, job_title, 
+                "EMAIL_ERROR", 
+                f"Email verification failed: {str(e)}"
+            )
+            
             return {"status": "error", "message": f"Email verification failed: {str(e)}"}
+    
+    def _get_email_config_for_address(self, email_address):
+        """Get email configuration for a specific email address"""
+        try:
+            # Check if we have specific configuration for this email
+            verification_config = self.config.get('verification', {})
+            
+            # Use the same email as application email
+            email_config = {
+                'email': email_address,
+                'app_password': verification_config.get('email_app_password', ''),
+                'imap_server': verification_config.get('email_imap_server', 'imap.gmail.com'),
+                'imap_port': verification_config.get('email_imap_port', 993),
+                'smtp_server': verification_config.get('email_smtp_server', 'smtp.gmail.com'),
+                'smtp_port': verification_config.get('email_smtp_port', 587)
+            }
+            
+            # Determine email provider settings based on email domain
+            email_domain = email_address.split('@')[1].lower() if '@' in email_address else ''
+            
+            if 'gmail' in email_domain:
+                email_config.update({
+                    'imap_server': 'imap.gmail.com',
+                    'imap_port': 993,
+                    'smtp_server': 'smtp.gmail.com',
+                    'smtp_port': 587
+                })
+            elif 'outlook' in email_domain or 'hotmail' in email_domain:
+                email_config.update({
+                    'imap_server': 'imap-mail.outlook.com',
+                    'imap_port': 993,
+                    'smtp_server': 'smtp-mail.outlook.com',
+                    'smtp_port': 587
+                })
+            elif 'yahoo' in email_domain:
+                email_config.update({
+                    'imap_server': 'imap.mail.yahoo.com',
+                    'imap_port': 993,
+                    'smtp_server': 'smtp.mail.yahoo.com',
+                    'smtp_port': 587
+                })
+            
+            # Check if we have the required app password
+            if not email_config.get('app_password'):
+                logger.warning(f"📧 No app password configured for {email_address}")
+                return None
+            
+            return email_config
+            
+        except Exception as e:
+            self._log_error(f"Error getting email config for {email_address}", e)
+            return None
     
     def _extract_email_body(self, msg):
         """Extract text content from email message"""
@@ -1806,3 +2093,233 @@ class FixedJobBot:
         except Exception as e:
             self._log_error(f"Error in {platform} cycle", e)
             return False
+    
+    def _check_platform_health(self, platform):
+        """Check if platform is healthy and responsive"""
+        try:
+            logger.info(f"🏥 Checking health of {platform}")
+            
+            # Navigate to platform's main page
+            platform_urls = {
+                "LinkedIn": "https://www.linkedin.com",
+                "Indeed": "https://www.indeed.com",
+                "RemoteOK": "https://remoteok.com",
+                "Dice": "https://www.dice.com"
+            }
+            
+            if platform not in platform_urls:
+                logger.warning(f"⚠️ Unknown platform: {platform}")
+                return False
+            
+            # Try to access the platform
+            self.driver.get(platform_urls[platform])
+            time.sleep(3)
+            
+            # Check if page loaded successfully
+            if "error" in self.driver.title.lower() or "unavailable" in self.driver.page_source.lower():
+                logger.error(f"❌ Platform {platform} appears to be down")
+                return False
+            
+            logger.info(f"✅ Platform {platform} is healthy")
+            return True
+            
+        except Exception as e:
+            self._log_error(f"Health check failed for {platform}", e)
+            return False
+    
+    def _rotate_platforms(self, failed_platform, available_platforms):
+        """Rotate to next available platform when current fails"""
+        try:
+            logger.info(f"🔄 Rotating from failed platform: {failed_platform}")
+            
+            # Remove failed platform from available list
+            remaining_platforms = [p for p in available_platforms if p != failed_platform]
+            
+            if not remaining_platforms:
+                logger.error("❌ No platforms available for rotation")
+                return None
+            
+            # Check health of remaining platforms
+            for platform in remaining_platforms:
+                if self._check_platform_health(platform):
+                    logger.info(f"✅ Rotated to healthy platform: {platform}")
+                    return platform
+            
+            logger.error("❌ No healthy platforms available")
+            return None
+            
+        except Exception as e:
+            self._log_error("Platform rotation failed", e)
+            return None
+    
+    def run_comprehensive_cycle(self, max_platforms=None):
+        """Run comprehensive job application cycle with platform rotation"""
+        try:
+            logger.info("🚀 Starting comprehensive job application cycle")
+            
+            # Initialize platform statistics
+            platform_stats = {
+                "total_platforms": 0,
+                "successful_platforms": 0,
+                "failed_platforms": 0,
+                "total_applications": 0,
+                "verification_failures": 0
+            }
+            
+            # Define platform priority order
+            platforms = ["LinkedIn", "Indeed", "RemoteOK", "Dice"]
+            
+            if max_platforms:
+                platforms = platforms[:max_platforms]
+            
+            platform_stats["total_platforms"] = len(platforms)
+            
+            # Track failed platforms for rotation
+            failed_platforms = []
+            verification_failures = {}
+            
+            # Setup browser first
+            if not self._setup_browser():
+                logger.error("❌ Failed to setup browser")
+                return False
+            
+            try:
+                # Process each platform
+                for platform in platforms:
+                    # Skip if platform has failed too many times
+                    if verification_failures.get(platform, 0) >= 3:
+                        logger.warning(f"⚠️ Skipping {platform} due to repeated verification failures")
+                        continue
+                    
+                    # Check platform health before proceeding
+                    if not self._check_platform_health(platform):
+                        failed_platforms.append(platform)
+                        platform_stats["failed_platforms"] += 1
+                        
+                        # Try to rotate to another platform
+                        alternative_platform = self._rotate_platforms(platform, platforms)
+                        if alternative_platform:
+                            platform = alternative_platform
+                        else:
+                            continue
+                    
+                    # Run platform cycle
+                    cycle_success = self.run_platform_cycle(platform)
+                    
+                    if cycle_success:
+                        platform_stats["successful_platforms"] += 1
+                        
+                        # Check verification success rate
+                        verification_success = self._check_verification_success_rate(platform)
+                        
+                        if verification_success < 0.5:  # Less than 50% verification success
+                            verification_failures[platform] = verification_failures.get(platform, 0) + 1
+                            platform_stats["verification_failures"] += 1
+                            
+                            logger.warning(f"⚠️ Low verification success rate for {platform}: {verification_success:.2%}")
+                            
+                            if verification_failures[platform] >= 3:
+                                logger.error(f"❌ {platform} disabled due to repeated verification failures")
+                    else:
+                        platform_stats["failed_platforms"] += 1
+                        failed_platforms.append(platform)
+                    
+                    # Add delay between platforms
+                    time.sleep(30)
+                
+                # Log final statistics
+                self._log_cycle_statistics(platform_stats, failed_platforms, verification_failures)
+                
+                logger.info(f"✅ Comprehensive cycle completed: {platform_stats['successful_platforms']}/{platform_stats['total_platforms']} platforms successful")
+                
+                return platform_stats["successful_platforms"] > 0
+                
+            finally:
+                # Always close browser
+                self._close_browser()
+                
+        except Exception as e:
+            self._log_error("Comprehensive cycle failed", e)
+            return False
+    
+    def _check_verification_success_rate(self, platform):
+        """Check verification success rate for a platform"""
+        try:
+            # Read verification log to calculate success rate
+            if not os.path.exists(self.verification_log_file):
+                return 1.0  # Default to 100% if no log exists
+            
+            with open(self.verification_log_file, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+            
+            total_verifications = 0
+            successful_verifications = 0
+            
+            for line in lines:
+                if f"- {platform} -" in line:
+                    total_verifications += 1
+                    if "EMAIL_CONFIRMED" in line or "CONFIRMED" in line:
+                        successful_verifications += 1
+            
+            if total_verifications == 0:
+                return 1.0
+            
+            return successful_verifications / total_verifications
+            
+        except Exception as e:
+            self._log_error("Error checking verification success rate", e)
+            return 1.0
+    
+    def _log_cycle_statistics(self, platform_stats, failed_platforms, verification_failures):
+        """Log comprehensive cycle statistics"""
+        try:
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            
+            stats_details = (
+                f"{timestamp} - COMPREHENSIVE CYCLE STATISTICS\n"
+                f"Total Platforms: {platform_stats['total_platforms']}\n"
+                f"Successful Platforms: {platform_stats['successful_platforms']}\n"
+                f"Failed Platforms: {platform_stats['failed_platforms']}\n"
+                f"Total Applications: {platform_stats['total_applications']}\n"
+                f"Verification Failures: {platform_stats['verification_failures']}\n"
+                f"Failed Platform List: {', '.join(failed_platforms)}\n"
+                f"Verification Failure Counts: {verification_failures}\n"
+                f"=" * 60 + "\n"
+            )
+            
+            with open(self.cycle_log_file, 'a', encoding='utf-8') as f:
+                f.write(stats_details)
+            
+            logger.info("✅ Cycle statistics logged")
+            
+        except Exception as e:
+            self._log_error("Failed to log cycle statistics", e)
+
+
+def main():
+    """Main execution function"""
+    print("🚀 FIXED JOB BOT - Starting Enhanced Job Application System")
+    print("=" * 60)
+    
+    try:
+        # Initialize bot
+        bot = FixedJobBot()
+        
+        # Run comprehensive cycle
+        success = bot.run_comprehensive_cycle()
+        
+        if success:
+            print("✅ Job application cycle completed successfully")
+            return 0
+        else:
+            print("❌ Job application cycle failed")
+            return 1
+            
+    except Exception as e:
+        print(f"❌ Critical error: {e}")
+        logger.error(f"Critical error in main: {e}")
+        return 1
+
+
+if __name__ == "__main__":
+    exit(main())

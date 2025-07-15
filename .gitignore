@@ -3,8 +3,15 @@
 .env.local
 .env.production
 .env.staging
+.env.encrypted
+.credentials.key
+credentials_password.txt
 credentials_template.env
 credentials.env
+
+# Temporary credential files
+.env.temp
+.credentials.temp
 
 # User configuration (contains sensitive data)
 user_config.json

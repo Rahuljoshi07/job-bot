@@ -1,0 +1,117 @@
+2025-07-15 19:09:36 - Error loading encrypted credentials
+'FixedJobBot' object has no attribute 'encrypted_env_file'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 184, in _load_encrypted_credentials
+    if not os.path.exists(self.encrypted_env_file):
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FixedJobBot' object has no attribute 'encrypted_env_file'
+
+
+2025-07-15 19:09:36 - Error loading encrypted credentials
+'FixedJobBot' object has no attribute 'encrypted_env_file'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 184, in _load_encrypted_credentials
+    if not os.path.exists(self.encrypted_env_file):
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FixedJobBot' object has no attribute 'encrypted_env_file'
+
+
+2025-07-15 19:09:36 - Error generating encryption key
+a bytes-like object is required, not 'MagicMock'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 140, in _generate_encryption_key
+    key = base64.urlsafe_b64encode(kdf.derive(password_bytes))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/base64.py", line 119, in urlsafe_b64encode
+    return b64encode(s).translate(_urlsafe_encode_translation)
+           ^^^^^^^^^^^^
+  File "/usr/lib/python3.12/base64.py", line 58, in b64encode
+    encoded = binascii.b2a_base64(s, newline=False)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: a bytes-like object is required, not 'MagicMock'
+
+
+2025-07-15 19:09:36 - Error loading encrypted credentials
+'FixedJobBot' object has no attribute 'encrypted_env_file'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 184, in _load_encrypted_credentials
+    if not os.path.exists(self.encrypted_env_file):
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FixedJobBot' object has no attribute 'encrypted_env_file'
+
+
+2025-07-15 19:09:36 - Error loading encrypted credentials
+'FixedJobBot' object has no attribute 'encrypted_env_file'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 184, in _load_encrypted_credentials
+    if not os.path.exists(self.encrypted_env_file):
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FixedJobBot' object has no attribute 'encrypted_env_file'
+
+
+2025-07-15 19:10:09 - Error loading encrypted credentials
+'FixedJobBot' object has no attribute 'encrypted_env_file'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 184, in _load_encrypted_credentials
+    if not os.path.exists(self.encrypted_env_file):
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FixedJobBot' object has no attribute 'encrypted_env_file'
+
+
+2025-07-15 19:10:09 - Error loading encrypted credentials
+'FixedJobBot' object has no attribute 'encrypted_env_file'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 184, in _load_encrypted_credentials
+    if not os.path.exists(self.encrypted_env_file):
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FixedJobBot' object has no attribute 'encrypted_env_file'
+
+
+2025-07-15 19:10:09 - Error generating encryption key
+a bytes-like object is required, not 'MagicMock'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 140, in _generate_encryption_key
+    key = base64.urlsafe_b64encode(kdf.derive(password_bytes))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/base64.py", line 119, in urlsafe_b64encode
+    return b64encode(s).translate(_urlsafe_encode_translation)
+           ^^^^^^^^^^^^
+  File "/usr/lib/python3.12/base64.py", line 58, in b64encode
+    encoded = binascii.b2a_base64(s, newline=False)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: a bytes-like object is required, not 'MagicMock'
+
+
+2025-07-15 19:10:09 - Error loading encrypted credentials
+'FixedJobBot' object has no attribute 'encrypted_env_file'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 184, in _load_encrypted_credentials
+    if not os.path.exists(self.encrypted_env_file):
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FixedJobBot' object has no attribute 'encrypted_env_file'
+
+
+2025-07-15 19:10:10 - Error loading encrypted credentials
+'FixedJobBot' object has no attribute 'encrypted_env_file'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 184, in _load_encrypted_credentials
+    if not os.path.exists(self.encrypted_env_file):
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FixedJobBot' object has no attribute 'encrypted_env_file'
+
+
+2025-07-15 19:10:41 - Error generating encryption key
+a bytes-like object is required, not 'MagicMock'
+Traceback (most recent call last):
+  File "/home/runner/work/job-bot/job-bot/fixed_job_bot.py", line 140, in _generate_encryption_key
+    key = base64.urlsafe_b64encode(kdf.derive(password_bytes))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/base64.py", line 119, in urlsafe_b64encode
+    return b64encode(s).translate(_urlsafe_encode_translation)
+           ^^^^^^^^^^^^
+  File "/usr/lib/python3.12/base64.py", line 58, in b64encode
+    encoded = binascii.b2a_base64(s, newline=False)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: a bytes-like object is required, not 'MagicMock'
+
+
