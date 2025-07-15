@@ -370,14 +370,14 @@ class TestEnhancedJobBot(unittest.TestCase):
         mock_platform.load_credentials.return_value = True
         mock_platform.authenticate.return_value = True
         mock_platform.search_jobs.return_value = [
-            {'id': 'job1', 'title': 'Test Engineer', 'company': 'Test Co', 'url': 'https://test.com/job1'}
+            {'id': 'unique_job1', 'title': 'Test Engineer', 'company': 'Test Co', 'url': 'https://test.com/unique_job1'}
         ]
         mock_platform.create_job_application.return_value = JobApplication(
             platform='remoteok',
-            job_id='job1',
+            job_id='unique_job1',
             title='Test Engineer',
             company='Test Co',
-            url='https://test.com/job1'
+            url='https://test.com/unique_job1'
         )
         mock_platform.apply_to_job.return_value = True
         mock_create_platform.return_value = mock_platform
@@ -389,6 +389,7 @@ class TestEnhancedJobBot(unittest.TestCase):
         self.assertIn('platforms', results)
         self.assertIn('remoteok', results['platforms'])
         self.assertEqual(results['platforms']['remoteok']['jobs_found'], 1)
+        self.assertEqual(results['platforms']['remoteok']['applications_sent'], 1)
     
     def test_statistics_generation(self):
         """Test statistics generation."""
