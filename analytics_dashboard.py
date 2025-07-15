@@ -9,8 +9,17 @@ import sqlite3
 import json
 from datetime import datetime, timedelta
 from collections import defaultdict
-import matplotlib.pyplot as plt
-import pandas as pd
+try:
+    import matplotlib.pyplot as plt
+    MATPLOTLIB_AVAILABLE = True
+except ImportError:
+    MATPLOTLIB_AVAILABLE = False
+try:
+    import pandas as pd
+    PANDAS_AVAILABLE = True
+except ImportError:
+    PANDAS_AVAILABLE = False
+from datetime_utils import format_report_timestamp, get_current_datetime, get_current_user
 
 class JobBotAnalytics:
     """Advanced analytics for job bot performance"""
@@ -183,7 +192,7 @@ class JobBotAnalytics:
         """Generate comprehensive analytics report"""
         print("📊 JOB BOT ANALYTICS REPORT")
         print("=" * 50)
-        print(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(format_report_timestamp())
         print()
         
         # Basic stats
@@ -262,6 +271,10 @@ class JobBotAnalytics:
         
         try:
             if format.lower() == 'csv':
+                if not PANDAS_AVAILABLE:
+                    print("❌ pandas not available. Install with: pip install pandas")
+                    return
+                
                 # Export to CSV
                 df = pd.read_sql_query("""
                     SELECT 
@@ -271,7 +284,7 @@ class JobBotAnalytics:
                     ORDER BY applied_date DESC
                 """, self.conn)
                 
-                filename = f"job_applications_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+                filename = f"job_applications_{get_current_datetime().replace(' ', '_').replace(':', '')}.csv"
                 df.to_csv(filename, index=False)
                 print(f"✅ Data exported to {filename}")
                 
@@ -287,7 +300,7 @@ class JobBotAnalytics:
                 for row in cursor.fetchall():
                     data.append(dict(zip(columns, row)))
                 
-                filename = f"job_applications_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+                filename = f"job_applications_{get_current_datetime().replace(' ', '_').replace(':', '')}.json"
                 with open(filename, 'w') as f:
                     json.dump(data, f, indent=2, default=str)
                 print(f"✅ Data exported to {filename}")
@@ -299,9 +312,11 @@ class JobBotAnalytics:
     
     def create_visualizations(self):
         """Create visualization charts"""
-        try:
-            import matplotlib.pyplot as plt
+        if not MATPLOTLIB_AVAILABLE:
+            print("⚠️ Matplotlib not available. Install with: pip install matplotlib")
+            return
             
+        try:
             stats = self.get_basic_stats()
             if not stats:
                 print("❌ No data for visualization!")
@@ -343,7 +358,7 @@ class JobBotAnalytics:
             plt.tight_layout()
             
             # Save chart
-            filename = f"job_bot_analytics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+            filename = f"job_bot_analytics_{get_current_datetime().replace(' ', '_').replace(':', '')}.png"
             plt.savefig(filename, dpi=300, bbox_inches='tight')
             print(f"📊 Visualization saved to {filename}")
             
@@ -351,8 +366,6 @@ class JobBotAnalytics:
             if os.getenv('DISPLAY'):
                 plt.show()
             
-        except ImportError:
-            print("⚠️ Matplotlib not available. Install with: pip install matplotlib")
         except Exception as e:
             print(f"❌ Visualization failed: {e}")
 

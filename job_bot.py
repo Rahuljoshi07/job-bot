@@ -4,6 +4,7 @@ import json
 import os
 from bs4 import BeautifulSoup
 import schedule
+from datetime_utils import get_current_datetime, get_current_user
 
 class JobBot:
     def __init__(self):
@@ -78,14 +79,14 @@ class JobBot:
         
         # Log application
         with open('job-bot/applications.txt', 'a') as f:
-            f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - Applied to {job['title']} at {job['company']} ({job['platform']})\n")
+            f.write(f"{get_current_datetime()} - Applied to {job['title']} at {job['company']} ({job['platform']}) by {get_current_user()}\n")
         
         print(f"✅ Application submitted successfully!")
         return True
     
     def run_job_search(self):
         """Main job search function"""
-        print(f"\n🤖 Job Bot running at {time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"\n🤖 Job Bot running at {get_current_datetime()} UTC by {get_current_user()}")
         
         all_jobs = []
         

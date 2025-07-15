@@ -18,6 +18,7 @@ import sqlite3
 from datetime import datetime, timedelta
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
+from datetime_utils import get_current_datetime, get_current_user
 try:
     from email.mime.text import MimeText
     from email.mime.multipart import MimeMultipart
@@ -1242,7 +1243,7 @@ LinkedIn: {linkedin}
     def take_screenshot(self, job_match: JobMatch, suffix: str = "") -> str:
         """Take proof screenshot"""
         try:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = get_current_datetime().replace(' ', '_').replace(':', '').replace('-', '')
             safe_title = "".join(c for c in job_match.title if c.isalnum() or c in (' ', '-', '_'))[:50]
             safe_company = "".join(c for c in job_match.company if c.isalnum() or c in (' ', '-', '_'))[:30]
             
@@ -1476,8 +1477,9 @@ LinkedIn: {linkedin}
     
     def _log_application(self, job_match: JobMatch, screenshot_path: str):
         """Log application details"""
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        log_entry = f"{timestamp} - Applied to {job_match.title} at {job_match.company} ({job_match.platform}) - Score: {job_match.relevance_score:.1f}% - URL: {job_match.url} - Proof: {screenshot_path}\n"
+        timestamp = get_current_datetime()
+        user = get_current_user()
+        log_entry = f"{timestamp} - Applied to {job_match.title} at {job_match.company} ({job_match.platform}) - Score: {job_match.relevance_score:.1f}% - URL: {job_match.url} - Proof: {screenshot_path} - User: {user}\n"
         
         try:
             with open("enhanced_applications.txt", 'a', encoding='utf-8') as f:

@@ -1,0 +1,7 @@
+# .mailmap file to remove GitHub Copilot from contributors
+# This file maps commit authors to desired names/emails for git log and other git commands
+# Format: Proper Name <proper@email.com> <commit@email.com>
+
+# Remove GitHub Copilot from contributors
+Rahuljoshi07 <rahuljoshi07@users.noreply.github.com> GitHub Copilot <noreply@github.com>
+Rahuljoshi07 <rahuljoshi07@users.noreply.github.com> copilot@github.com
