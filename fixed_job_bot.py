@@ -490,7 +490,7 @@ class FixedJobBot:
             self._log_error("Failed to log verification", e)
     
     def _check_email_confirmation(self, platform, job_title, company_name, application_time):
-        """Check email for job application confirmation"""
+        """Check email for job application confirmation with enhanced error handling"""
         try:
             # Skip email verification if disabled
             if not self.config.get('email_verification', {}).get('enabled', False):
@@ -506,26 +506,48 @@ class FixedJobBot:
             
             logger.info(f"📧 Checking email for {job_title} at {company_name} confirmation...")
             
-            # Connect to IMAP server
-            imap_server = email_config.get('imap_server', 'imap.gmail.com')
-            imap_port = email_config.get('imap_port', 993)
+            # Connect to IMAP server with retry logic
+            max_connection_retries = 3
+            mail = None
             
-            mail = imaplib.IMAP4_SSL(imap_server, imap_port)
-            mail.login(email_config['email'], email_config['app_password'])
-            mail.select('inbox')
+            for connection_attempt in range(max_connection_retries):
+                try:
+                    imap_server = email_config.get('imap_server', 'imap.gmail.com')
+                    imap_port = email_config.get('imap_port', 993)
+                    
+                    mail = imaplib.IMAP4_SSL(imap_server, imap_port)
+                    mail.login(email_config['email'], email_config['app_password'])
+                    mail.select('inbox')
+                    break
+                    
+                except Exception as e:
+                    logger.warning(f"📧 Email connection attempt {connection_attempt + 1} failed: {e}")
+                    if connection_attempt < max_connection_retries - 1:
+                        time.sleep(5)  # Wait before retry
+                    else:
+                        return {"status": "connection_error", "message": f"Failed to connect to email server after {max_connection_retries} attempts"}
+            
+            if not mail:
+                return {"status": "connection_error", "message": "Failed to establish email connection"}
             
             # Search for confirmation emails from the time of application
             search_time = application_time - timedelta(minutes=5)  # Allow some buffer
             search_date = search_time.strftime('%d-%b-%Y')
             
-            # Search keywords that might indicate job application confirmation
+            # Enhanced search keywords that are more likely to match job application confirmations
             search_keywords = [
                 'application received',
                 'application confirmation',
                 'thank you for applying',
                 'application submitted',
+                'we have received your application',
+                'your application has been received',
+                'application acknowledgment',
+                'job application received',
                 company_name.lower(),
-                platform.lower()
+                platform.lower(),
+                # Add job title keywords
+                *job_title.lower().split()
             ]
             
             confirmation_found = False
@@ -537,59 +559,67 @@ class FixedJobBot:
             end_time = time.time() + timeout
             
             while time.time() < end_time:
-                # Search for emails since the search date
-                typ, data = mail.search(None, f'(SINCE "{search_date}")')
-                
-                if typ == 'OK':
-                    mail_ids = data[0].split()
+                try:
+                    # Search for emails since the search date
+                    typ, data = mail.search(None, f'(SINCE "{search_date}")')
                     
-                    # Check recent emails (last 50 to avoid overload)
-                    for mail_id in mail_ids[-50:]:
-                        try:
-                            typ, data = mail.fetch(mail_id, '(RFC822)')
-                            if typ == 'OK':
-                                msg = email.message_from_bytes(data[0][1])
-                                
-                                # Get email details
-                                subject = msg.get('subject', '').lower()
-                                from_addr = msg.get('from', '').lower()
-                                date_str = msg.get('date', '')
-                                
-                                # Parse email date
-                                try:
-                                    email_date = email.utils.parsedate_to_datetime(date_str)
-                                    if email_date < application_time:
-                                        continue  # Skip emails before application
-                                except:
-                                    continue
-                                
-                                # Check if email content matches confirmation patterns
-                                body = self._extract_email_body(msg)
-                                content = (subject + ' ' + from_addr + ' ' + body).lower()
-                                
-                                # Check for confirmation keywords
-                                for keyword in search_keywords:
-                                    if keyword in content:
+                    if typ == 'OK':
+                        mail_ids = data[0].split()
+                        
+                        # Check recent emails (last 50 to avoid overload)
+                        for mail_id in mail_ids[-50:]:
+                            try:
+                                typ, data = mail.fetch(mail_id, '(RFC822)')
+                                if typ == 'OK':
+                                    msg = email.message_from_bytes(data[0][1])
+                                    
+                                    # Get email details
+                                    subject = msg.get('subject', '').lower()
+                                    from_addr = msg.get('from', '').lower()
+                                    date_str = msg.get('date', '')
+                                    
+                                    # Parse email date
+                                    try:
+                                        email_date = email.utils.parsedate_to_datetime(date_str)
+                                        if email_date < application_time:
+                                            continue  # Skip emails before application
+                                    except:
+                                        continue
+                                    
+                                    # Check if email content matches confirmation patterns
+                                    body = self._extract_email_body(msg)
+                                    content = (subject + ' ' + from_addr + ' ' + body).lower()
+                                    
+                                    # Check for confirmation keywords
+                                    matched_keywords = []
+                                    for keyword in search_keywords:
+                                        if keyword in content:
+                                            matched_keywords.append(keyword)
+                                    
+                                    if matched_keywords:
                                         confirmation_found = True
                                         confirmation_details.append({
                                             'subject': subject,
                                             'from': from_addr,
                                             'date': date_str,
-                                            'keyword_matched': keyword
+                                            'keywords_matched': matched_keywords,
+                                            'message_id': msg.get('message-id', '')
                                         })
                                         break
                                 
-                                if confirmation_found:
-                                    break
-                        except Exception as e:
-                            logger.debug(f"Error processing email {mail_id}: {e}")
-                            continue
-                
-                if confirmation_found:
+                            except Exception as e:
+                                logger.debug(f"Error processing email {mail_id}: {e}")
+                                continue
+                    
+                    if confirmation_found:
+                        break
+                    
+                    # Wait before next check
+                    time.sleep(check_interval)
+                    
+                except Exception as e:
+                    logger.warning(f"📧 Error during email search: {e}")
                     break
-                
-                # Wait before next check
-                time.sleep(check_interval)
             
             mail.close()
             mail.logout()
@@ -605,12 +635,154 @@ class FixedJobBot:
                 logger.warning(f"⚠️ No email confirmation found for {job_title} at {company_name}")
                 return {
                     "status": "pending",
-                    "message": "No email confirmation found within timeout period"
+                    "message": f"No email confirmation found within {timeout}s timeout period"
                 }
                 
         except Exception as e:
             self._log_error(f"Email verification error for {job_title} at {company_name}", e)
             return {"status": "error", "message": f"Email verification failed: {str(e)}"}
+    
+    def _enhanced_email_verification_check(self, platform, job_title, company_name, application_time):
+        """Enhanced email verification with multiple checking strategies"""
+        try:
+            # Run the primary email check
+            primary_result = self._check_email_confirmation(platform, job_title, company_name, application_time)
+            
+            # If primary check was successful, return immediately
+            if primary_result["status"] == "confirmed":
+                return primary_result
+            
+            # If primary check failed due to configuration, return that
+            if primary_result["status"] in ["disabled", "config_missing", "connection_error"]:
+                return primary_result
+            
+            # If primary check was pending, try alternative search strategies
+            logger.info(f"📧 Primary email check pending, trying alternative strategies...")
+            
+            # Alternative check with broader search criteria
+            alternative_result = self._alternative_email_check(platform, job_title, company_name, application_time)
+            
+            if alternative_result["status"] == "confirmed":
+                return alternative_result
+            
+            # Return the primary result if alternative also failed
+            return primary_result
+            
+        except Exception as e:
+            self._log_error(f"Enhanced email verification error", e)
+            return {"status": "error", "message": f"Enhanced email verification failed: {str(e)}"}
+    
+    def _alternative_email_check(self, platform, job_title, company_name, application_time):
+        """Alternative email verification check with different search criteria"""
+        try:
+            email_config = self.config.get('email_verification', {})
+            
+            if not email_config.get('email') or not email_config.get('app_password'):
+                return {"status": "config_missing", "message": "Email configuration incomplete"}
+            
+            logger.info(f"📧 Running alternative email check for {job_title} at {company_name}")
+            
+            # Connect to IMAP server
+            imap_server = email_config.get('imap_server', 'imap.gmail.com')
+            imap_port = email_config.get('imap_port', 993)
+            
+            mail = imaplib.IMAP4_SSL(imap_server, imap_port)
+            mail.login(email_config['email'], email_config['app_password'])
+            mail.select('inbox')
+            
+            # Use a broader search timeframe
+            search_time = application_time - timedelta(minutes=10)  # Broader buffer
+            search_date = search_time.strftime('%d-%b-%Y')
+            
+            # Alternative search keywords - more generic
+            alternative_keywords = [
+                'noreply',
+                'donotreply',
+                'jobs',
+                'career',
+                'hr',
+                'talent',
+                'recruiting',
+                'application',
+                platform.lower()
+            ]
+            
+            confirmation_found = False
+            confirmation_details = []
+            
+            # Search for emails from common job-related senders
+            for keyword in alternative_keywords:
+                try:
+                    typ, data = mail.search(None, f'(SINCE "{search_date}" FROM "{keyword}")')
+                    
+                    if typ == 'OK' and data[0]:
+                        mail_ids = data[0].split()
+                        
+                        for mail_id in mail_ids[-10:]:  # Check last 10 emails for each keyword
+                            try:
+                                typ, data = mail.fetch(mail_id, '(RFC822)')
+                                if typ == 'OK':
+                                    msg = email.message_from_bytes(data[0][1])
+                                    
+                                    # Get email details
+                                    subject = msg.get('subject', '').lower()
+                                    from_addr = msg.get('from', '').lower()
+                                    date_str = msg.get('date', '')
+                                    
+                                    # Parse email date
+                                    try:
+                                        email_date = email.utils.parsedate_to_datetime(date_str)
+                                        if email_date < application_time:
+                                            continue  # Skip emails before application
+                                    except:
+                                        continue
+                                    
+                                    # Check if email content matches job application patterns
+                                    body = self._extract_email_body(msg)
+                                    content = (subject + ' ' + from_addr + ' ' + body).lower()
+                                    
+                                    # Look for job application related content
+                                    if any(pattern in content for pattern in ['application', 'job', 'position', company_name.lower()]):
+                                        confirmation_found = True
+                                        confirmation_details.append({
+                                            'subject': subject,
+                                            'from': from_addr,
+                                            'date': date_str,
+                                            'search_keyword': keyword,
+                                            'message_id': msg.get('message-id', '')
+                                        })
+                                        break
+                                        
+                            except Exception as e:
+                                logger.debug(f"Error processing alternative email {mail_id}: {e}")
+                                continue
+                    
+                    if confirmation_found:
+                        break
+                        
+                except Exception as e:
+                    logger.debug(f"Error searching for keyword {keyword}: {e}")
+                    continue
+            
+            mail.close()
+            mail.logout()
+            
+            if confirmation_found:
+                logger.info(f"✅ Alternative email confirmation found for {job_title} at {company_name}")
+                return {
+                    "status": "confirmed",
+                    "message": "Alternative email confirmation found",
+                    "details": confirmation_details
+                }
+            else:
+                return {
+                    "status": "pending",
+                    "message": "No alternative email confirmation found"
+                }
+                
+        except Exception as e:
+            self._log_error(f"Alternative email verification error", e)
+            return {"status": "error", "message": f"Alternative email verification failed: {str(e)}"}
     
     def _extract_email_body(self, msg):
         """Extract text content from email message"""
@@ -1327,9 +1499,9 @@ class FixedJobBot:
                 # Take final verification screenshot
                 self._take_verification_screenshot(platform, company_name, f"{job_title}_Completion")
                 
-                # Check email confirmation if enabled
+                # Check email confirmation if enabled using enhanced verification
                 application_time = datetime.now()
-                email_verification = self._check_email_confirmation(platform, job_title, company_name, application_time)
+                email_verification = self._enhanced_email_verification_check(platform, job_title, company_name, application_time)
                 
                 # Update verification status based on email confirmation
                 if email_verification["status"] == "confirmed":
@@ -1757,52 +1929,354 @@ class FixedJobBot:
                 
             return False
     
-    def run_platform_cycle(self, platform):
-        """Run complete job cycle for a platform"""
+    def run_platform_cycle(self, platform, max_jobs_per_search=5, max_retries=3):
+        """Run complete job cycle for a platform with enhanced error handling and retry logic"""
         start_time = time.time()
         jobs_found = 0
         jobs_applied = 0
+        retry_count = 0
+        
+        while retry_count < max_retries:
+            try:
+                logger.info(f"🚀 Starting job cycle for {platform} (attempt {retry_count + 1}/{max_retries})")
+                
+                # Reset counters for each retry
+                if retry_count > 0:
+                    jobs_found = 0
+                    jobs_applied = 0
+                    logger.info(f"🔄 Retrying {platform} cycle after previous failure")
+                
+                # Setup browser if not already done
+                if not self.driver:
+                    if not self._setup_browser():
+                        logger.error(f"❌ Browser setup failed for {platform}")
+                        retry_count += 1
+                        time.sleep(min(2 ** retry_count, 30))  # Exponential backoff
+                        continue
+                
+                # Login if needed
+                if platform != "RemoteOK":  # RemoteOK doesn't require login
+                    login_success = self._login_to_platform(platform)
+                    if not login_success:
+                        logger.error(f"❌ Login failed for {platform}")
+                        retry_count += 1
+                        time.sleep(min(2 ** retry_count, 30))  # Exponential backoff
+                        continue
+                
+                # Get search keywords from config
+                job_types = self.config['preferences'].get('job_types', ['DevOps Engineer'])
+                locations = self.config['preferences'].get('locations', ['Remote'])
+                
+                # Handle search and application process
+                search_success = False
+                
+                # For each keyword and location combination
+                for job_type in job_types:
+                    for location in locations:
+                        try:
+                            logger.info(f"🔍 Searching {platform} for {job_type} in {location}")
+                            
+                            # Search for jobs
+                            job_items = self.search_jobs(platform, job_type, location)
+                            current_jobs_found = len(job_items)
+                            jobs_found += current_jobs_found
+                            
+                            if not job_items:
+                                logger.warning(f"⚠️ No jobs found for {job_type} in {location}")
+                                continue
+                            
+                            search_success = True
+                            logger.info(f"✅ Found {current_jobs_found} jobs for {job_type} in {location}")
+                            
+                            # Apply to each job (limit to max_jobs_per_search)
+                            for i, job_item in enumerate(job_items[:max_jobs_per_search]):
+                                try:
+                                    logger.info(f"🎯 Applying to job {i+1}/{min(len(job_items), max_jobs_per_search)}")
+                                    
+                                    if self.apply_to_job(platform, job_item):
+                                        jobs_applied += 1
+                                        logger.info(f"✅ Successfully applied to job {i+1}")
+                                    else:
+                                        logger.warning(f"⚠️ Failed to apply to job {i+1}")
+                                    
+                                    # Add delay between applications to avoid rate limiting
+                                    time.sleep(random.uniform(2, 5))
+                                    
+                                except Exception as e:
+                                    self._log_error(f"Error applying to job {i+1} in {job_type} search", e)
+                                    continue
+                                    
+                        except Exception as e:
+                            self._log_error(f"Error processing {job_type} in {location}", e)
+                            continue
+                
+                # If we made it here and found jobs, consider it a success
+                if search_success:
+                    duration = time.time() - start_time
+                    self._log_cycle(platform, jobs_found, jobs_applied, duration)
+                    
+                    logger.info(f"✅ Completed {platform} cycle: {jobs_found} jobs found, {jobs_applied} applications sent in {duration:.2f}s")
+                    return {
+                        'success': True,
+                        'platform': platform,
+                        'jobs_found': jobs_found,
+                        'jobs_applied': jobs_applied,
+                        'duration': duration,
+                        'retry_count': retry_count
+                    }
+                else:
+                    logger.warning(f"⚠️ No jobs found on {platform}, but no critical errors")
+                    duration = time.time() - start_time
+                    self._log_cycle(platform, jobs_found, jobs_applied, duration)
+                    
+                    return {
+                        'success': True,
+                        'platform': platform,
+                        'jobs_found': jobs_found,
+                        'jobs_applied': jobs_applied,
+                        'duration': duration,
+                        'retry_count': retry_count,
+                        'message': 'No jobs found but no errors'
+                    }
+                
+            except Exception as e:
+                self._log_error(f"Critical error in {platform} cycle (attempt {retry_count + 1})", e)
+                retry_count += 1
+                
+                if retry_count < max_retries:
+                    wait_time = min(2 ** retry_count, 30)  # Exponential backoff, max 30s
+                    logger.info(f"⏳ Waiting {wait_time}s before retry...")
+                    time.sleep(wait_time)
+                    
+                    # Reset browser on retry
+                    try:
+                        self._close_browser()
+                    except:
+                        pass
+                else:
+                    logger.error(f"❌ Max retries ({max_retries}) reached for {platform}")
+        
+        # If we get here, all retries failed
+        duration = time.time() - start_time
+        self._log_cycle(platform, jobs_found, jobs_applied, duration)
+        
+        return {
+            'success': False,
+            'platform': platform,
+            'jobs_found': jobs_found,
+            'jobs_applied': jobs_applied,
+            'duration': duration,
+            'retry_count': retry_count,
+            'error': f'Failed after {max_retries} retries'
+        }
+    
+    def run_comprehensive_cycle(self, platforms=None, max_jobs_per_platform=25, cycle_delay=300):
+        """Run comprehensive job application cycle across multiple platforms with rotation"""
+        if platforms is None:
+            platforms = ["LinkedIn", "Indeed", "RemoteOK", "Dice"]
+        
+        logger.info(f"🚀 Starting comprehensive job cycle across {len(platforms)} platforms")
+        start_time = time.time()
+        
+        # Overall statistics
+        total_jobs_found = 0
+        total_jobs_applied = 0
+        platform_results = {}
+        successful_platforms = []
+        failed_platforms = []
         
         try:
-            logger.info(f"🚀 Starting job cycle for {platform}")
+            # Initialize browser once for all platforms
+            if not self._setup_browser():
+                logger.error("❌ Failed to initialize browser for comprehensive cycle")
+                return {
+                    'success': False,
+                    'error': 'Browser initialization failed',
+                    'platform_results': {},
+                    'duration': time.time() - start_time
+                }
             
-            # Login if needed
-            if platform != "RemoteOK":  # RemoteOK doesn't require login
-                if not self._login_to_platform(platform):
-                    logger.error(f"❌ Login failed for {platform}, skipping")
-                    return False
-            
-            # Get search keywords
-            job_types = self.config['preferences']['job_types']
-            locations = self.config['preferences']['locations']
-            
-            # For each keyword and location combination
-            for job_type in job_types:
-                for location in locations:
-                    try:
-                        # Search for jobs
-                        job_items = self.search_jobs(platform, job_type, location)
-                        jobs_found += len(job_items)
+            # Process each platform
+            for platform_index, platform in enumerate(platforms):
+                logger.info(f"📋 Processing platform {platform_index + 1}/{len(platforms)}: {platform}")
+                
+                try:
+                    # Run platform cycle
+                    platform_result = self.run_platform_cycle(
+                        platform, 
+                        max_jobs_per_search=max_jobs_per_platform // len(self.config['preferences'].get('job_types', ['DevOps Engineer']))
+                    )
+                    
+                    # Store results
+                    platform_results[platform] = platform_result
+                    
+                    if platform_result['success']:
+                        successful_platforms.append(platform)
+                        total_jobs_found += platform_result['jobs_found']
+                        total_jobs_applied += platform_result['jobs_applied']
                         
-                        if not job_items:
-                            logger.warning(f"⚠️ No jobs found for {job_type} in {location}")
-                            continue
-                        
-                        # Apply to each job (limit to 5 per search for testing)
-                        for job_item in job_items[:5]:
-                            if self.apply_to_job(platform, job_item):
-                                jobs_applied += 1
-                                
-                    except Exception as e:
-                        self._log_error(f"Error processing {job_type} in {location}", e)
+                        logger.info(f"✅ {platform} cycle completed successfully")
+                        logger.info(f"   Jobs found: {platform_result['jobs_found']}")
+                        logger.info(f"   Jobs applied: {platform_result['jobs_applied']}")
+                        logger.info(f"   Duration: {platform_result['duration']:.2f}s")
+                    else:
+                        failed_platforms.append(platform)
+                        logger.error(f"❌ {platform} cycle failed: {platform_result.get('error', 'Unknown error')}")
+                    
+                    # Add delay between platforms (except for the last one)
+                    if platform_index < len(platforms) - 1:
+                        logger.info(f"⏳ Waiting {cycle_delay}s before next platform...")
+                        time.sleep(cycle_delay)
+                    
+                except Exception as e:
+                    self._log_error(f"Critical error processing {platform}", e)
+                    failed_platforms.append(platform)
+                    platform_results[platform] = {
+                        'success': False,
+                        'platform': platform,
+                        'error': str(e),
+                        'jobs_found': 0,
+                        'jobs_applied': 0,
+                        'duration': 0
+                    }
             
-            # Log cycle statistics
-            duration = time.time() - start_time
-            self._log_cycle(platform, jobs_found, jobs_applied, duration)
+            # Calculate overall statistics
+            total_duration = time.time() - start_time
+            success_rate = len(successful_platforms) / len(platforms) if platforms else 0
             
-            logger.info(f"✅ Completed {platform} cycle: {jobs_found} jobs found, {jobs_applied} applications sent in {duration:.2f}s")
-            return True
+            # Log comprehensive results
+            self._log_comprehensive_cycle_results(
+                platforms, successful_platforms, failed_platforms,
+                total_jobs_found, total_jobs_applied, total_duration
+            )
+            
+            # Determine overall success
+            overall_success = len(successful_platforms) > 0  # Success if at least one platform worked
+            
+            logger.info(f"🎯 Comprehensive cycle completed!")
+            logger.info(f"   Success rate: {success_rate:.1%} ({len(successful_platforms)}/{len(platforms)} platforms)")
+            logger.info(f"   Total jobs found: {total_jobs_found}")
+            logger.info(f"   Total jobs applied: {total_jobs_applied}")
+            logger.info(f"   Total duration: {total_duration:.2f}s")
+            
+            return {
+                'success': overall_success,
+                'total_jobs_found': total_jobs_found,
+                'total_jobs_applied': total_jobs_applied,
+                'duration': total_duration,
+                'success_rate': success_rate,
+                'successful_platforms': successful_platforms,
+                'failed_platforms': failed_platforms,
+                'platform_results': platform_results
+            }
             
         except Exception as e:
-            self._log_error(f"Error in {platform} cycle", e)
-            return False
+            self._log_error("Critical error in comprehensive cycle", e)
+            return {
+                'success': False,
+                'error': str(e),
+                'platform_results': platform_results,
+                'duration': time.time() - start_time
+            }
+        finally:
+            # Clean up browser
+            try:
+                self._close_browser()
+            except:
+                pass
+    
+    def _log_comprehensive_cycle_results(self, platforms, successful_platforms, failed_platforms,
+                                       total_jobs_found, total_jobs_applied, total_duration):
+        """Log comprehensive cycle results to file"""
+        try:
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            
+            comprehensive_log = (
+                f"{timestamp} - COMPREHENSIVE CYCLE RESULTS\n"
+                f"Platforms processed: {', '.join(platforms)}\n"
+                f"Successful platforms: {', '.join(successful_platforms)}\n"
+                f"Failed platforms: {', '.join(failed_platforms)}\n"
+                f"Total jobs found: {total_jobs_found}\n"
+                f"Total jobs applied: {total_jobs_applied}\n"
+                f"Total duration: {total_duration:.2f}s\n"
+                f"Success rate: {len(successful_platforms)}/{len(platforms)} platforms\n"
+                f"{'='*60}\n"
+            )
+            
+            with open(self.cycle_log_file, 'a', encoding='utf-8') as f:
+                f.write(comprehensive_log)
+                
+            logger.info("✅ Comprehensive cycle results logged")
+            
+        except Exception as e:
+            self._log_error("Failed to log comprehensive cycle results", e)
+    
+    def run_smart_retry_cycle(self, failed_platforms, max_attempts=2):
+        """Run smart retry cycle for failed platforms with adaptive strategies"""
+        if not failed_platforms:
+            logger.info("✅ No failed platforms to retry")
+            return {'success': True, 'retried_platforms': []}
+        
+        logger.info(f"🔄 Starting smart retry cycle for {len(failed_platforms)} failed platforms")
+        retry_results = {}
+        successful_retries = []
+        
+        for attempt in range(max_attempts):
+            logger.info(f"🔄 Retry attempt {attempt + 1}/{max_attempts}")
+            
+            platforms_to_retry = [p for p in failed_platforms if p not in successful_retries]
+            
+            if not platforms_to_retry:
+                logger.info("✅ All platforms successfully retried")
+                break
+            
+            for platform in platforms_to_retry:
+                try:
+                    logger.info(f"🔄 Retrying {platform}...")
+                    
+                    # Use progressively more conservative settings
+                    max_jobs = max(5, 10 - (attempt * 2))  # Reduce job count on retries
+                    
+                    # Setup browser fresh for retry
+                    if not self._setup_browser():
+                        logger.error(f"❌ Browser setup failed for {platform} retry")
+                        continue
+                    
+                    # Run platform cycle with retry settings
+                    result = self.run_platform_cycle(platform, max_jobs_per_search=max_jobs)
+                    
+                    if result['success']:
+                        successful_retries.append(platform)
+                        retry_results[platform] = result
+                        logger.info(f"✅ {platform} retry successful")
+                    else:
+                        logger.warning(f"⚠️ {platform} retry failed")
+                        retry_results[platform] = result
+                    
+                    # Close browser between retries
+                    self._close_browser()
+                    
+                    # Add delay between retry attempts
+                    time.sleep(30)
+                    
+                except Exception as e:
+                    self._log_error(f"Error during {platform} retry", e)
+                    retry_results[platform] = {
+                        'success': False,
+                        'error': str(e),
+                        'platform': platform
+                    }
+            
+            # Add longer delay between retry attempts
+            if attempt < max_attempts - 1 and len(successful_retries) < len(failed_platforms):
+                logger.info("⏳ Waiting before next retry attempt...")
+                time.sleep(120)  # 2 minutes between retry attempts
+        
+        logger.info(f"🎯 Smart retry cycle completed: {len(successful_retries)}/{len(failed_platforms)} platforms recovered")
+        
+        return {
+            'success': len(successful_retries) > 0,
+            'retried_platforms': successful_retries,
+            'failed_platforms': [p for p in failed_platforms if p not in successful_retries],
+            'retry_results': retry_results
+        }
