@@ -10,8 +10,28 @@ import json
 import sqlite3
 from datetime import datetime
 
-# Import existing modules
-from job_bot import JobBot
+# Import existing modules with fallback
+try:
+    from job_bot import JobBot
+    JOB_BOT_AVAILABLE = True
+except ImportError:
+    JOB_BOT_AVAILABLE = False
+    print("⚠️ Original job_bot module not available. Install dependencies: pip install beautifulsoup4 schedule")
+    
+    # Create a mock JobBot for testing
+    class JobBot:
+        def __init__(self):
+            self.applied_jobs = set()
+        
+        def search_remoteok(self):
+            return []
+        
+        def search_dice_simulation(self):
+            return []
+        
+        def apply_to_job(self, job):
+            return True
+
 from web_dashboard import JobBotDashboard
 from notifications import NotificationManager
 
