@@ -1638,4 +1638,4 @@ class FixedJobBot:
             
             # Log cycle statistics
             duration = time.time() - start_time
-            self._log
+            self._log_cycle(platform,
