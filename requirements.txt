@@ -10,7 +10,7 @@ webdriver-manager==4.0.1
 python-dotenv==1.0.0
 requests-html==0.10.0
 urllib3==1.26.18
-certifi==2024.2.2
+certifi==2024.7.4
 
 # Enhanced AI and NLP dependencies
 nltk==3.8.1
