@@ -132,3 +132,19 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# === SECURITY ADDITIONS ===
+.env
+.env.*
+.github-bot-credentials*
+*.enc
+*.key
+*.pem
+config.json
+secrets.json
+credentials.json
+*.log
+logs/
+secure-logs/
+*.db
+*.sqlite*
